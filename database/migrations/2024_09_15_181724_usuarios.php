@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('usuarios', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('nome', 100);
-            $table->string('name', 100);
             $table->string('email', 255);
             $table->string('senha');
             $table->enum('nivel_acesso', ['admin', 'user']);
