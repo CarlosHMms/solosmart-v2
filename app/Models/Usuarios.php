@@ -15,6 +15,5 @@ class Usuarios extends Model
     ];
 
     public $timestamps = false;
-    public function usuarios() {}
     use HasFactory;
 }
