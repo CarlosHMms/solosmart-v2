@@ -35,8 +35,10 @@ class UsuariosController extends Controller
         }
         $created = Usuarios::create($validator->validated());
         if($created){
-            return $this->error('Algo está errado', 400);
+            return $this->response('Usuario criado', 200, $created);
         }
+        return $this->error('Usuario não foi criado', 400);
+
     }
 
     /**

@@ -1,11 +1,12 @@
 <?php
 namespace App\Traits;
 use Illuminate\Support\MessageBag;
+use Illuminate\Database\Eloquent\Model;
 
 trait HttpResponse{
 
     //função da estrutura json que traz resultados de uma requisição de sucesso
-    public function response(string $message,  string|int $status,array $data = [] ){
+    public function response(string $message,  string|int $status,array|Model $data = [] ){
         return response()->json([
             'message' => $message,
             'status' => $status,
