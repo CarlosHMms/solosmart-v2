@@ -31,7 +31,7 @@ class UsuariosController extends Controller
             'nivel_acesso' => 'required|in:admin,user'
         ]);
         if($validator -> fails()){
-            return $this->error('Dados inválidos', 422, $validator->errors());
+            return $this->error('Dados inválidos', 400, $validator->errors());
         }
         $created = Usuarios::create($validator->validated());
         if($created){
