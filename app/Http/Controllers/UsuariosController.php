@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Usuarios;
 use App\Traits\HttpResponse;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash; 
 
 class UsuariosController extends Controller
 {
@@ -33,7 +34,10 @@ class UsuariosController extends Controller
         if($validator -> fails()){
             return $this->error('Dados inválidos', 400, $validator->errors());
         }
-        $created = Usuarios::create($validator->validated());
+        $validatedData = $validator->validated();
+        $validatedData['senha'] = Hash::make($validatedData['senha']); // Criptografa a senha
+    
+        $created = Usuarios::create($validatedData);
         if($created){
             return $this->response('Usuario criado', 200, $created);
         }
