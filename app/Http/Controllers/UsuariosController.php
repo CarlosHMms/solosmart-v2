@@ -76,15 +76,18 @@ class UsuariosController extends Controller
             return $this->response('usuário atualizado', 200, $request->all());
 
         }
-        return $this->error('usuário não atualizado', 400);
+        return $this->error('', 400);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Usuarios $usuario)
     {
-        //
+        $deleted = $usuario->delete();
+        if ($deleted){
+            return $this->response('usuário deletado', 200);
+        }return $this->error('usuário não foi deletado', 400);
     }
 
     public function validation(Request $request){
