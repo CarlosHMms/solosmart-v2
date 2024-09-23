@@ -17,6 +17,8 @@ class UsuariosFactory extends Factory
     public function definition(): array
     {
         return [
+            'nome' => $this->nome,
+            'email' => $this->email
             //
         ];
     }

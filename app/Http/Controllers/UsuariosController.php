@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UsuariosResource;
 use Illuminate\Http\Request;
 use App\Models\Usuarios;
 use App\Traits\HttpResponse;
@@ -42,9 +43,9 @@ class UsuariosController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Usuarios $usuario)
     {
-
+        return new UsuariosResource($usuario);
     }
 
     /**
@@ -87,7 +88,8 @@ class UsuariosController extends Controller
         $deleted = $usuario->delete();
         if ($deleted){
             return $this->response('usuário deletado', 200);
-        }return $this->error('usuário não foi deletado', 400);
+        }
+        return $this->error('usuário não foi deletado', 400);
     }
 
     public function validation(Request $request){
