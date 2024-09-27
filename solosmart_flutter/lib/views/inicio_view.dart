@@ -62,6 +62,16 @@ class _InicioViewState extends State<InicioView>{
                       // Ação do botão
                     },
                   ),
+                  ListTile(
+                    leading: const Icon(Icons.exit_to_app, color: Colors.white),
+                    title: const Text(
+                      'Sair',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onTap: () {
+                      // Ação do botão
+                    },
+                  ),
                 ]
               ],
             ),
