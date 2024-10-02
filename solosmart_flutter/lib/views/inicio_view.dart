@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:solosmart_flutter/views/login_view.dart';
+import 'package:solosmart_flutter/views/perfil_view.dart';
 
 class InicioView extends StatefulWidget{
   const InicioView({super.key});
@@ -53,6 +55,21 @@ class _InicioViewState extends State<InicioView>{
                     },
                   ),
                   ListTile(
+                    leading: const Icon(Icons.person, color: Colors.white),
+                    title: const Text(
+                      'Perfil',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onTap: () {
+                      // Ação do botão
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const PerfilView()),
+                      );
+                    },
+                  ),
+                  ListTile(
                     leading: const Icon(Icons.settings, color: Colors.white),
                     title: const Text(
                       'Configurações',
@@ -70,6 +87,10 @@ class _InicioViewState extends State<InicioView>{
                     ),
                     onTap: () {
                       // Ação do botão
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const LoginView()),
+                        );
                     },
                   ),
                 ]
