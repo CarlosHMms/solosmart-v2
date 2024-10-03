@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:solosmart_flutter/views/login_view.dart';
+import 'package:solosmart_flutter/views/add_view.dart';
 
-class PerfilView extends StatefulWidget {
-  const PerfilView({super.key});
+class AddView extends StatefulWidget {
+  const AddView({super.key});
 
   @override
-  State<PerfilView> createState() => _PerfilViewState();
+  State<AddView> createState() => _AddViewState();
 }
 
-class _PerfilViewState extends State<PerfilView> {
+class _AddViewState extends State<AddView> {
   bool _isDrawerExpanded = true;
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class _PerfilViewState extends State<PerfilView> {
                         children: [
                           // Exemplo de um nome de usuário
                           Text(
-                            'Nome do Usuário',
+                            'Matheus',
                             style: TextStyle(
                               fontSize: 48,
                               fontWeight: FontWeight.w600,

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:solosmart_flutter/views/login_view.dart';
 import 'package:solosmart_flutter/views/perfil_view.dart';
+import 'package:solosmart_flutter/views/relatorios_view.dart';
+import 'package:solosmart_flutter/views/home_view.dart';
+import 'package:solosmart_flutter/views/add_view.dart';
+import 'package:solosmart_flutter/views/config_view.dart';
 
 class InicioView extends StatefulWidget {
   const InicioView({super.key});
@@ -13,6 +17,19 @@ class _InicioViewState extends State<InicioView> {
   final _formkey = GlobalKey<FormState>();
   bool _isDrawerExpanded = true;
 
+  // Controlador para as telas (views)
+  int _selectedViewIndex = 0;
+
+  // Definir quais telas (views) serão exibidas com base no índice
+  final List<Widget> _views = [
+    const HomeView(), // Tela inicial (Home)
+    const PerfilView(), // Tela de perfil
+    const RelatoriosView(),
+    const AddView(),
+    const ConfigView(), // Tela de relatórios
+    // Adicione outras telas que você quiser
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +39,7 @@ class _InicioViewState extends State<InicioView> {
           // Barra lateral (Drawer) customizada
           AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            width: _isDrawerExpanded ? 210 : 70, // Largura da barra lateral
+            width: _isDrawerExpanded ? 200 : 70, // Largura da barra lateral
             color: const Color(0xFF6D4C3D),
             child: Column(
               children: [
@@ -64,7 +81,10 @@ class _InicioViewState extends State<InicioView> {
                       style: TextStyle(color: Colors.white),
                     ),
                     onTap: () {
-                      // Ação do botão
+                      // Mudar para a tela Home
+                      setState(() {
+                        _selectedViewIndex = 0;
+                      });
                     },
                   ),
                   ListTile(
@@ -74,12 +94,10 @@ class _InicioViewState extends State<InicioView> {
                       style: TextStyle(color: Colors.white),
                     ),
                     onTap: () {
-                      // Ação do botão
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const PerfilView()),
-                      );
+                      // Mudar para a tela de Perfil
+                      setState(() {
+                        _selectedViewIndex = 1;
+                      });
                     },
                   ),
                   ListTile(
@@ -90,7 +108,10 @@ class _InicioViewState extends State<InicioView> {
                       style: TextStyle(color: Colors.white),
                     ),
                     onTap: () {
-                      // Ação do botão
+                      // Mudar para a tela de Relatórios
+                      setState(() {
+                        _selectedViewIndex = 2;
+                      });
                     },
                   ),
                   ListTile(
@@ -101,6 +122,10 @@ class _InicioViewState extends State<InicioView> {
                     ),
                     onTap: () {
                       // Ação do botão
+                      // Mudar para a tela de Adiocionar Central
+                      setState(() {
+                        _selectedViewIndex = 3;
+                      });
                     },
                   ),
                   ListTile(
@@ -111,6 +136,10 @@ class _InicioViewState extends State<InicioView> {
                     ),
                     onTap: () {
                       // Ação do botão
+                      // Mudar para a tela de Configurações
+                      setState(() {
+                        _selectedViewIndex = 4;
+                      });
                     },
                   ),
                   // Adiciona o Spacer para empurrar o botão 'Sair' para o final
@@ -122,7 +151,7 @@ class _InicioViewState extends State<InicioView> {
                       style: TextStyle(color: Colors.white),
                     ),
                     onTap: () {
-                      // Ação do botão
+                      // Ação do botão de sair
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -134,13 +163,11 @@ class _InicioViewState extends State<InicioView> {
               ],
             ),
           ),
-          // Conteúdo principal
+          // Conteúdo principal que muda conforme a opção do menu
           Expanded(
             child: Container(
               color: const Color(0xFFF5F8DE),
-              child: const Center(
-                child: Text("Conteúdo principal"),
-              ),
+              child: _views[_selectedViewIndex], // Exibir a tela selecionada
             ),
           ),
         ],
