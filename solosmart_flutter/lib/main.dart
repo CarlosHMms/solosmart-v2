@@ -13,8 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'SoloSmart',
-      theme: ThemeData(
-      ),
+      theme: ThemeData(),
       home: const InicioView(),
     );
   }

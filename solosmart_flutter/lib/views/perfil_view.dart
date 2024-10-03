@@ -98,7 +98,7 @@ class _PerfilViewState extends State<PerfilView> {
           // Painel principal
           Expanded(
             child: Container(
-              color: Color(0xFFF5F8DE), // Cor de fundo clara
+              color: const Color(0xFFF5F8DE), // Cor de fundo clara
               child: Stack(
                 children: [
                   // Conteúdo do painel principal aqui
@@ -107,17 +107,17 @@ class _PerfilViewState extends State<PerfilView> {
                       width: 934,
                       height: 695,
                       decoration: BoxDecoration(
-                        color: Color(0xFFF5F8DE),
+                        color: const Color(0xFFF5F8DE),
                         borderRadius: BorderRadius.circular(19),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.25),
-                            offset: Offset(-7, 11),
+                            offset: const Offset(-7, 11),
                             blurRadius: 25,
                           ),
                         ],
                       ),
-                      child: Column(
+                      child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           // Exemplo de um nome de usuário
@@ -161,14 +161,14 @@ class _PerfilViewState extends State<PerfilView> {
   // Widget para os itens do menu
   Widget _menuItem(String title, IconData icon, double topPosition) {
     return Padding(
-      padding: EdgeInsets.only(left: 71.0, top: 16.0),
+      padding: const EdgeInsets.only(left: 71.0, top: 16.0),
       child: Row(
         children: [
           Icon(icon, color: Colors.white, size: 26),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 24,
               fontFamily: 'Inter-Regular',
