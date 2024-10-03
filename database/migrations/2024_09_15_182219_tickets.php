@@ -10,11 +10,11 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->foreignId('user_id')->references('id')->on('usuarios')->onDelete('RESTRICT');
             $table->boolean('status');
             $table->string('assunto', 50);
             $table->text('descricao');
             $table->timestamp('data_ticket', precision: 0);
+            $table->foreignId('users_id')->references('id')->on('users')->onDelete('RESTRICT');
         });
     }
 

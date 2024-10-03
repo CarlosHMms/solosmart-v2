@@ -26,7 +26,7 @@ class UsuariosController extends Controller
      */
     public function store(Request $request)
     {
-         $validator = $this->validation($request);
+        $validator = $this->validation($request);
         if($validator -> fails()){
             return $this->error('Dados inválidos', 400, $validator->errors());
         }
@@ -70,7 +70,7 @@ class UsuariosController extends Controller
         $updated = Usuarios::find($id)->update([
             'nome' => $validatedData['nome'],
             'email' => $validatedData['email'],
-            'senha' => $validatedData['senha'],
+            'password' => $validatedData['senha'],
             'nivel_acesso' => $validatedData['nivel_acesso']
         ]);
         if($updated){
