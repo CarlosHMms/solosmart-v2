@@ -12,9 +12,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'SoloSmart',
       theme: ThemeData(),
       home: const InicioView(),
+      routes: {
+        '/home': (context) => const InicioView(),
+      },
     );
   }
 }
