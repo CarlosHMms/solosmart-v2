@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Placas extends Model
 {
-    public function user_id(): HasMany
-    {
-        return $this->hasMany(Usuarios::class, 'id', 'user_id');
-    }
     use HasFactory;
+
+    protected $table = 'placas';
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'cadastro_view.dart';
+import 'inicio_view.dart';
 import 'package:solosmart_flutter/services/auth_user.dart';
 
 class LoginView extends StatefulWidget {
@@ -110,7 +111,12 @@ class _LoginViewState extends State<LoginView> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 content: Text(
-                                    'Login bem-sucedido: ${responseData['message']}')),
+                                    'Sucesso: ${responseData['message']}')),
+                          );
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const InicioView()),
                           );
                           // Navegue para a próxima tela ou faça o que for necessário
                         } else {

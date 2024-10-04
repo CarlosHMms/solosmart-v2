@@ -4,19 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\UsersResource;
 use Illuminate\Http\Request;
-use App\Models\Users;
+use App\Models\User;
 use App\Traits\HttpResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class UsersController extends Controller
+class UserController extends Controller
 {
     use HttpResponse;
     
     public function index()
     {
-        return Users::all();
+        return User::all();
     }
 
 
@@ -32,7 +32,7 @@ class UsersController extends Controller
         $validatedData = $validator->validated();
         $validatedData['password'] = Hash::make($validatedData['password']);
 
-        $created = Users::create($validatedData);
+        $created = User::create($validatedData);
         if($created){
             return $this->response('Usuário cadastrado', 200, $created);
         }
@@ -42,35 +42,52 @@ class UsersController extends Controller
 
     public function login(Request $request)
     {
-        // Validação dos dados de entrada
         $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email',
+            'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:6',
         ]);
 
-        // Verifica se a validação falhou
         if ($validator->fails()) {
             return $this->error('Dados inválidos', 400, $validator->errors());
         }
 
-        // Obtém as credenciais do usuário
-        $credentials = $request->only('email', 'password');
+        $user = Users::where('email', $request->email)->first();
 
-        // Tenta autenticar o usuário
-        if (Auth::attempt($credentials)) {
-            // Autenticação bem-sucedida
-            $user = Auth::user();
-            return $this->response('Login bem-sucedido', 200, new UsersResource($user));
+        if (!$user) {
+            return $this->error('Email incorreto ou usuário não cadastrado', 404);
         }
 
-        // Retorna erro se as credenciais forem inválidas
-        return $this->error('Credenciais inválidas', 401);
+        if (!Hash::check($request->password, $user->password)) {
+            return $this->error('Senha incorreta', 401);
+        }
+
+        $token = $user->createToken('authToken')->plainTextToken;
+
+        return $this->response('Login realizado com sucesso', 200, [
+            'user' => $user,
+            'token' => $token
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+        // Verifica se o usuário está autenticado
+        if ($request->user()) {
+            // Revoke (invalida) o token atual
+            $request->user()->currentAccessToken()->delete();
+
+            // Retorna resposta de sucesso
+            return $this->response('Logout realizado com sucesso', 200);
+        }
+
+        // Caso o usuário não esteja autenticado, retorna erro
+        return $this->error('Usuário não autenticado', 401);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Users $usuario)
+    public function show(User $usuario)
     {
         return new UsersResource($usuario);
     }
@@ -94,7 +111,7 @@ class UsersController extends Controller
         }
         $validatedData = $validator->validated();
         $validatedData['password'] = Hash::make($validatedData['password']);
-        $updated = Users::find($id)->update([
+        $updated = User::find($id)->update([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'password' => $validatedData['password'],
@@ -110,7 +127,7 @@ class UsersController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Users $usuario)
+    public function destroy(User $usuario)
     {
         $deleted = $usuario->delete();
         if ($deleted){
@@ -124,15 +141,6 @@ class UsersController extends Controller
             'name' => 'required|string|max:100',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:6'
-        ]);
-        return $validator;
-    }
-
-    private function loginValidation(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email',
-            'password' => 'required|string|min:6',
         ]);
         return $validator;
     }
