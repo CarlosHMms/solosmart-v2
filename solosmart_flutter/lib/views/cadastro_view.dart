@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:solosmart_flutter/services/auth_user.dart';
 import 'login_view.dart';
 
 class CadastroView extends StatefulWidget {
@@ -10,11 +13,39 @@ class CadastroView extends StatefulWidget {
 
 class _CadastroViewState extends State<CadastroView> {
   final _formKey = GlobalKey<FormState>();
+  final AuthService _authService =
+      AuthService(); // Instância do serviço de autenticação
 
   String _name = '';
   String _email = '';
   String _password = '';
   String _confirmPassword = '';
+
+  // Chama a função de cadastro do serviço de autenticação
+  Future<void> _register() async {
+    try {
+      final response = await _authService.register(_name, _email, _password);
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Sucesso: ${responseData['message']}')),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginView()),
+        );
+      } else {
+        final responseData = jsonDecode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro: ${responseData['message']}')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao conectar-se ao servidor: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,22 +147,21 @@ class _CadastroViewState extends State<CadastroView> {
                     fillColor: Colors.white,
                   ),
                   obscureText: true,
-                  onSaved: (value) => _confirmPassword = value ?? '',
-                  validator: (value) {
+                  /*validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Campo vazio, inválido';
-                    }else if(value.hashCode != _password.hashCode){
+                    } else if (value != _password) {
                       return 'As senhas não coincidem';
                     }
                     return null;
-                  },
+                  },*/
                 ),
                 const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState?.validate() ?? false) {
                       _formKey.currentState?.save();
-                      print('Nome: $_name, Email: $_email, Senha: $_password');
+                      _register(); // Chama a função de registro
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -141,7 +171,8 @@ class _CadastroViewState extends State<CadastroView> {
                       vertical: 18,
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5), // Define a borda menos redonda
+                      borderRadius: BorderRadius.circular(
+                          5), // Define a borda menos redonda
                     ),
                   ),
                   child: const Text(
@@ -161,7 +192,9 @@ class _CadastroViewState extends State<CadastroView> {
                         // Navega para a página de login quando o botão for clicado
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const LoginView()), // Altere LoginPage para a sua página de login
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const LoginView()), // Altere LoginPage para a sua página de login
                         );
                       },
                       child: const Text(

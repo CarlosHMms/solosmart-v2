@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Users;
 use App\Traits\HttpResponse;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
@@ -33,11 +34,39 @@ class UsersController extends Controller
 
         $created = Users::create($validatedData);
         if($created){
-            return $this->response('Usuario criado', 200, $created);
+            return $this->response('Usuário cadastrado', 200, $created);
         }
-        return $this->error('Usuario não foi criado', 400);
+        return $this->error('Usuário não cadastrado', 401);
 
     }
+
+    public function login(Request $request)
+    {
+        // Validação dos dados de entrada
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email',
+            'password' => 'required|string|min:6',
+        ]);
+
+        // Verifica se a validação falhou
+        if ($validator->fails()) {
+            return $this->error('Dados inválidos', 400, $validator->errors());
+        }
+
+        // Obtém as credenciais do usuário
+        $credentials = $request->only('email', 'password');
+
+        // Tenta autenticar o usuário
+        if (Auth::attempt($credentials)) {
+            // Autenticação bem-sucedida
+            $user = Auth::user();
+            return $this->response('Login bem-sucedido', 200, new UsersResource($user));
+        }
+
+        // Retorna erro se as credenciais forem inválidas
+        return $this->error('Credenciais inválidas', 401);
+    }
+
     /**
      * Display the specified resource.
      */
@@ -99,5 +128,12 @@ class UsersController extends Controller
         return $validator;
     }
 
-
+    private function loginValidation(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email',
+            'password' => 'required|string|min:6',
+        ]);
+        return $validator;
+    }
 }

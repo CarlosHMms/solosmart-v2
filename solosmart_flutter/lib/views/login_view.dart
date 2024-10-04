@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'cadastro_view.dart';
+import 'package:solosmart_flutter/services/auth_user.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -8,16 +10,18 @@ class LoginView extends StatefulWidget {
   State<LoginView> createState() => _LoginViewState();
 }
 
-class _LoginViewState extends State<LoginView>{
+class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
+  final AuthService _authService =
+      AuthService(); // Criando uma instância do AuthService
 
   String _email = '';
   String _password = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF6D4C3D), // Fundo marrom
-
       body: Center(
         child: Container(
           padding: const EdgeInsets.all(20.0),
@@ -91,10 +95,39 @@ class _LoginViewState extends State<LoginView>{
                 ),
                 const SizedBox(height: 30),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    // Alterando para uma função assíncrona
                     if (_formKey.currentState?.validate() ?? false) {
                       _formKey.currentState?.save();
                       print('Email: $_email, Senha: $_password');
+
+                      // Chamada da função de login
+                      try {
+                        final response =
+                            await _authService.login(_email, _password);
+                        if (response.statusCode == 200) {
+                          final responseData = jsonDecode(response.body);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text(
+                                    'Login bem-sucedido: ${responseData['message']}')),
+                          );
+                          // Navegue para a próxima tela ou faça o que for necessário
+                        } else {
+                          final responseData = jsonDecode(response.body);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content:
+                                    Text('Erro: ${responseData['message']}')),
+                          );
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content:
+                                  Text('Erro ao conectar-se ao servidor: $e')),
+                        );
+                      }
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -124,7 +157,9 @@ class _LoginViewState extends State<LoginView>{
                         // Navega para a página de login quando o botão for clicado
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const CadastroView()), // direcionamento para tela de cadastro
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const CadastroView()), // direcionamento para tela de cadastro
                         );
                       },
                       child: const Text(
