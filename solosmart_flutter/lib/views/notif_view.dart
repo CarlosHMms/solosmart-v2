@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:solosmart_flutter/views/relatorios_view.dart';
+import 'package:solosmart_flutter/views/notif_view.dart';
 
-class RelatoriosView extends StatefulWidget {
-  const RelatoriosView({super.key});
+class NotifView extends StatefulWidget {
+  const NotifView({super.key});
 
   @override
-  State<RelatoriosView> createState() => _RelatoriosViewState();
+  State<NotifView> createState() => _NotifViewState();
 }
 
-class _RelatoriosViewState extends State<RelatoriosView> {
+class _NotifViewState extends State<NotifView> {
   bool _isDrawerExpanded = true;
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class _RelatoriosViewState extends State<RelatoriosView> {
                         children: [
                           // Exemplo de um nome de usuário
                           Text(
-                            'Felipe',
+                            'Orlando',
                             style: TextStyle(
                               fontSize: 48,
                               fontWeight: FontWeight.w600,

@@ -5,6 +5,7 @@ import 'package:solosmart_flutter/views/relatorios_view.dart';
 import 'package:solosmart_flutter/views/home_view.dart';
 import 'package:solosmart_flutter/views/add_view.dart';
 import 'package:solosmart_flutter/views/config_view.dart';
+import 'package:solosmart_flutter/views/notif_view.dart';
 
 class InicioView extends StatefulWidget {
   const InicioView({super.key});
@@ -27,6 +28,7 @@ class _InicioViewState extends State<InicioView> {
     const RelatoriosView(),
     const AddView(),
     const ConfigView(), // Tela de relatórios
+    const NotifView(),
     // Adicione outras telas que você quiser
   ];
 
@@ -53,6 +55,10 @@ class _InicioViewState extends State<InicioView> {
                             color: Colors.white),
                         onPressed: () {
                           // Ação do botão de notificação
+                          // Mudar para a tela Home
+                          setState(() {
+                            _selectedViewIndex = 5;
+                          });
                         },
                       ),
                     ],
