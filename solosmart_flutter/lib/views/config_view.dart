@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:solosmart_flutter/views/config_view.dart';
 
 class ConfigView extends StatefulWidget {
   const ConfigView({super.key});
@@ -9,7 +8,7 @@ class ConfigView extends StatefulWidget {
 }
 
 class _ConfigViewState extends State<ConfigView> {
-  bool _isDrawerExpanded = true;
+  final bool _isDrawerExpanded = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:solosmart_flutter/views/relatorios_view.dart';
 
 class RelatoriosView extends StatefulWidget {
   const RelatoriosView({super.key});
@@ -9,7 +8,7 @@ class RelatoriosView extends StatefulWidget {
 }
 
 class _RelatoriosViewState extends State<RelatoriosView> {
-  bool _isDrawerExpanded = true;
+  final bool _isDrawerExpanded = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

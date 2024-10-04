@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:solosmart_flutter/views/notif_view.dart';
 
 class NotifView extends StatefulWidget {
   const NotifView({super.key});
@@ -9,7 +8,7 @@ class NotifView extends StatefulWidget {
 }
 
 class _NotifViewState extends State<NotifView> {
-  bool _isDrawerExpanded = true;
+  final bool _isDrawerExpanded = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

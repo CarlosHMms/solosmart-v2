@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:solosmart_flutter/views/login_view.dart';
 
 class PerfilView extends StatefulWidget {
   const PerfilView({super.key});
@@ -9,7 +8,7 @@ class PerfilView extends StatefulWidget {
 }
 
 class _PerfilViewState extends State<PerfilView> {
-  bool _isDrawerExpanded = true;
+  final bool _isDrawerExpanded = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:solosmart_flutter/views/add_view.dart';
 
 class AddView extends StatefulWidget {
   const AddView({super.key});
@@ -9,7 +8,7 @@ class AddView extends StatefulWidget {
 }
 
 class _AddViewState extends State<AddView> {
-  bool _isDrawerExpanded = true;
+  final bool _isDrawerExpanded = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:solosmart_flutter/views/suport_view.dart';
 
 class SuportView extends StatefulWidget {
   const SuportView({super.key});
@@ -9,7 +8,7 @@ class SuportView extends StatefulWidget {
 }
 
 class _SuportViewState extends State<SuportView> {
-  bool _isDrawerExpanded = true;
+  final bool _isDrawerExpanded = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
