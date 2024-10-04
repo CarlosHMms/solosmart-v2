@@ -14,8 +14,7 @@ class Users extends Model
     protected $fillable = [
         'name',
         'email',
-        'password',  // Alterado para 'password' em vez de 'senha'
-        'nivel_acesso'
+        'password',
     ];
     public $timestamps = false;
 }
