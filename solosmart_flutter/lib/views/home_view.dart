@@ -9,7 +9,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  bool _isDrawerExpanded = true;
+  final bool _isDrawerExpanded = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

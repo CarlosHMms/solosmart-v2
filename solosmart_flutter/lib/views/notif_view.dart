@@ -9,7 +9,7 @@ class NotifView extends StatefulWidget {
 }
 
 class _NotifViewState extends State<NotifView> {
-  bool _isDrawerExpanded = true;
+  final bool _isDrawerExpanded = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

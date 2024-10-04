@@ -9,7 +9,7 @@ class PerfilView extends StatefulWidget {
 }
 
 class _PerfilViewState extends State<PerfilView> {
-  bool _isDrawerExpanded = true;
+  final bool _isDrawerExpanded = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

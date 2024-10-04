@@ -9,7 +9,7 @@ class AddView extends StatefulWidget {
 }
 
 class _AddViewState extends State<AddView> {
-  bool _isDrawerExpanded = true;
+  final bool _isDrawerExpanded = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

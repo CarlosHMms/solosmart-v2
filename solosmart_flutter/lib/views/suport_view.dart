@@ -9,7 +9,7 @@ class SuportView extends StatefulWidget {
 }
 
 class _SuportViewState extends State<SuportView> {
-  bool _isDrawerExpanded = true;
+  final bool _isDrawerExpanded = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
