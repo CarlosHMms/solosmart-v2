@@ -1,15 +1,15 @@
 <?php
 
-use App\Http\Controllers\UsuariosController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
-Route::get('/usuarios', [UsuariosController::class, 'index']);
-Route::get('/usuarios/{usuario}', [UsuariosController::class, 'show']);
-Route::post('/usuarios', [UsuariosController::class, 'store']);
-Route::put('/usuarios/{usuario}', [UsuariosController::class, 'update']);
-Route::delete('/usuarios/{usuario}', [UsuariosController::class, 'destroy']);
+Route::get('/usuarios', [UsersController::class, 'index']);
+Route::get('/usuarios/{usuario}', [UsersController::class, 'show']);
+Route::post('/cadastro', [UsersController::class, 'store']);
+Route::put('/usuarios/{usuario}', [UsersController::class, 'update']);
+Route::delete('/usuarios/{usuario}', [UsersController::class, 'destroy']);
 
