@@ -4,19 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\UsersResource;
 use Illuminate\Http\Request;
-use App\Models\Users;
+use App\Models\User;
 use App\Traits\HttpResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class UsersController extends Controller
+class UserController extends Controller
 {
     use HttpResponse;
     
     public function index()
     {
-        return Users::all();
+        return User::all();
     }
 
 
@@ -32,7 +32,7 @@ class UsersController extends Controller
         $validatedData = $validator->validated();
         $validatedData['password'] = Hash::make($validatedData['password']);
 
-        $created = Users::create($validatedData);
+        $created = User::create($validatedData);
         if($created){
             return $this->response('Usuário cadastrado', 200, $created);
         }
@@ -70,7 +70,7 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Users $usuario)
+    public function show(User $usuario)
     {
         return new UsersResource($usuario);
     }
@@ -94,7 +94,7 @@ class UsersController extends Controller
         }
         $validatedData = $validator->validated();
         $validatedData['password'] = Hash::make($validatedData['password']);
-        $updated = Users::find($id)->update([
+        $updated = User::find($id)->update([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'password' => $validatedData['password'],
@@ -110,7 +110,7 @@ class UsersController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Users $usuario)
+    public function destroy(User $usuario)
     {
         $deleted = $usuario->delete();
         if ($deleted){
