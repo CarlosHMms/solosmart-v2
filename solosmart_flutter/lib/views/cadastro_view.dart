@@ -19,7 +19,7 @@ class _CadastroViewState extends State<CadastroView> {
   String _name = '';
   String _email = '';
   String _password = '';
-  String _confirmPassword = '';
+  final String _confirmPassword = '';
 
   // Chama a função de cadastro do serviço de autenticação
   Future<void> _register() async {

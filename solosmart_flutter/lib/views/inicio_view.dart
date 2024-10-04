@@ -22,6 +22,10 @@ class _InicioViewState extends State<InicioView> {
   // Controlador para as telas (views)
   int _selectedViewIndex = 0;
 
+  // Lista de placas para o Dropdown
+  List<String> placas = ['Placa 1', 'Placa 2', 'Placa 3'];
+  String? selectedPlaca;
+
   // Definir quais telas (views) serão exibidas com base no índice
   final List<Widget> _views = [
     const HomeView(), // Tela inicial (Home)
@@ -151,7 +155,35 @@ class _InicioViewState extends State<InicioView> {
                           });
                         },
                       ),
-                      // Adiciona o Spacer para empurrar o botão 'Sair' para o final
+                      // Spacer para empurrar o DropdownButton para o centro
+                      const Spacer(),
+                      // Caixa de seleção (DropdownButton) para selecionar a placa
+                      Container(
+                        width: 150, // Ajuste da largura do Dropdown
+                        child: DropdownButtonFormField<String>(
+                          decoration: const InputDecoration(
+                            labelText: 'Selecione a placa',
+                            labelStyle: TextStyle(color: Colors.white),
+                          ),
+                          value: selectedPlaca,
+                          dropdownColor: const Color(0xFF6D4C3D),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedPlaca = newValue!;
+                            });
+                          },
+                          items: placas.map((String placa) {
+                            return DropdownMenuItem<String>(
+                              value: placa,
+                              child: Text(
+                                placa,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      // Spacer para empurrar o botão "Sair" para o fim
                       const Spacer(),
                       ListTile(
                         leading:

@@ -1,26 +1,65 @@
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final String? selectedPlaca;
+
+  const HomeView({super.key, this.selectedPlaca});
 
   @override
   State<HomeView> createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<HomeView> {
-  final bool _isDrawerExpanded = true;
+  late String placaInfo;
+  late String temperatura;
+  late String umidade;
+
+  @override
+  void initState() {
+    super.initState();
+    _atualizarInformacoes(widget.selectedPlaca);
+  }
+
+  @override
+  void didUpdateWidget(HomeView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.selectedPlaca != widget.selectedPlaca) {
+      _atualizarInformacoes(widget.selectedPlaca);
+    }
+  }
+
+  void _atualizarInformacoes(String? placa) {
+    setState(() {
+      if (placa == 'Placa 1') {
+        placaInfo = 'Placa 1 - Localização: Estufa A';
+        temperatura = 'Temperatura: 25ºC';
+        umidade = 'Umidade: 60%';
+      } else if (placa == 'Placa 2') {
+        placaInfo = 'Placa 2 - Localização: Campo B';
+        temperatura = 'Temperatura: 30ºC';
+        umidade = 'Umidade: 50%';
+      } else if (placa == 'Placa 3') {
+        placaInfo = 'Placa 3 - Localização: Horta C';
+        temperatura = 'Temperatura: 28ºC';
+        umidade = 'Umidade: 55%';
+      } else {
+        placaInfo = 'Nenhuma placa selecionada';
+        temperatura = 'Temperatura: --ºC';
+        umidade = 'Umidade: --%';
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
         children: [
-          // Painel principal
           Expanded(
             child: Container(
               color: const Color(0xFFF5F8DE), // Cor de fundo clara
               child: Stack(
                 children: [
-                  // Conteúdo do painel principal aqui
                   Center(
                     child: Container(
                       width: 934,
@@ -36,30 +75,27 @@ class _HomeViewState extends State<HomeView> {
                           ),
                         ],
                       ),
-                      child: const Column(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Exemplo de um nome de usuário
                           Text(
-                            'Carlos',
-                            style: TextStyle(
-                              fontSize: 48,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'OpenSans-SemiBold',
+                            placaInfo,
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontFamily: 'OpenSans-Regular',
                             ),
                           ),
-                          SizedBox(height: 20),
-                          // Exemplo de informação de contato
+                          const SizedBox(height: 20),
                           Text(
-                            'email@exemplo.com',
-                            style: TextStyle(
+                            temperatura,
+                            style: const TextStyle(
                               fontSize: 24,
                               fontFamily: 'OpenSans-Regular',
                             ),
                           ),
                           Text(
-                            'Senha: ********',
-                            style: TextStyle(
+                            umidade,
+                            style: const TextStyle(
                               fontSize: 24,
                               fontFamily: 'OpenSans-Regular',
                             ),
@@ -70,27 +106,6 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 ],
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Widget para os itens do menu
-  Widget _menuItem(String title, IconData icon, double topPosition) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 71.0, top: 16.0),
-      child: Row(
-        children: [
-          Icon(icon, color: Colors.white, size: 26),
-          const SizedBox(width: 10),
-          Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontFamily: 'Inter-Regular',
             ),
           ),
         ],
