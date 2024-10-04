@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:solosmart_flutter/views/home_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});

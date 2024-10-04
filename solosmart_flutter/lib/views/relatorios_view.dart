@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:solosmart_flutter/views/relatorios_view.dart';
 
 class RelatoriosView extends StatefulWidget {
   const RelatoriosView({super.key});

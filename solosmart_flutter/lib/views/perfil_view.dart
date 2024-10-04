@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:solosmart_flutter/views/login_view.dart';
 
 class PerfilView extends StatefulWidget {
   const PerfilView({super.key});

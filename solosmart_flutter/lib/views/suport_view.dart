@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:solosmart_flutter/views/suport_view.dart';
 
 class SuportView extends StatefulWidget {
   const SuportView({super.key});

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:solosmart_flutter/views/add_view.dart';
 
 class AddView extends StatefulWidget {
   const AddView({super.key});

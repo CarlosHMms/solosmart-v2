@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:solosmart_flutter/views/notif_view.dart';
 
 class NotifView extends StatefulWidget {
   const NotifView({super.key});

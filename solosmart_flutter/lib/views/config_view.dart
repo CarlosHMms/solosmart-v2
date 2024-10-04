@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:solosmart_flutter/views/config_view.dart';
 
 class ConfigView extends StatefulWidget {
   const ConfigView({super.key});
