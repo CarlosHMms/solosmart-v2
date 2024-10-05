@@ -12,7 +12,7 @@ class AuthController extends Controller
     public function login(Request $request){
         if(Auth::attempt($request->only('email','password'))){
             return $this->response('Authorized', 200,[
-                'token' => $request->user()->createToken('tokenAuth')
+                'token' => $request->user()->createToken('tokenAuth', ['placa-index','placa-store','placa-show'])
             ]);
         }
         return $this->response('Not Authorized', 403);

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\UsersResource;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Traits\HttpResponse;
@@ -16,7 +16,7 @@ class UserController extends Controller
     
     public function index()
     {
-        return User::all();
+        return UserResource::collection(User::all());
     }
 
 
@@ -40,56 +40,12 @@ class UserController extends Controller
 
     }
 
-    public function login(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:6',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->error('Dados inválidos', 400, $validator->errors());
-        }
-
-        $user = Users::where('email', $request->email)->first();
-
-        if (!$user) {
-            return $this->error('Email incorreto ou usuário não cadastrado', 404);
-        }
-
-        if (!Hash::check($request->password, $user->password)) {
-            return $this->error('Senha incorreta', 401);
-        }
-
-        $token = $user->createToken('authToken')->plainTextToken;
-
-        return $this->response('Login realizado com sucesso', 200, [
-            'user' => $user,
-            'token' => $token
-        ]);
-    }
-
-    public function logout(Request $request)
-    {
-        // Verifica se o usuário está autenticado
-        if ($request->user()) {
-            // Revoke (invalida) o token atual
-            $request->user()->currentAccessToken()->delete();
-
-            // Retorna resposta de sucesso
-            return $this->response('Logout realizado com sucesso', 200);
-        }
-
-        // Caso o usuário não esteja autenticado, retorna erro
-        return $this->error('Usuário não autenticado', 401);
-    }
-
     /**
      * Display the specified resource.
      */
     public function show(User $usuario)
     {
-        return new UsersResource($usuario);
+        return new UserResource($usuario);
     }
 
     /**

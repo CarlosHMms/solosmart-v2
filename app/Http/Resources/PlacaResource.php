@@ -17,7 +17,10 @@ class PlacaResource extends JsonResource
         return [
             'id' => $this->id,
             'numero_serie' => $this->numero_serie,
-            'user_id' => $this->user_id
+            'user' => [
+                'name' => $this->user->name,
+                'email' => $this->user->email
+            ]
 
         ];
     }
