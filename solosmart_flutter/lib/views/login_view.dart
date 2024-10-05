@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:solosmart_flutter/services/user_provider.dart';
 import 'cadastro_view.dart';
 import 'inicio_view.dart';
 import 'package:solosmart_flutter/services/auth_user.dart';
@@ -108,6 +110,10 @@ class _LoginViewState extends State<LoginView> {
                             await _authService.login(_email, _password);
                         if (response.statusCode == 200) {
                           final responseData = jsonDecode(response.body);
+                          String token = responseData['token'];
+                          var user = responseData['user'];
+                          Provider.of<UserProvider>(context, listen: false)
+                              .setUser(user);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 content: Text(
