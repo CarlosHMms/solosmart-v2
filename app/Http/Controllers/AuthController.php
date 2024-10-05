@@ -12,12 +12,16 @@ class AuthController extends Controller
     public function login(Request $request){
         if(Auth::attempt($request->only('email','password'))){
             return $this->response('Authorized', 200,[
-                'token' => $request->user()->createToken('tokenAuth', ['placa-index','placa-store','placa-show'])
+                'token' => $request->user()->createToken('tokenAuth', ['placa-index','placa-store','placa-show', 'auth-logout'])
             ]);
         }
         return $this->response('Not Authorized', 403);
     }
-    public function logout(){
-
+    public function logout(Request $request){
+        if(!auth()->user()->tokenCan('auth-logout')){
+            return $this->error('Unauthorized', 403);
+        }
+        $request->user()->currentAccessToken()->delete();
+        return $this->response('token revoked', 200);
     }
 }

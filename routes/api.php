@@ -16,7 +16,7 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::get('/placas/{placa}', [PlacaController::class, 'show'])->middleware('auth:sanctum');
     Route::post('/placas', [PlacaController::class, 'store'])->middleware('auth:sanctum');
     Route::get('/placas', [PlacaController::class, 'index'])->middleware('auth:sanctum');
-
+    Route::post('/logout', [AuthController::class, 'logout']);
 });
 
 
