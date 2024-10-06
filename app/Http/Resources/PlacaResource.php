@@ -21,7 +21,6 @@ class PlacaResource extends JsonResource
                 'name' => $this->user->name,
                 'email' => $this->user->email
             ]
-
         ];
     }
 }

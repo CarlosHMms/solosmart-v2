@@ -43,13 +43,17 @@ class PlacaController extends Controller
 
 
 
-    public function show(Placas $placas)
+    public function show($id)
     {
         if(!auth()->user()->tokenCan('placa-show')){
             return $this->error('Unauthorized', 403);
         }
+        $placa = Placas::with('user')->find($id);
+        if (!$placa) {
+            return $this->error('Placa não encontrada', 404);
+        }
 
-        return new PlacaResource($placas);
+        return new PlacaResource($placa);
 
     }
 

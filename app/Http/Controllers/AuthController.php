@@ -11,9 +11,12 @@ class AuthController extends Controller
     use HttpResponse;
     public function login(Request $request){
         if(Auth::attempt($request->only('email','password'))){
+            $token = $request->user()->createToken('tokenAuth', ['placa-index','placa-store','placa-show', 'auth-logout'], now()->addHours(16));
             return $this->response('Authorized', 200,[
-                'token' => $request->user()->createToken('tokenAuth', ['placa-index','placa-store','placa-show', 'auth-logout'])
+                'token' => $token->plainTextToken
+
             ]);
+
         }
         return $this->response('Not Authorized', 403);
     }
