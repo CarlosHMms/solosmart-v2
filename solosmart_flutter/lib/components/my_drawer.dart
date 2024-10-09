@@ -4,8 +4,7 @@ import 'package:solosmart_flutter/views/login_view.dart';
 class MyDrawer extends StatefulWidget {
   final bool isDrawerExpanded;
   final Function(int) onSelectView;
-  final Function(bool)
-      onToggleDrawer;
+  final Function(bool) onToggleDrawer;
   final List<String> placas;
   final String? selectedPlaca;
   final Function(String?) onPlacaSelected;
@@ -65,7 +64,7 @@ class _MyDrawerState extends State<MyDrawer> {
               leading: const Icon(Icons.home, color: Colors.white),
               title: const Text('Home', style: TextStyle(color: Colors.white)),
               onTap: () {
-                widget.onSelectView(0); // Mudar para a tela Home
+                widget.onSelectView(1); // Mudar para a tela Home
               },
             ),
             ListTile(
@@ -73,7 +72,7 @@ class _MyDrawerState extends State<MyDrawer> {
               title:
                   const Text('Perfil', style: TextStyle(color: Colors.white)),
               onTap: () {
-                widget.onSelectView(1); // Mudar para a tela de Perfil
+                widget.onSelectView(2); // Mudar para a tela de Perfil
               },
             ),
             ListTile(
@@ -81,7 +80,7 @@ class _MyDrawerState extends State<MyDrawer> {
               title: const Text('Relatórios',
                   style: TextStyle(color: Colors.white)),
               onTap: () {
-                widget.onSelectView(2); // Mudar para a tela de Relatórios
+                widget.onSelectView(3); // Mudar para a tela de Relatórios
               },
             ),
             ListTile(
@@ -90,7 +89,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   style: TextStyle(color: Colors.white)),
               onTap: () {
                 widget
-                    .onSelectView(3); // Mudar para a tela de Adicionar Central
+                    .onSelectView(4); // Mudar para a tela de Adicionar Central
               },
             ),
             ListTile(
@@ -98,9 +97,10 @@ class _MyDrawerState extends State<MyDrawer> {
               title: const Text('Configurações',
                   style: TextStyle(color: Colors.white)),
               onTap: () {
-                widget.onSelectView(4); // Mudar para a tela de Configurações
+                widget.onSelectView(5); // Mudar para a tela de Configurações
               },
             ),
+
             const Spacer(),
             // Caixa de seleção (DropdownButton) para selecionar a placa
             SizedBox(

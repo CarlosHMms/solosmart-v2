@@ -8,7 +8,6 @@ class RelatoriosView extends StatefulWidget {
 }
 
 class _RelatoriosViewState extends State<RelatoriosView> {
-  final bool _isDrawerExpanded = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solosmart_flutter/views/home_view.dart';
+import 'package:solosmart_flutter/views/placas_view.dart';
 import 'package:solosmart_flutter/views/perfil_view.dart';
 import 'package:solosmart_flutter/views/relatorios_view.dart';
 import 'package:solosmart_flutter/views/add_view.dart';
@@ -20,23 +21,35 @@ class _InicioViewState extends State<InicioView> {
   final _formkey = GlobalKey<FormState>();
   bool _isDrawerExpanded = true;
 
-  // Controlador para as telas (views)
   int _selectedViewIndex = 0;
 
-  // Lista de placas para o Dropdown
   List<String> placas = ['Placa 1', 'Placa 2', 'Placa 3'];
   String? selectedPlaca;
 
-  // Definir quais telas (views) serão exibidas com base no índice
-  final List<Widget> _views = [
-    const HomeView(),
-    const PerfilView(),
-    const RelatoriosView(),
-    const AddView(),
-    const ConfigView(),
-    const NotifView(),
-    const SuportView(),
-  ];
+
+  final List<Widget> _views = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    _views.addAll([
+      PlacasView(
+        onAddButtonPressed: () {
+          setState(() {
+            _selectedViewIndex = 4; 
+          });
+        },
+      ),
+      const HomeView(),
+      const PerfilView(),
+      const RelatoriosView(),
+      const AddView(),
+      const ConfigView(),
+      const NotifView(),
+      const SuportView(),
+    ]);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,21 +80,19 @@ class _InicioViewState extends State<InicioView> {
                   });
                 },
               ),
-              // Conteúdo principal que muda conforme a opção do menu
               Expanded(
                 child: Container(
                   color: const Color(0xFFF5F8DE),
                   child:
-                      _views[_selectedViewIndex], // Exibir a tela selecionada
+                      _views[_selectedViewIndex],
                 ),
               ),
             ],
           ),
-          // Botão flutuante de suporte
           MySupportButton(
             onPressed: () {
               setState(() {
-                _selectedViewIndex = 6;
+                _selectedViewIndex = 7;
               });
             },
           ),

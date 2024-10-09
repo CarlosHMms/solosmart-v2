@@ -25,7 +25,7 @@ class _AddViewState extends State<AddView> {
 
         if (response.statusCode == 200) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Placa cadastrada com sucesso!')),
+            const SnackBar(content: Text('Placa cadastrada com sucesso!')),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
