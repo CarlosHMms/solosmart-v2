@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:solosmart_flutter/services/placaController.dart';
 import 'package:http/http.dart' as http;
+import 'package:solosmart_flutter/utils/provider.dart';
 
 class AddView extends StatefulWidget {
   const AddView({super.key});
@@ -12,6 +14,8 @@ class AddView extends StatefulWidget {
 class _AddViewState extends State<AddView> {
   String _name = '';
   String _numeroSerie = '';
+  String token = '';
+
   final _formKey = GlobalKey<FormState>();
   final PlacaService _placaService = PlacaService();
 
@@ -21,7 +25,7 @@ class _AddViewState extends State<AddView> {
 
       try {
         final http.Response response = await _placaService.cadastrarPlaca(
-            _numeroSerie, 1); // UserId = 1 como exemplo
+            _numeroSerie, 1,token); // UserId = 1 como exemplo
 
         if (response.statusCode == 200) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -43,6 +47,8 @@ class _AddViewState extends State<AddView> {
 
   @override
   Widget build(BuildContext context) {
+
+    token = Provider.of<TokenProvider>(context).token!;
     return Scaffold(
       backgroundColor: const Color(0xFFF5F8DE),
       body: Center(
