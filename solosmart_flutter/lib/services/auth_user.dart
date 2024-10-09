@@ -5,6 +5,7 @@ class AuthService {
   final String baseUrl =
       'http://127.0.0.1:8000/api';
 
+
   Future<http.Response> register(
       String name, String email, String password) async {
     final url = Uri.parse('$baseUrl/cadastro');
@@ -37,6 +38,7 @@ class AuthService {
           'password': password,
         }),
       );
+
       return response;
     } catch (e) {
       throw Exception('Erro ao se conectar com o servidor: $e');

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solosmart_flutter/services/user_provider.dart';
+import 'package:solosmart_flutter/utils/provider.dart';
 import 'cadastro_view.dart';
 import 'inicio_view.dart';
 import 'package:solosmart_flutter/services/auth_user.dart';
@@ -90,8 +91,8 @@ class _LoginViewState extends State<LoginView> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Por favor, insira sua senha';
-                    } else if (value.length < 8) {
-                      return 'A senha deve ter no mínimo 8 caracteres';
+                    } else if (value.length < 6) {
+                      return 'A senha deve ter no mínimo 6 caracteres';
                     }
                     return null;
                   },
@@ -102,14 +103,16 @@ class _LoginViewState extends State<LoginView> {
                     // Alterando para uma função assíncrona
                     if (_formKey.currentState?.validate() ?? false) {
                       _formKey.currentState?.save();
-                      print('Email: $_email, Senha: $_password');
-
                       // Chamada da função de login
                       try {
                         final response =
                             await _authService.login(_email, _password);
                         if (response.statusCode == 200) {
-                          final responseData = jsonDecode(response.body);
+                          final Map<String, dynamic> responseData = jsonDecode(response.body);
+                          String? token = responseData['data']['token'];
+                          if(token != null){
+                            Provider.of<TokenProvider>(context, listen: false).setToken(token);
+                          }
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 content: Text(
