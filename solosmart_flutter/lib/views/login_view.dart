@@ -90,8 +90,8 @@ class _LoginViewState extends State<LoginView> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Por favor, insira sua senha';
-                    } else if (value.length < 6) {
-                      return 'A senha deve ter no mínimo 6 caracteres';
+                    } else if (value.length < 8) {
+                      return 'A senha deve ter no mínimo 8 caracteres';
                     }
                     return null;
                   },
@@ -110,10 +110,6 @@ class _LoginViewState extends State<LoginView> {
                             await _authService.login(_email, _password);
                         if (response.statusCode == 200) {
                           final responseData = jsonDecode(response.body);
-                          String token = responseData['token'];
-                          var user = responseData['user'];
-                          Provider.of<UserProvider>(context, listen: false)
-                              .setUser(user);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 content: Text(
