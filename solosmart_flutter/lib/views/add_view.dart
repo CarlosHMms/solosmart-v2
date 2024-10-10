@@ -47,7 +47,6 @@ class _AddViewState extends State<AddView> {
 
   @override
   Widget build(BuildContext context) {
-
     token = Provider.of<TokenProvider>(context).token!;
     return Scaffold(
       backgroundColor: const Color(0xFFF5F8DE),
