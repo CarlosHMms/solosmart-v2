@@ -7,7 +7,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => TokenProvider()),
+        ChangeNotifierProvider(create: (_) => AllProvider()),
       ],
       child: MyApp(),
     ),

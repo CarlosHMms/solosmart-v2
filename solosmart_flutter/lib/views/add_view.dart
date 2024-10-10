@@ -15,6 +15,7 @@ class _AddViewState extends State<AddView> {
   String _name = '';
   String _numeroSerie = '';
   String token = '';
+  int userId = -1;
 
   final _formKey = GlobalKey<FormState>();
   final PlacaService _placaService = PlacaService();
@@ -25,7 +26,7 @@ class _AddViewState extends State<AddView> {
 
       try {
         final http.Response response = await _placaService.cadastrarPlaca(
-            _numeroSerie, 1,token); // UserId = 1 como exemplo
+            _numeroSerie, userId,token); // UserId = 1 como exemplo
 
         if (response.statusCode == 200) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -47,7 +48,8 @@ class _AddViewState extends State<AddView> {
 
   @override
   Widget build(BuildContext context) {
-    token = Provider.of<TokenProvider>(context).token!;
+    token = Provider.of<AllProvider>(context).token!;
+    userId = Provider.of<AllProvider>(context).userId!;
     return Scaffold(
       backgroundColor: const Color(0xFFF5F8DE),
       body: Center(
