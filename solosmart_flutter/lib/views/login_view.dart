@@ -110,8 +110,12 @@ class _LoginViewState extends State<LoginView> {
                         if (response.statusCode == 200) {
                           final Map<String, dynamic> responseData = jsonDecode(response.body);
                           String? token = responseData['data']['token'];
+                          int? userId = responseData['data']['user']['id'];
+                          if(userId != null){
+                            Provider.of<AllProvider>(context, listen: false).setUserId(userId);
+                          }
                           if(token != null){
-                            Provider.of<TokenProvider>(context, listen: false).setToken(token);
+                            Provider.of<AllProvider>(context, listen: false).setToken(token);
                           }
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
