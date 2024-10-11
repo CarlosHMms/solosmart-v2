@@ -10,7 +10,7 @@ class PlacasView extends StatefulWidget {
 }
 
 class _PlacasViewState extends State<PlacasView> {
-  List<String> placas = ['Placa 1'];
+  List<String> placas = ['Placa 1', 'Placa 2', 'Placa 3'];
 
   @override
   Widget build(BuildContext context) {
@@ -20,56 +20,88 @@ class _PlacasViewState extends State<PlacasView> {
           Expanded(
             child: Container(
               color: const Color(0xFFF5F8DE),
-              child: Stack(
-                children: [
-                  Center(
-                    child: Container(
-                      width: 600,
-                      height: 400,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF5F8DE),
-                        borderRadius: BorderRadius.circular(19),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.25),
-                            offset: const Offset(-7, 11),
-                            blurRadius: 25,
-                          ),
-                        ],
+              child: Center(
+                child: Container(
+                  width: 450,
+                  height: 500,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF5F8DE),
+                    borderRadius: BorderRadius.circular(19),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.25),
+                        offset: const Offset(-7, 11),
+                        blurRadius: 25,
                       ),
-                      child: Column(
+                    ],
+                  ),
+                  child: Stack(
+                    children: [
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          placas.isNotEmpty
-                              ? Expanded(
-                                  child: ListView.builder(
-                                    itemCount: placas.length,
-                                    itemBuilder: (context, index) {
-                                      return ListTile(
-                                        title: Text(placas[index]),
-                                      );
-                                    },
-                                  ),
-                                )
-                              : const Text(
-                                  'Não há placas adicionadas',
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 20.0),
-                            child: ElevatedButton(
-                              onPressed: widget.onAddButtonPressed,
-                              child: const Text(
-                                "+ Adicionar Placa",
-                                style: TextStyle(fontSize: 20),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 50.0),
+                            child: Text(
+                              'Selecionar Central',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 40,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Open Sans',
+                                color: Colors.black,
                               ),
                             ),
                           ),
+                          Expanded(
+                            child: placas.isNotEmpty
+                                ? ListView.builder(
+                                    padding: const EdgeInsets.all(16.0),
+                                    itemCount: placas.length,
+                                    itemBuilder: (context, index) {
+                                      return ListTile(
+                                        title: Text(
+                                          placas[index],
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      );
+                                    },
+                                  )
+                                : const Center(
+                                    child: Text(
+                                      'Não há placas adicionadas',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                          ),
                         ],
                       ),
-                    ),
+                      Positioned(
+                        bottom: 60,
+                        left: 0,
+                        right: 0,
+                        child: Center(
+                          child: InkWell(
+                            onTap: widget.onAddButtonPressed,
+                            child: Container(
+                              width: 60,
+                              height: 60,
+                              decoration: const BoxDecoration(
+                                color: Color.fromRGBO(65, 51, 122, 1),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.add,
+                                size: 32,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
