@@ -19,12 +19,12 @@ class _CadastroViewState extends State<CadastroView> {
   String _name = '';
   String _email = '';
   String _password = '';
-  final String _confirmPassword = '';
+  String _confirmPassword = '';
 
   // Chama a função de cadastro do serviço de autenticação
   Future<void> _register() async {
     try {
-      final response = await _authService.register(_name, _email, _password);
+      final response = await _authService.register(_name, _email, _password, _confirmPassword);
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -146,6 +146,7 @@ class _CadastroViewState extends State<CadastroView> {
                     filled: true,
                     fillColor: Colors.white,
                   ),
+                  onSaved: (value) => _confirmPassword = value ?? '',
                   obscureText: true,
                   /*validator: (value) {
                     if (value == null || value.isEmpty) {

@@ -7,7 +7,7 @@ class AuthService {
 
 
   Future<http.Response> register(
-      String name, String email, String password) async {
+      String name, String email, String password, String password_confirmation) async {
     final url = Uri.parse('$baseUrl/cadastro');
 
     try {
@@ -18,6 +18,7 @@ class AuthService {
           'name': name,
           'email': email,
           'password': password,
+          'password_confirmation': password_confirmation
         }),
       );
       return response;
