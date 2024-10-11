@@ -17,7 +17,7 @@ class MySupportButton extends StatelessWidget {
             width: 80,
             height: 80,
             decoration: const BoxDecoration(
-              color: Color.fromRGBO(65, 51, 122, 1), // Cor roxa
+              color: Color.fromRGBO(65, 51, 122, 1),
               shape: BoxShape.circle,
             ),
           ),
