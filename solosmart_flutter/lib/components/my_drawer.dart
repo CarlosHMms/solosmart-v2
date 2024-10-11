@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:solosmart_flutter/services/auth_user.dart';
+import 'package:solosmart_flutter/utils/provider.dart';
 import 'package:solosmart_flutter/views/login_view.dart';
 
 class MyDrawer extends StatefulWidget {
@@ -24,8 +29,11 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
+  final AuthService _authService = AuthService();
+    String token = '';
   @override
   Widget build(BuildContext context) {
+    token = Provider.of<AllProvider>(context).token!;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       width: widget.isDrawerExpanded ? 210 : 70, // Largura da barra lateral
@@ -128,10 +136,17 @@ class _MyDrawerState extends State<MyDrawer> {
             ListTile(
               leading: const Icon(Icons.exit_to_app, color: Colors.white),
               title: const Text('Sair', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.push(
+              onTap: () async {
+                // Função para realizar o logout
+                final response = await _authService.logout(token);
+                if(response.statusCode == 200){
+                  print(response.body);
+                }
+
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginView()),
+                      (Route<dynamic> route) => false,
                 );
               },
             ),

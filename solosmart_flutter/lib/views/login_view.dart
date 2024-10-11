@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:solosmart_flutter/services/user_provider.dart';
 import 'package:solosmart_flutter/utils/provider.dart';
 import 'cadastro_view.dart';
 import 'inicio_view.dart';
@@ -119,8 +118,7 @@ class _LoginViewState extends State<LoginView> {
                           }
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                                content: Text(
-                                    'Sucesso: ${responseData['message']}')),
+                                content: Text('Sucesso: ${responseData['message']}')),
                           );
                           Navigator.pushReplacement(
                             context,
@@ -130,13 +128,16 @@ class _LoginViewState extends State<LoginView> {
                           // Navegue para a próxima tela ou faça o que for necessário
                         } else {
                           final responseData = jsonDecode(response.body);
+                          print(responseData['message']);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 content:
                                     Text('Erro: ${responseData['message']}')),
+
                           );
                         }
                       } catch (e) {
+                        print(e);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                               content:

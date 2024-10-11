@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solosmart_flutter/utils/provider.dart';
 import 'package:solosmart_flutter/views/inicio_view.dart';
+import 'package:solosmart_flutter/views/login_view.dart';
 
 void main() {
   runApp(
@@ -24,9 +25,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'SoloSmart',
       theme: ThemeData(),
-      home: const InicioView(),
+      home: const LoginView(),
       routes: {
-        '/home': (context) => const InicioView(),
+        '/home': (context) => const LoginView(),
       },
     );
   }
