@@ -9,6 +9,7 @@ use App\Traits\HttpResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
 
 class UserController extends Controller
 {
@@ -96,7 +97,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:100',
             'email' => 'required|string|email|max:255|unique:users,email',
-            'password' => 'required|string|min:6'
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
         return $validator;
     }
