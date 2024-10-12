@@ -12,27 +12,27 @@ class PasswordRecoveryView extends StatefulWidget {
 
 class _PasswordRecoveryViewState extends State<PasswordRecoveryView> {
   final _formKey = GlobalKey<FormState>();
-  final AuthService _authService = AuthService(); // Instância do AuthService
+  final AuthService _authService = AuthService();
 
   String _email = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF6D4C3D), // Fundo marrom
+      backgroundColor: const Color(0xFF6D4C3D),
       body: Center(
         child: Container(
           padding: const EdgeInsets.all(20.0),
-          width: 350, // Largura do container
+          width: 350,
           decoration: BoxDecoration(
-            color: const Color(0xFFF5F8DE), // Cor Off-White do container
-            borderRadius: BorderRadius.circular(10.0), // Bordas arredondadas
+            color: const Color(0xFFF5F8DE),
+            borderRadius: BorderRadius.circular(10.0),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.2),
                 spreadRadius: 3,
                 blurRadius: 5,
-                offset: const Offset(0, 3), // Sombra
+                offset: const Offset(0, 3),
               ),
             ],
           ),
@@ -42,16 +42,16 @@ class _PasswordRecoveryViewState extends State<PasswordRecoveryView> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Image.asset(
-                  'assets/images/SoloSmart.png', // Caminho da imagem
-                  width: 200, // Largura da imagem
-                  height: 100, // Altura da imagem
+                  'assets/images/SoloSmart.png',
+                  width: 200,
+                  height: 100,
                 ),
                 const Text(
                   'Recuperar Senha',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black, // Cor do texto título
+                    color: Colors.black,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -78,54 +78,50 @@ class _PasswordRecoveryViewState extends State<PasswordRecoveryView> {
                     if (_formKey.currentState?.validate() ?? false) {
                       _formKey.currentState?.save();
                       try {
-                        final message = await _authService.passwordRecovery(
-                            _email); // Chama a função de recuperação de senha
+                        final response =
+                            await _authService.passwordRecovery(_email);
+                        final Map<String, dynamic> responseData =
+                            jsonDecode(response.body);
 
-                        // Exibe mensagem dependendo do resultado
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(message),
-                            backgroundColor:
-                                Colors.green, // Cor verde para sucesso
-                          ),
-                        );
-
-                        // Verifica se a recuperação foi bem-sucedida
-                        if (message.startsWith('Sucesso')) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const LoginView()),
+                        if (response.statusCode == 200) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content:
+                                  Text('Sucesso: ${responseData['status']}'),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content:
+                                    Text('Erro: ${responseData['email'][0]}')),
                           );
                         }
                       } catch (e) {
                         print(e);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content:
-                                Text('Erro ao conectar-se ao servidor: $e'),
-                            backgroundColor:
-                                Colors.red, // Cor vermelha para erro
-                          ),
+                              content:
+                                  Text('Erro ao conectar-se ao servidor: $e')),
                         );
                       }
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF41337A), // Cor do botão
+                    backgroundColor: const Color(0xFF41337A),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 115,
                       vertical: 18,
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5), // Define a borda
+                      borderRadius: BorderRadius.circular(5),
                     ),
                   ),
                   child: const Text(
                     'Enviar',
                     style: TextStyle(
                       fontSize: 18,
-                      color: Colors.white, // Cor do texto do botão
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -143,7 +139,7 @@ class _PasswordRecoveryViewState extends State<PasswordRecoveryView> {
                       },
                       child: const Text(
                         'Faça login',
-                        style: TextStyle(color: Colors.blue), // Cor do link
+                        style: TextStyle(color: Colors.blue),
                       ),
                     ),
                   ],

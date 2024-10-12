@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:solosmart_flutter/utils/provider.dart';
 import 'package:solosmart_flutter/views/inicio_view.dart';
 import 'package:solosmart_flutter/views/login_view.dart';
+import 'package:solosmart_flutter/views/redefinir_view.dart';
 
 void main() {
   runApp(
@@ -10,7 +11,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => AllProvider()),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
@@ -25,9 +26,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'SoloSmart',
       theme: ThemeData(),
-      home: const LoginView(),
+      //home: const LoginView(),
       routes: {
-        '/home': (context) => const LoginView(),
+        '/': (context) => const LoginView(),
+        '/reset': (context) => ResetPasswordView(),
       },
     );
   }

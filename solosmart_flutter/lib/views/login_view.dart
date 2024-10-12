@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solosmart_flutter/utils/provider.dart';
-import 'package:solosmart_flutter/views/recuperarLink.dart';
+import 'package:solosmart_flutter/views/recuperar_view.dart';
 import 'cadastro_view.dart';
 import 'inicio_view.dart';
 import 'package:solosmart_flutter/services/auth_user.dart';

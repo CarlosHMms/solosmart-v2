@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  final String baseUrl = 'http://127.0.0.1/api';
+  final String baseUrl = 'http://127.0.0.1:8000/api';
 
-  Future<String> passwordRecovery(String email) async {
+  Future<http.Response> passwordRecovery(String email) async {
     final url = Uri.parse('$baseUrl/recover');
 
     try {
@@ -14,13 +14,7 @@ class AuthService {
         body: jsonEncode({'email': email}),
       );
 
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = jsonDecode(response.body);
-        return responseData['status'];
-      } else {
-        final Map<String, dynamic> errorData = jsonDecode(response.body);
-        return errorData['email'][0];
-      }
+      return response;
     } catch (e) {
       throw Exception('Erro ao se conectar com o servidor: $e');
     }
