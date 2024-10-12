@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solosmart_flutter/utils/provider.dart';
+import 'package:solosmart_flutter/views/recuperarLink.dart';
 import 'cadastro_view.dart';
 import 'inicio_view.dart';
 import 'package:solosmart_flutter/services/auth_user.dart';
@@ -95,6 +96,39 @@ class _LoginViewState extends State<LoginView> {
                     }
                     return null;
                   },
+                ),
+                Positioned(
+                  left: 727,
+                  top: 646,
+                  child: SizedBox(
+                    width: 466,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: GestureDetector(
+                        onTap: () {
+                          // Redireciona para a página de recuperação de senha
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const PasswordRecoveryView(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Esqueceu a senha?',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                            fontFamily: 'Open Sans',
+                            decoration:
+                                TextDecoration.underline, // Estilo de link
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 30),
                 ElevatedButton(

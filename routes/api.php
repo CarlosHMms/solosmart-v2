@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlacaController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -26,4 +27,5 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::post('/login', [AuthController::class, 'login']);
     Route::put('/usuarios/{usuario}', [UserController::class, 'update']);
     Route::delete('/usuarios/{usuario}', [UserController::class, 'destroy']);
+    Route::post('/recover', [PasswordResetLinkController::class, 'store']);
 

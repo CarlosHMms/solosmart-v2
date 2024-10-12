@@ -14,7 +14,7 @@ class AuthController extends Controller
         if(Auth::attempt($request->only('email','password'))){
             $user = Auth::user();
             $token = $request->user()->createToken('tokenAuth', ['placa-index','placa-store','placa-show', 'auth-logout'], now()->addHours(16));
-            return $this->response('Authorized', 200,[
+            return $this->response('Login Realizado!', 200,[
                 'token' => $token->plainTextToken,
                 'user' => [
                     'id' => $user->id,
@@ -23,7 +23,7 @@ class AuthController extends Controller
             ]);
 
         }
-        return $this->response('Not Authorized', 403);
+        return $this->response('Email ou Senha incorretos!', 403);
     }
     public function logout(Request $request){
         if(!auth()->user()->tokenCan('auth-logout')){
