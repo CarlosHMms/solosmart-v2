@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class AllProvider with ChangeNotifier {
   String? _token;
   int? _userId;
+  Map<String, dynamic>? _user;
 
   int? get userId => _userId;
 
@@ -16,6 +17,13 @@ class AllProvider with ChangeNotifier {
 
   void setToken(String token) {
     _token = token;
+    notifyListeners();
+  }
+
+  Map<String, dynamic>? get user => _user;
+
+  void setUser(Map<String, dynamic> user) {
+    _user = user;
     notifyListeners();
   }
 }

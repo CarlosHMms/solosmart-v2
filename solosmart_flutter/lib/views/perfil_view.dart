@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:solosmart_flutter/utils/provider.dart';
 
 class PerfilView extends StatefulWidget {
   const PerfilView({super.key});
@@ -10,6 +12,9 @@ class PerfilView extends StatefulWidget {
 class _PerfilViewState extends State<PerfilView> {
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<AllProvider>(context);
+    final user = userProvider.user;
+
     return Scaffold(
       body: Row(
         children: [
@@ -35,28 +40,27 @@ class _PerfilViewState extends State<PerfilView> {
                           ),
                         ],
                       ),
-                      child: const Column(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Exemplo de um nome de usuário
                           Text(
-                            'Nome do Usuário',
-                            style: TextStyle(
+                            user?['name'] ?? 'Nome do Usuário',
+                            style: const TextStyle(
                               fontSize: 48,
                               fontWeight: FontWeight.w600,
                               fontFamily: 'OpenSans-SemiBold',
                             ),
                           ),
-                          SizedBox(height: 20),
-                          // Exemplo de informação de contato
+                          const SizedBox(height: 20),
                           Text(
-                            'email@exemplo.com',
-                            style: TextStyle(
+                            user?['email'] ?? 'email@exemplo.com',
+                            style: const TextStyle(
                               fontSize: 24,
                               fontFamily: 'OpenSans-Regular',
                             ),
                           ),
-                          Text(
+                          const SizedBox(height: 10),
+                          const Text(
                             'Senha: ********',
                             style: TextStyle(
                               fontSize: 24,
