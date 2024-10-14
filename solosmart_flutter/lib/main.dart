@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       //home: const LoginView(),
       routes: {
         '/': (context) => const LoginView(),
-        '/reset': (context) => ResetPasswordView(),
+        '/reset': (context) => const ResetPasswordView(),
       },
     );
   }

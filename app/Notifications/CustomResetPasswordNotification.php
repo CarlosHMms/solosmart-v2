@@ -23,7 +23,7 @@ class CustomResetPasswordNotification extends Notification
 
     public function toMail($notifiable)
     {
-        $flutterUrl = 'http://localhost:50029/reset';
+        $flutterUrl = 'http://localhost:50000/reset';
         $url = $flutterUrl . '?token=' . $this->token . '&email=' . urlencode($notifiable->email);
 
         return (new MailMessage)
