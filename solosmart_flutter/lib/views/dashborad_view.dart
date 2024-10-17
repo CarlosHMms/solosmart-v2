@@ -5,8 +5,9 @@ class DashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const temperature = '0°C'; // Substitua por dados reais
-    const airHumidity = '0%'; // Substitua por dados reais
+    const temperature = '0°C';
+    const airHumidity = '0%';
+    const soilHumidity = '0%';
 
     return Scaffold(
       body: Row(
@@ -14,7 +15,7 @@ class DashboardView extends StatelessWidget {
           // Painel principal
           Expanded(
             child: Container(
-              color: const Color(0xFFF5F8DE), // Cor de fundo clara
+              color: const Color(0xFFF5F8DE),
               child: Stack(
                 children: [
                   // Conteúdo do painel principal aqui
@@ -55,6 +56,15 @@ class DashboardView extends StatelessWidget {
                               value: airHumidity,
                               icon: Icons.water_drop_outlined,
                               color: Colors.blueAccent,
+                            ),
+                            const SizedBox(height: 20),
+                            // Umidade do Solo
+                            _buildDashboardCard(
+                              context,
+                              title: 'Umidade do Solo',
+                              value: soilHumidity,
+                              icon: Icons.grass_outlined,
+                              color: Colors.greenAccent,
                             ),
                             const SizedBox(height: 30),
                           ],

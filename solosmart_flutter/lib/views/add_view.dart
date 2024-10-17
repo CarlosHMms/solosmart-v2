@@ -15,41 +15,42 @@ class _AddViewState extends State<AddView> {
   String _name = '';
   String _numeroSerie = '';
   String token = '';
-  int userId = -1;
 
   final _formKey = GlobalKey<FormState>();
   final PlacaService _placaService = PlacaService();
 
-  Future<void> _cadastrarPlaca() async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState?.save();
-
-      try {
-        final http.Response response = await _placaService.cadastrarPlaca(
-            _numeroSerie, userId,token); // UserId = 1 como exemplo
-
-        if (response.statusCode == 200) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Placa cadastrada com sucesso!')),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text('Erro ao cadastrar placa: ${response.body}')),
-          );
-        }
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro: $e')),
-        );
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     token = Provider.of<AllProvider>(context).token!;
-    userId = Provider.of<AllProvider>(context).userId!;
+    final userProvider = Provider.of<AllProvider>(context);
+    final user = userProvider.user;
+
+    Future<void> _cadastrarPlaca() async {
+      if (_formKey.currentState!.validate()) {
+        _formKey.currentState?.save();
+
+        try {
+          final http.Response response = await _placaService.cadastrarPlaca(
+              _numeroSerie, user?['id'], token);
+
+          if (response.statusCode == 200) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Placa cadastrada com sucesso!')),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content: Text('Erro ao cadastrar placa: ${response.body}')),
+            );
+          }
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Erro: $e')),
+          );
+        }
+      }
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFFF5F8DE),
       body: Center(

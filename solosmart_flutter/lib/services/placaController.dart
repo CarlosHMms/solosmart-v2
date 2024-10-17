@@ -22,7 +22,7 @@ class PlacaService{
         },
         body: jsonEncode({
           'numero_serie': numeroSerie,
-          'user_id': userId,
+          'users_id': userId,
         }),
       );
       return response;

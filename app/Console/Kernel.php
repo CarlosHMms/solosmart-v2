@@ -11,7 +11,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         //todos os tokens que foram expirados dentro das últimas 24 horas serão apagados das tabelas no banco
-         $schedule->command('sanctum:prune-expired')->dailyAt('00:00')->timezone('America/Sao_Paulo');
+        $schedule->command('sanctum:prune-expired')->dailyAt('00:00')->timezone('America/Sao_Paulo');
     }
 
     protected function commands()

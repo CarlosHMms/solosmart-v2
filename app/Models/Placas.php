@@ -12,7 +12,7 @@ class Placas extends Model
     protected $table = 'placas';
     protected $fillable = [
         'numero_serie',
-        'user_id',
+        'users_id',
 
     ];
 
