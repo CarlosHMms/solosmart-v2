@@ -1,9 +1,6 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
-import 'package:solosmart_flutter/services/auth_user.dart';
-import 'package:solosmart_flutter/utils/provider.dart';
 
 class PlacaService{
   final String baseUrl = 'http://127.0.0.1:8000/api';
