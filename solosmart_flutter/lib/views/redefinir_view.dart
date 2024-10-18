@@ -35,21 +35,21 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF6d4c3d),
+      backgroundColor: const Color(0xFF6d4c3d),
       body: Center(
         child: SingleChildScrollView(
           child: Container(
             width: 612,
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Color(0xFFf5f8de),
+              color: const Color(0xFFf5f8de),
               borderRadius: BorderRadius.circular(19),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
                   spreadRadius: 4,
                   blurRadius: 10,
-                  offset: Offset(0, 4),
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
@@ -58,7 +58,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Solo',
                     style: TextStyle(
                       fontFamily: 'Academy',
@@ -66,7 +66,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                       fontSize: 40,
                     ),
                   ),
-                  Text(
+                  const Text(
                     'Smart',
                     style: TextStyle(
                       fontFamily: 'Academy',
@@ -74,8 +74,8 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                       fontSize: 40,
                     ),
                   ),
-                  SizedBox(height: 20),
-                  Text(
+                  const SizedBox(height: 20),
+                  const Text(
                     'Nova Senha',
                     style: TextStyle(
                       fontFamily: 'Open Sans',
@@ -84,12 +84,12 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   // Campo de Senha
                   TextFormField(
                     controller: _passwordController,
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Senha',
                       border: OutlineInputBorder(),
                     ),
@@ -100,12 +100,12 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   // Campo de Repetir Senha
                   TextFormField(
                     controller: _confirmPasswordController,
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Repetir Senha',
                       border: OutlineInputBorder(),
                     ),
@@ -119,7 +119,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                   // Botões de Cancelar e Redefinir
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -131,13 +131,13 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.grey[200],
-                          side: BorderSide(color: Color(0xFF41337a), width: 2),
+                          side: const BorderSide(color: Color(0xFF41337a), width: 2),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(
                               horizontal: 30, vertical: 15),
                           child: Text(
                             'Cancelar',
@@ -153,13 +153,13 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                       ElevatedButton(
                         onPressed: _resetPassword,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF41337a),
+                          backgroundColor: const Color(0xFF41337a),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(
                               horizontal: 30, vertical: 15),
                           child: Text(
                             'Redefinir',
