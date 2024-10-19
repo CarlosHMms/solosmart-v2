@@ -7,7 +7,6 @@ use App\Traits\HttpResponse;
 use Illuminate\Http\Request;
 use App\Models\Gravacoes;
 use App\Models\Placas;
-use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Validator;
 
 class SensorDataController extends Controller
@@ -30,10 +29,10 @@ class SensorDataController extends Controller
     if ($validator->fails()) {
         return $this->error('Validation failed', 422, $validator->errors());
     }
-
+    $placa_id = $validator->validated()['placa_id'];
     try {
         // Dispara o job para gerar dados do sensor
-        Bus::dispatch(new GenerateSensorDataJob($request->placa_id));
+        GenerateSensorDataJob::dispatch(($placa_id));
         
         // Se o dispatch for bem-sucedido
         return $this->response('Geração de dados iniciada para a placa.', 200);

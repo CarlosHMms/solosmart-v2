@@ -17,7 +17,7 @@ class GenerateSensorDataJob implements ShouldQueue
 
     public function __construct($placaId)
     {
-        $this->placaId = $placaId;
+        
     }
 
     public function handle()
