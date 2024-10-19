@@ -15,22 +15,31 @@ class PlacasView extends StatefulWidget {
 
 class _PlacasViewState extends State<PlacasView> {
   final PlacaService _placaController = PlacaService();
-  String token = '';
+  String? token;
   List<dynamic> _placas = []; // Lista dinâmica para armazenar as placas
 
   @override
   void initState() {
     super.initState();
-    _carregarPlacas();   // Chama a função para carregar as placas ao inicializar a tela
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    token = Provider.of<AllProvider>(context).token;
+
+    if (token != null) {
+      _carregarPlacas(); // Chama a função para carregar as placas ao inicializar a tela
+    }
   }
 
   Future<void> _carregarPlacas() async {
     try {
-      final response = await _placaController.listarPlaca(token);
+      final response = await _placaController.listarPlaca(token!);
 
       if (response.statusCode == 200) {
         // Decodifica o JSON e atualiza o estado com a lista de placas
-        List<dynamic> placasJson = json.decode(response.body);
+        List<dynamic> placasJson = json.decode(response.body)['data'];
         setState(() {
           _placas = placasJson;
         });
@@ -45,7 +54,6 @@ class _PlacasViewState extends State<PlacasView> {
 
   @override
   Widget build(BuildContext context) {
-    token = Provider.of<AllProvider>(context).token!;
     return Scaffold(
       body: Row(
         children: [
@@ -93,7 +101,7 @@ class _PlacasViewState extends State<PlacasView> {
                                     itemBuilder: (context, index) {
                                       return ListTile(
                                         title: Text(
-                                          _placas[index],
+                                          _placas[index]['name'],
                                           textAlign: TextAlign.center,
                                         ),
                                       );
