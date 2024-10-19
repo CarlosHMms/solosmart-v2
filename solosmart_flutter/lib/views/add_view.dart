@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:solosmart_flutter/services/placaController.dart';
+import 'package:solosmart_flutter/services/placaService.dart';
 import 'package:http/http.dart' as http;
 import 'package:solosmart_flutter/utils/provider.dart';
 
