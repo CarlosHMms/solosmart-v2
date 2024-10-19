@@ -22,27 +22,6 @@ class PlacaController extends Controller
         return PlacaResource::collection($placas);
     }
 
-    // Método de sucesso
-    protected function success($message, $data, $statusCode = 200)
-    {
-        return response()->json([
-            'status' => 'success',
-            'message' => $message,
-            'data' => $data,
-        ], $statusCode);
-    }
-
-    // Método de erro
-    protected function error($message, $statusCode)
-    {
-        return response()->json([
-            'status' => 'error',
-            'message' => $message,
-        ], $statusCode);
-    }
-
-
-
     public function store(Request $request)
     {
         if(!auth()->user()->tokenCan('placa-store')){
