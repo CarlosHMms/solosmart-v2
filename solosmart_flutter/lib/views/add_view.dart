@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solosmart_flutter/services/placaController.dart';
 import 'package:http/http.dart' as http;
 import 'package:solosmart_flutter/utils/provider.dart';
+import 'package:solosmart_flutter/views/inicio_view.dart';
 
 class AddView extends StatefulWidget {
   const AddView({super.key});
@@ -34,8 +37,17 @@ class _AddViewState extends State<AddView> {
               _numeroSerie, user?['id'], token);
 
           if (response.statusCode == 200) {
+            final Map<String, dynamic> responseData = jsonDecode(response.body);
+            Map<String, dynamic>? placas = responseData['data'];
+            if (placas != null) {
+              Provider.of<AllProvider>(context, listen: false).setPlacas(placas);
+            }
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Placa cadastrada com sucesso!')),
+            );
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const InicioView()),
             );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
