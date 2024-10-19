@@ -11,7 +11,7 @@ class Kernel extends ConsoleKernel
 {
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('sanctum:prune-expired')->dailyAt('00:00')->timezone('America/Sao_Paulo');
+        $schedule->command('sanctum:prune-expired --hours=24')->daily();
         $schedule->job(new GenerateSensorDataJob())->everyMinute();
     }
 
