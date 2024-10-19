@@ -11,6 +11,7 @@ return new class extends Migration
     {
         Schema::create('placas', function (Blueprint $table) {
             $table->id()->autoIncrement();
+            $table->string('name', 255);
             $table->string('numero_serie', 50);
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('RESTRICT');
         });

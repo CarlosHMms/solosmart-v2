@@ -5,7 +5,7 @@ class PlacaService{
   final String baseUrl = 'http://127.0.0.1:8000/api';
 
 
-  Future<http.Response> cadastrarPlaca(String numeroSerie,  String token) async {
+  Future<http.Response> cadastrarPlaca(String name, String numeroSerie,  String token) async {
     final url = Uri.parse('$baseUrl/placas');
 
     try {
@@ -17,6 +17,7 @@ class PlacaService{
           'Authorization': 'Bearer $token',
         },
         body: jsonEncode({
+          'name': name,
           'numero_serie': numeroSerie
         }),
       );

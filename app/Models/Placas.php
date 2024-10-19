@@ -11,6 +11,7 @@ class Placas extends Model
 
     protected $table = 'placas';
     protected $fillable = [
+        'name',
         'numero_serie',
         'user_id',
 

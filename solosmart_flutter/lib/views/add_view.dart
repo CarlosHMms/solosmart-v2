@@ -33,7 +33,7 @@ class _AddViewState extends State<AddView> {
 
         try {
           final http.Response response =
-              await _placaService.cadastrarPlaca(_numeroSerie, _token);
+              await _placaService.cadastrarPlaca(_name, _numeroSerie, _token);
 
           if (response.statusCode == 200) {
             final Map<String, dynamic> responseData = jsonDecode(response.body);
