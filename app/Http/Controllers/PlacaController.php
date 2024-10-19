@@ -17,8 +17,31 @@ class PlacaController extends Controller
         if(!auth()->user()->tokenCan('placa-index')){
             return $this->error('Unauthorized', 403);
         }
-        return PlacaResource::collection(Placas::with('user')->get());
+        $placas = Placas::with('user')->where('user_id', auth()->id())->get();
+
+        return PlacaResource::collection($placas);
     }
+
+    // Método de sucesso
+    protected function success($message, $data, $statusCode = 200)
+    {
+        return response()->json([
+            'status' => 'success',
+            'message' => $message,
+            'data' => $data,
+        ], $statusCode);
+    }
+
+    // Método de erro
+    protected function error($message, $statusCode)
+    {
+        return response()->json([
+            'status' => 'error',
+            'message' => $message,
+        ], $statusCode);
+    }
+
+
 
     public function store(Request $request)
     {
@@ -26,6 +49,7 @@ class PlacaController extends Controller
             return $this->error('Unauthorized', 403);
         }
         $validator = Validator::make($request->all(),[
+            'name' => 'required|string|max:255',
             'numero_serie' => 'required|string|max:50'
         ]);
         if($validator->fails()){
@@ -33,6 +57,7 @@ class PlacaController extends Controller
         }
         
         $created = Placas::create([
+            'name' => $validator->validated()['name'],
             'numero_serie' => $validator->validated()['numero_serie'],
             'user_id' => auth()->id()
         ]);
@@ -52,7 +77,7 @@ class PlacaController extends Controller
         if(!auth()->user()->tokenCan('placa-show')){
             return $this->error('Unauthorized', 403);
         }
-        $placa = Placas::with('user')->find($id);
+        $placa = Placas::with('user')->where('user_id', auth()->id())->where('id', $id)->first();
         if (!$placa) {
             return $this->error('Placa não encontrada', 404);
         }
