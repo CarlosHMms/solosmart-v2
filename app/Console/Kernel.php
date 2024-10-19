@@ -2,16 +2,16 @@
 
 namespace App\Console;
 
-use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Jobs\GenerateSensorDataJob;
 
 class Kernel extends ConsoleKernel
 {
-
     protected function schedule(Schedule $schedule)
     {
-        //todos os tokens que foram expirados dentro das últimas 24 horas serão apagados das tabelas no banco
         $schedule->command('sanctum:prune-expired')->dailyAt('00:00')->timezone('America/Sao_Paulo');
+        $schedule->job(new GenerateSensorDataJob())->everyMinute();
     }
 
     protected function commands()
@@ -20,5 +20,4 @@ class Kernel extends ConsoleKernel
 
         require base_path('routes/console.php');
     }
-
 }
