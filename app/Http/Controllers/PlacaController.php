@@ -55,7 +55,7 @@ class PlacaController extends Controller
         if($validator->fails()){
             return $this->error( 'Dados inválidos', 422, $validator->errors());
         }
-        
+
         $created = Placas::create([
             'name' => $validator->validated()['name'],
             'numero_serie' => $validator->validated()['numero_serie'],
@@ -65,7 +65,7 @@ class PlacaController extends Controller
             return $this->response('Placa cadastrada', 200, $created);
         }
         return $this->error('Placa não foi cadastrada', 401);
-    
+
 
     }
 
