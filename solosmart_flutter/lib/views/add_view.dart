@@ -14,16 +14,17 @@ class AddView extends StatefulWidget {
 class _AddViewState extends State<AddView> {
   String _name = '';
   String _numeroSerie = '';
-  String token = '';
+  String _token = '';
+  int _userId = -1;
 
   final _formKey = GlobalKey<FormState>();
   final PlacaService _placaService = PlacaService();
 
   @override
   Widget build(BuildContext context) {
-    token = Provider.of<AllProvider>(context).token!;
-    final userProvider = Provider.of<AllProvider>(context);
-    final user = userProvider.user;
+    _token = Provider.of<AllProvider>(context).token!;
+    _userId = Provider.of<AllProvider>(context).userId!;
+
 
     Future<void> _cadastrarPlaca() async {
       if (_formKey.currentState!.validate()) {
@@ -31,7 +32,7 @@ class _AddViewState extends State<AddView> {
 
         try {
           final http.Response response = await _placaService.cadastrarPlaca(
-              _numeroSerie, user?['id'], token);
+              _numeroSerie, _userId, _token);
 
           if (response.statusCode == 200) {
             ScaffoldMessenger.of(context).showSnackBar(

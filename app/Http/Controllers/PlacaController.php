@@ -26,17 +26,21 @@ class PlacaController extends Controller
             return $this->error('Unauthorized', 403);
         }
         $validator = Validator::make($request->all(),[
-            'numero_serie' => 'required|string|max:50',
-            'users_id' => 'required|int',
+            'numero_serie' => 'required|string|max:50'
         ]);
         if($validator->fails()){
             return $this->error( 'Dados inválidos', 422, $validator->errors());
         }
-        $created = Placas::create($validator->validated());
+        
+        $created = Placas::create([
+            'numero_serie' => $validator->validated()['numero_serie'],
+            'user_id' => auth()->id()
+        ]);
         if($created){
             return $this->response('Placa cadastrada', 200, $created);
         }
         return $this->error('Placa não foi cadastrada', 401);
+    
 
     }
 

@@ -142,8 +142,10 @@ class _LoginViewState extends State<LoginView> {
                             await _authService.login(_email, _password);
                         if (response.statusCode == 200) {
                           final Map<String, dynamic> responseData = jsonDecode(response.body);
+                          print(responseData);
                           String? token = responseData['data']['token'];
                           int? userId = responseData['data']['user']['id'];
+                          print(userId);
                           Map<String, dynamic>? user = responseData['data']['user'];
                           if (user != null) {
                             Provider.of<AllProvider>(context, listen: false)
