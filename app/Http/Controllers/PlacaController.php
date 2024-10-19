@@ -27,7 +27,7 @@ class PlacaController extends Controller
         }
         $validator = Validator::make($request->all(),[
             'numero_serie' => 'required|string|max:50',
-            'users_id' => 'required|int',
+            'user_id' => 'required|int',
         ]);
         if($validator->fails()){
             return $this->error( 'Dados inválidos', 422, $validator->errors());

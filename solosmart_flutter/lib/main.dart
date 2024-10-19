@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solosmart_flutter/utils/provider.dart';
-import 'package:solosmart_flutter/views/inicio_view.dart';
 import 'package:solosmart_flutter/views/login_view.dart';
 import 'package:solosmart_flutter/views/redefinir_view.dart';
 

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:solosmart_flutter/services/placaService.dart';
+import 'package:solosmart_flutter/utils/provider.dart';
+import 'dart:convert';
 
 class PlacasView extends StatefulWidget {
   final VoidCallback onAddButtonPressed;
@@ -10,10 +14,38 @@ class PlacasView extends StatefulWidget {
 }
 
 class _PlacasViewState extends State<PlacasView> {
-  List<String> placas = ['Placa 1', 'Placa 2', 'Placa 3'];
+  final PlacaService _placaController = PlacaService();
+  String token = '';
+  List<dynamic> _placas = []; // Lista dinâmica para armazenar as placas
+
+  @override
+  void initState() {
+    super.initState();
+    _carregarPlacas(); // Chama a função para carregar as placas ao inicializar a tela
+  }
+
+  Future<void> _carregarPlacas() async {
+    try {
+      final response = await _placaController.listarPlaca(token);
+
+      if (response.statusCode == 200) {
+        // Decodifica o JSON e atualiza o estado com a lista de placas
+        List<dynamic> placasJson = json.decode(response.body);
+        setState(() {
+          _placas = placasJson;
+        });
+      } else {
+        throw Exception('Erro ao carregar as placas: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erro ao carregar as placas: $e');
+      // Aqui você pode exibir um erro na interface
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    token = Provider.of<AllProvider>(context).token!;
     return Scaffold(
       body: Row(
         children: [
@@ -54,14 +86,14 @@ class _PlacasViewState extends State<PlacasView> {
                             ),
                           ),
                           Expanded(
-                            child: placas.isNotEmpty
+                            child: _placas.isNotEmpty
                                 ? ListView.builder(
                                     padding: const EdgeInsets.all(16.0),
-                                    itemCount: placas.length,
+                                    itemCount: _placas.length,
                                     itemBuilder: (context, index) {
                                       return ListTile(
                                         title: Text(
-                                          placas[index],
+                                          _placas[index],
                                           textAlign: TextAlign.center,
                                         ),
                                       );

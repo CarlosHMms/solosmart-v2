@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:solosmart_flutter/views/dashborad_view.dart';
-import 'package:solosmart_flutter/views/home_view.dart';
 import 'package:solosmart_flutter/views/placas_view.dart';
 import 'package:solosmart_flutter/views/perfil_view.dart';
 import 'package:solosmart_flutter/views/relatorios_view.dart';
