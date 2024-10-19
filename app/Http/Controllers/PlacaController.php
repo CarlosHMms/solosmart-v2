@@ -17,7 +17,9 @@ class PlacaController extends Controller
         if(!auth()->user()->tokenCan('placa-index')){
             return $this->error('Unauthorized', 403);
         }
-        return PlacaResource::collection(Placas::with('user')->get());
+        $placas = Placas::with('user')->where('user_id', auth()->id())->get();
+
+        return PlacaResource::collection($placas);
     }
 
     public function store(Request $request)
@@ -31,7 +33,7 @@ class PlacaController extends Controller
         if($validator->fails()){
             return $this->error( 'Dados inválidos', 422, $validator->errors());
         }
-        
+
         $created = Placas::create([
             'numero_serie' => $validator->validated()['numero_serie'],
             'user_id' => auth()->id()
@@ -40,7 +42,7 @@ class PlacaController extends Controller
             return $this->response('Placa cadastrada', 200, $created);
         }
         return $this->error('Placa não foi cadastrada', 401);
-    
+
 
     }
 
@@ -52,7 +54,7 @@ class PlacaController extends Controller
         if(!auth()->user()->tokenCan('placa-show')){
             return $this->error('Unauthorized', 403);
         }
-        $placa = Placas::with('user')->find($id);
+        $placa = Placas::with('user')->where('user_id', auth()->id())->where('id', $id)->first();
         if (!$placa) {
             return $this->error('Placa não encontrada', 404);
         }
