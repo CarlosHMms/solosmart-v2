@@ -18,7 +18,6 @@ class _AddViewState extends State<AddView> {
   String _name = '';
   String _numeroSerie = '';
   String _token = '';
-  int _userId = -1;
 
   final _formKey = GlobalKey<FormState>();
   final PlacaService _placaService = PlacaService();
@@ -26,7 +25,7 @@ class _AddViewState extends State<AddView> {
   @override
   Widget build(BuildContext context) {
     _token = Provider.of<AllProvider>(context).token!;
-    _userId = Provider.of<AllProvider>(context).userId!;
+
 
     Future<void> _cadastrarPlaca() async {
       if (_formKey.currentState!.validate()) {
@@ -34,7 +33,7 @@ class _AddViewState extends State<AddView> {
 
         try {
           final http.Response response =
-              await _placaService.cadastrarPlaca(_numeroSerie, _userId, _token);
+              await _placaService.cadastrarPlaca(_numeroSerie, _token);
 
           if (response.statusCode == 200) {
             final Map<String, dynamic> responseData = jsonDecode(response.body);

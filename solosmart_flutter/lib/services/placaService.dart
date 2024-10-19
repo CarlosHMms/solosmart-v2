@@ -5,7 +5,7 @@ class PlacaService{
   final String baseUrl = 'http://127.0.0.1:8000/api';
 
 
-  Future<http.Response> cadastrarPlaca(String numeroSerie, int userId, String token) async {
+  Future<http.Response> cadastrarPlaca(String numeroSerie,  String token) async {
     final url = Uri.parse('$baseUrl/placas');
 
     try {
@@ -17,8 +17,7 @@ class PlacaService{
           'Authorization': 'Bearer $token', // Substitua pelo token de autenticação correto
         },
         body: jsonEncode({
-          'numero_serie': numeroSerie,
-          'user_id': userId,
+          'numero_serie': numeroSerie
         }),
       );
       return response;
@@ -26,7 +25,7 @@ class PlacaService{
       throw Exception('Erro ao se conectar com o servidor: $e');
     }
   }
-  
+
 Future<http.Response> listarPlaca(String token)
     async {
     final url = Uri.parse('$baseUrl/placas');
