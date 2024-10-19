@@ -2,9 +2,10 @@
 
 namespace App\Console;
 
-use Illuminate\Support\Facades\Schedule;
+//use Illuminate\Support\Facades\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Jobs\GenerateSensorDataJob;
+use Illuminate\Console\Scheduling\Schedule;
 
 class Kernel extends ConsoleKernel
 {

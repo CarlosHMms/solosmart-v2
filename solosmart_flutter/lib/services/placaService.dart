@@ -14,7 +14,7 @@ class PlacaService{
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': 'Bearer $token', // Substitua pelo token de autenticação correto
+          'Authorization': 'Bearer $token',
         },
         body: jsonEncode({
           'numero_serie': numeroSerie
@@ -36,8 +36,7 @@ Future<http.Response> listarPlaca(String token)
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization':
-              'Bearer $token', // Substitua pelo token de autenticação correto
+          'Authorization': 'Bearer $token',
         },
       );
       return response;

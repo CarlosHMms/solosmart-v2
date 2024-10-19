@@ -21,7 +21,7 @@ class _PlacasViewState extends State<PlacasView> {
   @override
   void initState() {
     super.initState();
-    _carregarPlacas(); // Chama a função para carregar as placas ao inicializar a tela
+    _carregarPlacas();   // Chama a função para carregar as placas ao inicializar a tela
   }
 
   Future<void> _carregarPlacas() async {
