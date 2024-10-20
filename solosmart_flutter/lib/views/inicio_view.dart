@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:solosmart_flutter/services/placaService.dart';
+import 'package:solosmart_flutter/utils/provider.dart';
 import 'package:solosmart_flutter/views/dashborad_view.dart';
 import 'package:solosmart_flutter/views/placas_view.dart';
 import 'package:solosmart_flutter/views/perfil_view.dart';
@@ -9,6 +12,7 @@ import 'package:solosmart_flutter/views/notif_view.dart';
 import 'package:solosmart_flutter/views/suport_view.dart';
 import 'package:solosmart_flutter/components/my_drawer.dart';
 import 'package:solosmart_flutter/components/my_supportbutton.dart';
+import 'dart:convert';
 
 class InicioView extends StatefulWidget {
   const InicioView({super.key});
@@ -20,12 +24,12 @@ class InicioView extends StatefulWidget {
 class _InicioViewState extends State<InicioView> {
   final _formkey = GlobalKey<FormState>();
   bool _isDrawerExpanded = true;
-
   int _selectedViewIndex = 0;
 
-  List<String> placas = ['Placa 1', 'Placa 2', 'Placa 3'];
+  List<dynamic> placas = []; // Lista para armazenar as placas carregadas
   String? selectedPlaca;
-
+  final PlacaService _placaController = PlacaService();
+  String? token;
 
   final List<Widget> _views = [];
 
@@ -37,11 +41,10 @@ class _InicioViewState extends State<InicioView> {
       PlacasView(
         onAddButtonPressed: () {
           setState(() {
-            _selectedViewIndex = 4; 
+            _selectedViewIndex = 4;
           });
         },
       ),
-      //const HomeView(),
       const DashboardView(),
       const PerfilView(),
       const RelatoriosView(),
@@ -53,6 +56,33 @@ class _InicioViewState extends State<InicioView> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    token = Provider.of<AllProvider>(context).token;
+
+    if (token != null) {
+      _carregarPlacas();
+    }
+  }
+
+  Future<void> _carregarPlacas() async {
+    try {
+      final response = await _placaController.listarPlaca(token!);
+
+      if (response.statusCode == 200) {
+        List<dynamic> placasJson = json.decode(response.body)['data'];
+        setState(() {
+          placas = placasJson; // Atualiza a lista de placas
+        });
+      } else {
+        throw Exception('Erro ao carregar as placas: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erro ao carregar as placas: $e');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F8DE),
@@ -60,7 +90,6 @@ class _InicioViewState extends State<InicioView> {
         children: [
           Row(
             children: [
-              // Componente do menu lateral
               MyDrawer(
                 isDrawerExpanded: _isDrawerExpanded,
                 onSelectView: (int index) {
@@ -73,7 +102,11 @@ class _InicioViewState extends State<InicioView> {
                     _isDrawerExpanded = isExpanded;
                   });
                 },
-                placas: placas,
+                placas: placas.isNotEmpty
+                    ? placas
+                        .map((placa) => placa['name'].toString())
+                        .toList() // Converte para List<String>
+                    : [],
                 selectedPlaca: selectedPlaca,
                 onPlacaSelected: (String? newValue) {
                   setState(() {
@@ -84,8 +117,7 @@ class _InicioViewState extends State<InicioView> {
               Expanded(
                 child: Container(
                   color: const Color(0xFFF5F8DE),
-                  child:
-                      _views[_selectedViewIndex],
+                  child: _views[_selectedViewIndex],
                 ),
               ),
             ],

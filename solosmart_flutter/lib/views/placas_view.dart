@@ -16,7 +16,7 @@ class PlacasView extends StatefulWidget {
 class _PlacasViewState extends State<PlacasView> {
   final PlacaService _placaController = PlacaService();
   String? token;
-  List<dynamic> _placas = []; // Lista dinâmica para armazenar as placas
+  List<dynamic> _placas = [];
 
   @override
   void initState() {
@@ -29,7 +29,7 @@ class _PlacasViewState extends State<PlacasView> {
     token = Provider.of<AllProvider>(context).token;
 
     if (token != null) {
-      _carregarPlacas(); // Chama a função para carregar as placas ao inicializar a tela
+      _carregarPlacas();
     }
   }
 
@@ -38,7 +38,6 @@ class _PlacasViewState extends State<PlacasView> {
       final response = await _placaController.listarPlaca(token!);
 
       if (response.statusCode == 200) {
-        // Decodifica o JSON e atualiza o estado com a lista de placas
         List<dynamic> placasJson = json.decode(response.body)['data'];
         setState(() {
           _placas = placasJson;
@@ -48,8 +47,13 @@ class _PlacasViewState extends State<PlacasView> {
       }
     } catch (e) {
       print('Erro ao carregar as placas: $e');
-      // Aqui você pode exibir um erro na interface
     }
+  }
+
+  void _onPlacaSelecionada(String placaName) {
+    print('Placa selecionada: $placaName');
+
+    Navigator.of(context).pushNamed('/dashboard');
   }
 
   @override
@@ -99,10 +103,25 @@ class _PlacasViewState extends State<PlacasView> {
                                     padding: const EdgeInsets.all(16.0),
                                     itemCount: _placas.length,
                                     itemBuilder: (context, index) {
+                                      String placaName = _placas[index]['name'];
                                       return ListTile(
-                                        title: Text(
-                                          _placas[index]['name'],
-                                          textAlign: TextAlign.center,
+                                        title: ElevatedButton(
+                                          onPressed: () =>
+                                              _onPlacaSelecionada(placaName),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                const Color.fromRGBO(
+                                                    65, 51, 122, 1),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 10.0),
+                                          ),
+                                          child: Text(
+                                            placaName,
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.white,
+                                            ),
+                                          ),
                                         ),
                                       );
                                     },
