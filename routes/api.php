@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/placas', [PlacaController::class, 'store']);
     Route::get('/placas', [PlacaController::class, 'index']);
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/gerar', [SensorDataController::class, 'startGeneratingData']);
+    Route::post('/gerar', [SensorDataController::class, 'generateData']);
     Route::get('/placa/{placa_id}', [SensorDataController::class, 'getPlacaData']);
 });
 

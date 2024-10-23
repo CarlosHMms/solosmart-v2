@@ -13,35 +13,36 @@ class SensorDataController extends Controller
 {
     use HttpResponse;
 
-   public function startGeneratingData(Request $request)
-{
-    // Verifica se o usuário tem permissão para armazenar placas
-    if (!auth()->user()->tokenCan('placa-store')) {
-        return $this->error('Unauthorized', 403);
-    }
+    public function generateData(Request $request)
+    {
+        if(!auth()->user()->tokenCan('placa-store')){
+            return $this->error('Unauthorized', 403);
+        }
 
-    // Validação dos dados da requisição
-    $validator = Validator::make($request->all(), [
-        'placa_id' => 'required|exists:placas,id',
-    ]);
+        $validator = Validator::make($request->all(), [
+            'placa_id' => 'required|exists:placas,id',
+        ]);
 
-    // Verifica se a validação falhou
-    if ($validator->fails()) {
-        return $this->error('Validation failed', 422, $validator->errors());
-    }
-    $placa_id = $validator->validated()['placa_id'];
-    try {
-        // Dispara o job para gerar dados do sensor
-        GenerateSensorDataJob::dispatch(($placa_id));
-        
-        // Se o dispatch for bem-sucedido
-        return $this->response('Geração de dados iniciada para a placa.', 200);
-    } catch (\Exception $e) {
-        // Se houver um erro ao despachar o job
-        return $this->error('Failed to dispatch job: ' . $e->getMessage(), 500);
-    }
-}
+        if($validator->fails()){
+            return $this->error('Dados inválidos', 422, $validator->errors());
+        }
 
+        $data = [
+            'placa_id' => $request->placa_id,
+            'temperatura_ar' => rand(20, 35),
+            'umidade_ar' => rand(30, 90),
+            'umidade_solo' => rand(10, 70),
+            'data_registro' => now(),
+        ];
+
+        $created = Gravacoes::create($data);
+
+        if($created){
+            return $this->response('Dados gerados e salvos com sucesso.', 200, $created);
+        }
+
+        return $this->error('Falha ao gerar os dados', 500);
+    }
 
     public function getPlacaData($placa_id)
     {
