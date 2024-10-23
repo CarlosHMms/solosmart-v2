@@ -6,6 +6,7 @@ class AllProvider with ChangeNotifier {
   int? _userId;
   Map<String, dynamic>? _user;
   Map<String, dynamic>? _placas;
+  Map<String, dynamic>? _dados;
 
   int? get userId => _userId;
 
@@ -32,6 +33,13 @@ class AllProvider with ChangeNotifier {
 
   void setPlacas(Map<String, dynamic> placas){
     _placas = placas;
+    notifyListeners();
+  }
+
+  Map<String, dynamic>? get dados => _dados;
+
+  void setDados(Map<String, dynamic> dados){
+    _dados = dados;
     notifyListeners();
   }
 }

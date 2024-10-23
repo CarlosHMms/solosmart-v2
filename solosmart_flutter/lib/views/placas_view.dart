@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:solosmart_flutter/services/generateData.dart';
 import 'package:solosmart_flutter/services/placaService.dart';
 import 'package:solosmart_flutter/utils/provider.dart';
 import 'dart:convert';
+import 'package:solosmart_flutter/views/dashborad_view.dart';
 
 class PlacasView extends StatefulWidget {
   final VoidCallback onAddButtonPressed;
@@ -15,6 +17,7 @@ class PlacasView extends StatefulWidget {
 
 class _PlacasViewState extends State<PlacasView> {
   final PlacaService _placaController = PlacaService();
+  final Generatedata _generatedata = Generatedata();
   String? token;
   List<dynamic> _placas = [];
 
@@ -50,10 +53,36 @@ class _PlacasViewState extends State<PlacasView> {
     }
   }
 
-  void _onPlacaSelecionada(String placaName) {
-    print('Placa selecionada: $placaName');
+  Future<void> _gerarDados(int placaId) async {
+    try {
+      final response = await _generatedata.gerarDados(placaId, token!);
 
-    Navigator.of(context).pushNamed('/dashboard');
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        Map<String, dynamic>? dados = responseData['data'];
+        if (dados != null) {
+          Provider.of<AllProvider>(context, listen: false).setDados(dados);
+        }
+        print('Dados gerados com sucesso para a placa $placaId.');
+
+        // Navegação para o Dashboard após a geração bem-sucedida
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DashboardView(),
+          ),
+        );
+      } else {
+        throw Exception('Erro ao gerar dados: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erro ao gerar dados: $e');
+    }
+  }
+
+  void _onPlacaSelecionada(String placaName, int placaId) {
+    print('Placa selecionada: $placaName');
+    _gerarDados(placaId); // Chama apenas a geração de dados
   }
 
   @override
@@ -104,10 +133,11 @@ class _PlacasViewState extends State<PlacasView> {
                                     itemCount: _placas.length,
                                     itemBuilder: (context, index) {
                                       String placaName = _placas[index]['name'];
+                                      int placaId = _placas[index]['id'];
                                       return ListTile(
                                         title: ElevatedButton(
-                                          onPressed: () =>
-                                              _onPlacaSelecionada(placaName),
+                                          onPressed: () => _onPlacaSelecionada(
+                                              placaName, placaId),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
                                                 const Color.fromRGBO(
