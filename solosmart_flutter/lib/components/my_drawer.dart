@@ -113,7 +113,7 @@ class _MyDrawerState extends State<MyDrawer> {
               width: 170, // Ajuste da largura do Dropdown
               child: DropdownButtonFormField<String>(
                 decoration: const InputDecoration(
-                  labelText: 'Selecione a placa',
+                  labelText: 'Selecionar Central',
                   labelStyle: TextStyle(color: Colors.white),
                 ),
                 value: widget.selectedPlaca,
