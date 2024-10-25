@@ -44,6 +44,11 @@ class _InicioViewState extends State<InicioView> {
             _selectedViewIndex = 4;
           });
         },
+        onDashboardSelected: (int index) {
+          setState(() {
+            _selectedViewIndex = index;
+          });
+        },
       ),
       const DashboardView(),
       const PerfilView(),

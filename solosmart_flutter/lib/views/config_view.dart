@@ -40,7 +40,7 @@ class _ConfigViewState extends State<ConfigView> {
                         children: [
                           // Exemplo de um nome de usuário
                           Text(
-                            'Thiago',
+                            'Dale',
                             style: TextStyle(
                               fontSize: 48,
                               fontWeight: FontWeight.w600,

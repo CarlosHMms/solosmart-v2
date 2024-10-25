@@ -8,8 +8,12 @@ import 'package:solosmart_flutter/views/dashborad_view.dart';
 
 class PlacasView extends StatefulWidget {
   final VoidCallback onAddButtonPressed;
+  final Function(int) onDashboardSelected;
 
-  const PlacasView({super.key, required this.onAddButtonPressed});
+  const PlacasView(
+      {super.key,
+      required this.onAddButtonPressed,
+      required this.onDashboardSelected});
 
   @override
   State<PlacasView> createState() => _PlacasViewState();
@@ -64,14 +68,8 @@ class _PlacasViewState extends State<PlacasView> {
           Provider.of<AllProvider>(context, listen: false).setDados(dados);
         }
         print('Dados gerados com sucesso para a placa $placaId.');
-
-        // Navegação para o Dashboard após a geração bem-sucedida
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const DashboardView(),
-          ),
-        );
+        widget.onDashboardSelected(
+            1);
       } else {
         throw Exception('Erro ao gerar dados: ${response.statusCode}');
       }
