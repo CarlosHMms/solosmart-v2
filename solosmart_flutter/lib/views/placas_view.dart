@@ -4,7 +4,6 @@ import 'package:solosmart_flutter/services/generateData.dart';
 import 'package:solosmart_flutter/services/placaService.dart';
 import 'package:solosmart_flutter/utils/provider.dart';
 import 'dart:convert';
-import 'package:solosmart_flutter/views/dashborad_view.dart';
 
 class PlacasView extends StatefulWidget {
   final VoidCallback onAddButtonPressed;
