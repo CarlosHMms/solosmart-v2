@@ -4,12 +4,18 @@ import 'package:solosmart_flutter/services/generateData.dart';
 import 'package:solosmart_flutter/services/placaService.dart';
 import 'package:solosmart_flutter/utils/provider.dart';
 import 'dart:convert';
-import 'package:solosmart_flutter/views/dashborad_view.dart';
 
 class PlacasView extends StatefulWidget {
   final VoidCallback onAddButtonPressed;
+  final Function(int) onDashboardSelected;
+  final ValueNotifier<String?> selectedPlacaNotifier;
 
-  const PlacasView({super.key, required this.onAddButtonPressed});
+  const PlacasView({
+    super.key,
+    required this.onAddButtonPressed,
+    required this.onDashboardSelected,
+    required this.selectedPlacaNotifier,
+  });
 
   @override
   State<PlacasView> createState() => _PlacasViewState();
@@ -64,14 +70,7 @@ class _PlacasViewState extends State<PlacasView> {
           Provider.of<AllProvider>(context, listen: false).setDados(dados);
         }
         print('Dados gerados com sucesso para a placa $placaId.');
-
-        // Navegação para o Dashboard após a geração bem-sucedida
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const DashboardView(),
-          ),
-        );
+        widget.onDashboardSelected(1); // Redireciona para o Dashboard
       } else {
         throw Exception('Erro ao gerar dados: ${response.statusCode}');
       }
@@ -82,7 +81,8 @@ class _PlacasViewState extends State<PlacasView> {
 
   void _onPlacaSelecionada(String placaName, int placaId) {
     print('Placa selecionada: $placaName');
-    _gerarDados(placaId); // Chama apenas a geração de dados
+    widget.selectedPlacaNotifier.value = placaName;
+    _gerarDados(placaId);
   }
 
   @override

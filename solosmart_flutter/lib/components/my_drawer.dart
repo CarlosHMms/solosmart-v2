@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solosmart_flutter/services/auth_user.dart';
@@ -29,7 +28,7 @@ class MyDrawer extends StatefulWidget {
 
 class _MyDrawerState extends State<MyDrawer> {
   final AuthService _authService = AuthService();
-    String token = '';
+  String token = '';
   @override
   Widget build(BuildContext context) {
     token = Provider.of<AllProvider>(context).token!;
@@ -47,7 +46,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 IconButton(
                   icon: const Icon(Icons.notifications, color: Colors.white),
                   onPressed: () {
-                    widget.onSelectView(5); // Ir para a tela de notificações
+                    widget.onSelectView(6); // Ir para a tela de notificações
                   },
                 ),
               ],
@@ -114,7 +113,7 @@ class _MyDrawerState extends State<MyDrawer> {
               width: 170, // Ajuste da largura do Dropdown
               child: DropdownButtonFormField<String>(
                 decoration: const InputDecoration(
-                  labelText: 'Selecione a placa',
+                  labelText: 'Selecionar Central',
                   labelStyle: TextStyle(color: Colors.white),
                 ),
                 value: widget.selectedPlaca,
@@ -138,14 +137,14 @@ class _MyDrawerState extends State<MyDrawer> {
               onTap: () async {
                 // Função para realizar o logout
                 final response = await _authService.logout(token);
-                if(response.statusCode == 200){
+                if (response.statusCode == 200) {
                   print(response.body);
                 }
 
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginView()),
-                      (Route<dynamic> route) => false,
+                  (Route<dynamic> route) => false,
                 );
               },
             ),
