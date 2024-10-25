@@ -154,7 +154,7 @@ class _PerfilViewState extends State<PerfilView> {
                                         : null,
                                   ),
                                 ),
-                          const SizedBox(height: 30),
+                          const SizedBox(height: 20),
                           Text(
                             user?['name'] ?? 'Nome do Usuário',
                             style: const TextStyle(
@@ -163,15 +163,15 @@ class _PerfilViewState extends State<PerfilView> {
                               fontFamily: 'OpenSans-SemiBold',
                             ),
                           ),
-                          const SizedBox(height: 25),
+                          const SizedBox(height: 20),
                           Text(
-                            user?['email'] ?? 'email@exemplo.com',
+                            'E-mail: ' + user?['email'] ?? 'email@exemplo.com',
                             style: const TextStyle(
                               fontSize: 24,
                               fontFamily: 'OpenSans-Regular',
                             ),
                           ),
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 10),
                           const Text(
                             'Senha: ********',
                             style: TextStyle(
