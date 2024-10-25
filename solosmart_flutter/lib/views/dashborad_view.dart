@@ -11,65 +11,55 @@ class DashboardView extends StatelessWidget {
     final dados = dadosProvider.dados;
 
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F8DE),
       body: Row(
         children: [
           Expanded(
             child: Container(
-              color: const Color(0xFFF5F8DE),
               child: Stack(
                 children: [
-                  Center(
-                    child: SingleChildScrollView(
-                      child: Container(
-                        width: 934,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF5F8DE),
-                          borderRadius: BorderRadius.circular(19),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.25),
-                              offset: const Offset(-7, 11),
-                              blurRadius: 25,
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                  SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start, // Alinha os itens no topo
+                      children: [
+                        const SizedBox(height: 20), // Menor espaçamento com o topo
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            const SizedBox(height: 100),
-                            // Temperatura Atual
-                            _buildDashboardCard(
-                              context,
-                              title: 'Temperatura Atual',
-                              value:
-                                  '${dados?['temperatura_ar']?.toString() ?? 'N/A'} °C',
-                              icon: Icons.thermostat_outlined,
-                              color: Colors.orangeAccent,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0), // Espaço entre os containers
+                              child: _buildDashboardCard(
+                                context,
+                                title: 'Temperatura Atual',
+                                value: '${dados?['temperatura_ar']?.toString() ?? 'N/A'} °C',
+                                icon: Icons.thermostat_outlined,
+                                color: Colors.orangeAccent,
+                              ),
                             ),
-                            const SizedBox(height: 100),
-                            // Umidade do Ar
-                            _buildDashboardCard(
-                              context,
-                              title: 'Umidade do Ar',
-                              value: 
-                                '${dados?['umidade_ar']?.toString() ?? 'N/A'} %',
-                              icon: Icons.water_drop_outlined,
-                              color: Colors.blueAccent,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: _buildDashboardCard(
+                                context,
+                                title: 'Umidade do Ar',
+                                value: '${dados?['umidade_ar']?.toString() ?? 'N/A'} %',
+                                icon: Icons.water_drop_outlined,
+                                color: Colors.blueAccent,
+                              ),
                             ),
-                            const SizedBox(height: 100),
-                            // Umidade do Solo
-                            _buildDashboardCard(
-                              context,
-                              title: 'Umidade do Solo',
-                              value:
-                                '${dados?['umidade_solo']?.toString() ?? 'N/A'} %',
-                              icon: Icons.grass_outlined,
-                              color: Colors.greenAccent,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: _buildDashboardCard(
+                                context,
+                                title: 'Umidade do Solo',
+                                value: '${dados?['umidade_solo']?.toString() ?? 'N/A'} %',
+                                icon: Icons.grass_outlined,
+                                color: Colors.greenAccent,
+                              ),
                             ),
-                            const SizedBox(height: 100),
                           ],
                         ),
-                      ),
+                        const SizedBox(height: 20), // Espaço reduzido abaixo dos cartões
+                      ],
                     ),
                   ),
                 ],
@@ -80,6 +70,7 @@ class DashboardView extends StatelessWidget {
       ),
     );
   }
+
 
   Widget _buildDashboardCard(
     BuildContext context, {
