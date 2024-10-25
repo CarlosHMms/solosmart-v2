@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlacaController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\SensorDataController;
+use App\Http\Controllers\ImageController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -21,6 +22,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/gerar', [SensorDataController::class, 'generateData']);
     Route::get('/placa/{placa_id}', [SensorDataController::class, 'getPlacaData']);
+    Route::get('/profile', [UserController::class, 'getProfile']);
+    Route::post('/profileupd', [UserController::class, 'updateProfileImage']);
+    Route::get('/{filename}', [ImageController::class, 'getImage']);
 });
 
 Route::get('/usuarios', [UserController::class, 'index']);

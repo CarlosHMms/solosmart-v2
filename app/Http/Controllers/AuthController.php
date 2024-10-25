@@ -20,6 +20,7 @@ class AuthController extends Controller
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
+                    'profile_image' => $user->profile_image,
                 ]
             ]);
 

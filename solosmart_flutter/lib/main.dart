@@ -9,22 +9,25 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AllProvider()),
+        ChangeNotifierProvider(
+            create: (context) => ProfileImageProvider(
+                context)) // Adicionar o ProfileImageProvider
       ],
       child: const MyApp(),
     ),
   );
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'SoloSmart',
       theme: ThemeData(),
-      //home: const LoginView(),
+      initialRoute: '/', // Usar initialRoute para definir a tela inicial
       routes: {
         '/': (context) => const LoginView(),
         '/reset': (context) => const ResetPasswordView(),

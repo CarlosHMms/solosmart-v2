@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -49,6 +50,29 @@ class UserController extends Controller
         return new UserResource($usuario);
     }
 
+    public function getProfile()
+    {
+    try {
+        // Obtém o usuário autenticado
+        $user = Auth::user();
+
+        if ($user) {
+            // Log para verificar o usuário autenticado
+            \Log::info('Usuário autenticado: ', ['user_id' => $user->id]);
+
+            // Retorna os dados do usuário autenticado
+            return $this->response('Perfil do usuário recuperado com sucesso', 200, $user);
+        }
+
+        return $this->error('Usuário não autenticado', 401);
+    } catch (\Exception $e) {
+        \Log::error('Erro ao recuperar o perfil do usuário: ' . $e->getMessage());
+        return $this->error('Erro ao recuperar o perfil do usuário', 500);
+    }
+    }
+
+
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -80,6 +104,32 @@ class UserController extends Controller
         }
         return $this->error('', 400);
     }
+
+    public function updateProfileImage(Request $request)
+{
+    $request->validate([
+        'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    $user = Auth::user();
+
+    if ($request->hasFile('profile_image')) {
+        // Remove a imagem antiga, se existir
+        if ($user->profile_image) {
+            Storage::delete($user->profile_image);
+        }
+
+        // Salva a nova imagem no disco público
+        $path = $request->file('profile_image')->store('profiles', 'public'); // Adicione 'public' aqui
+
+        // Atualiza o caminho da imagem no perfil do usuário
+        $user->profile_image = Storage::url($path); // Gera a URL correta
+        $user->save();
+    }
+
+    return response()->json(['message' => 'Imagem de perfil atualizada com sucesso!'], 200);
+}
+
 
     /**
      * Remove the specified resource from storage.
