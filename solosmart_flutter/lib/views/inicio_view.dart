@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solosmart_flutter/services/placaService.dart';
+import 'package:solosmart_flutter/services/generateData.dart';
 import 'package:solosmart_flutter/utils/provider.dart';
 import 'package:solosmart_flutter/views/dashborad_view.dart';
 import 'package:solosmart_flutter/views/placas_view.dart';
@@ -26,9 +27,10 @@ class _InicioViewState extends State<InicioView> {
   bool _isDrawerExpanded = true;
   int _selectedViewIndex = 0;
 
-  List<dynamic> placas = []; // Lista para armazenar as placas carregadas
+  List<dynamic> placas = [];
   String? selectedPlaca;
   final PlacaService _placaController = PlacaService();
+  final Generatedata _generatedata = Generatedata(); // Adicionando Generatedata
   String? token;
 
   final List<Widget> _views = [];
@@ -77,13 +79,47 @@ class _InicioViewState extends State<InicioView> {
       if (response.statusCode == 200) {
         List<dynamic> placasJson = json.decode(response.body)['data'];
         setState(() {
-          placas = placasJson; // Atualiza a lista de placas
+          placas = placasJson;
         });
       } else {
         throw Exception('Erro ao carregar as placas: ${response.statusCode}');
       }
     } catch (e) {
       print('Erro ao carregar as placas: $e');
+    }
+  }
+
+  Future<void> _gerarDados(int placaId) async {
+    try {
+      final response = await _generatedata.gerarDados(placaId, token!);
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        Map<String, dynamic>? dados = responseData['data'];
+        if (dados != null) {
+          Provider.of<AllProvider>(context, listen: false).setDados(dados);
+        }
+        print('Dados gerados com sucesso para a placa $placaId.');
+        setState(() {
+          _selectedViewIndex = 1; // Muda para o DashboardView
+        });
+      } else {
+        throw Exception('Erro ao gerar dados: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erro ao gerar dados: $e');
+    }
+  }
+
+  void _onPlacaSelecionada(String? newValue) {
+    setState(() {
+      selectedPlaca = newValue;
+    });
+
+    int? placaId =
+        placas.firstWhere((placa) => placa['name'] == newValue)['id'];
+    if (placaId != null) {
+      _gerarDados(placaId);
     }
   }
 
@@ -108,16 +144,10 @@ class _InicioViewState extends State<InicioView> {
                   });
                 },
                 placas: placas.isNotEmpty
-                    ? placas
-                        .map((placa) => placa['name'].toString())
-                        .toList() // Converte para List<String>
+                    ? placas.map((placa) => placa['name'].toString()).toList()
                     : [],
                 selectedPlaca: selectedPlaca,
-                onPlacaSelected: (String? newValue) {
-                  setState(() {
-                    selectedPlaca = newValue;
-                  });
-                },
+                onPlacaSelected: _onPlacaSelecionada,
               ),
               Expanded(
                 child: Container(

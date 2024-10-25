@@ -80,7 +80,7 @@ class _PlacasViewState extends State<PlacasView> {
 
   void _onPlacaSelecionada(String placaName, int placaId) {
     print('Placa selecionada: $placaName');
-    _gerarDados(placaId); // Chama apenas a geração de dados
+    _gerarDados(placaId);
   }
 
   @override
