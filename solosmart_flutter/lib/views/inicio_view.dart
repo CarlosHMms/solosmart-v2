@@ -28,9 +28,10 @@ class _InicioViewState extends State<InicioView> {
   int _selectedViewIndex = 0;
 
   List<dynamic> placas = [];
-  String? selectedPlaca;
+  final ValueNotifier<String?> selectedPlacaNotifier =
+      ValueNotifier<String?>(null);
   final PlacaService _placaController = PlacaService();
-  final Generatedata _generatedata = Generatedata(); // Adicionando Generatedata
+  final Generatedata _generatedata = Generatedata();
   String? token;
 
   final List<Widget> _views = [];
@@ -51,6 +52,7 @@ class _InicioViewState extends State<InicioView> {
             _selectedViewIndex = index;
           });
         },
+        selectedPlacaNotifier: selectedPlacaNotifier,
       ),
       const DashboardView(),
       const PerfilView(),
@@ -113,7 +115,7 @@ class _InicioViewState extends State<InicioView> {
 
   void _onPlacaSelecionada(String? newValue) {
     setState(() {
-      selectedPlaca = newValue;
+      selectedPlacaNotifier.value = newValue;
     });
 
     int? placaId =
@@ -146,7 +148,7 @@ class _InicioViewState extends State<InicioView> {
                 placas: placas.isNotEmpty
                     ? placas.map((placa) => placa['name'].toString()).toList()
                     : [],
-                selectedPlaca: selectedPlaca,
+                selectedPlaca: selectedPlacaNotifier.value,
                 onPlacaSelected: _onPlacaSelecionada,
               ),
               Expanded(
