@@ -119,8 +119,8 @@ class _PerfilViewState extends State<PerfilView> {
                 children: [
                   Center(
                     child: Container(
-                      width: 934,
-                      height: 695,
+                      width: 800,
+                      height: 600,
                       decoration: BoxDecoration(
                         color: const Color(0xFFF5F8DE),
                         borderRadius: BorderRadius.circular(19),
@@ -154,7 +154,7 @@ class _PerfilViewState extends State<PerfilView> {
                                         : null,
                                   ),
                                 ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 30),
                           Text(
                             user?['name'] ?? 'Nome do Usuário',
                             style: const TextStyle(
@@ -163,7 +163,7 @@ class _PerfilViewState extends State<PerfilView> {
                               fontFamily: 'OpenSans-SemiBold',
                             ),
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 25),
                           Text(
                             user?['email'] ?? 'email@exemplo.com',
                             style: const TextStyle(
@@ -171,7 +171,7 @@ class _PerfilViewState extends State<PerfilView> {
                               fontFamily: 'OpenSans-Regular',
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 15),
                           const Text(
                             'Senha: ********',
                             style: TextStyle(
