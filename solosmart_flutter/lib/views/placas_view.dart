@@ -82,6 +82,8 @@ class _PlacasViewState extends State<PlacasView> {
   void _onPlacaSelecionada(String placaName, int placaId) {
     print('Placa selecionada: $placaName');
     widget.selectedPlacaNotifier.value = placaName;
+    Provider.of<AllProvider>(context, listen: false)
+        .setPlacaId(placaId); // Armazena o ID da placa
     _gerarDados(placaId);
   }
 

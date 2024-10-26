@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:solosmart_flutter/services/ImageService.dart';
+import 'package:solosmart_flutter/services/generateData.dart';
 import 'package:solosmart_flutter/services/perfilService.dart';
 
 // Provider para gerenciar o estado do token
@@ -13,11 +14,19 @@ class AllProvider with ChangeNotifier {
   Map<String, dynamic>? _placas;
   Map<String, dynamic>? _dados;
   Map<String, dynamic>? _profile;
+  int? _placaId;
 
   int? get userId => _userId;
 
   void setUserId(int userId) {
     _userId = userId;
+    notifyListeners();
+  }
+
+  int? get placaId => _placaId;
+
+  void setPlacaId(int placaId) {
+    _placaId = placaId;
     notifyListeners();
   }
 
@@ -40,6 +49,28 @@ class AllProvider with ChangeNotifier {
   void setPlacas(Map<String, dynamic> placas) {
     _placas = placas;
     notifyListeners();
+  }
+
+  Future<void> atualizarDados(int placaId) async {
+    if (_token == null) return;
+
+    final generateDataService = Generatedata();
+
+    try {
+      final response = await generateDataService.gerarDados(placaId, _token!);
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        Map<String, dynamic>? novoDados = responseData['data'];
+        if (dados != null) {
+          setDados(novoDados!);
+        }
+      } else {
+        print('Erro ao gerar dados: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erro ao se conectar com o servidor: $e');
+    }
   }
 
   Map<String, dynamic>? get dados => _dados;

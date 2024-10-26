@@ -122,6 +122,7 @@ class _InicioViewState extends State<InicioView> {
         placas.firstWhere((placa) => placa['name'] == newValue)['id'];
     if (placaId != null) {
       _gerarDados(placaId);
+      Provider.of<AllProvider>(context, listen: false).setPlacaId(placaId);
     }
   }
 
