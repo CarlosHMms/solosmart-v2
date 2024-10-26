@@ -5,7 +5,7 @@ class ImageService {
 
   Future<http.Response> getUserImage(String token, String filename) async {
     final url =
-        Uri.parse('$baseUrl/$filename');
+        Uri.parse('$baseUrl/imagem/$filename');
 
     try {
       final response = await http.get(

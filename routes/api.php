@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/placa/{placa_id}', [SensorDataController::class, 'getPlacaData']);
     Route::get('/profile', [UserController::class, 'getProfile']);
     Route::post('/profileupd', [UserController::class, 'updateProfileImage']);
-    Route::get('/{filename}', [ImageController::class, 'getImage']);
+    Route::get('/imagem/{filename}', [ImageController::class, 'getImage']);
 });
 
 Route::get('/usuarios', [UserController::class, 'index']);
