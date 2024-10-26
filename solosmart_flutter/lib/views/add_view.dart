@@ -27,7 +27,7 @@ class _AddViewState extends State<AddView> {
     _token = Provider.of<AllProvider>(context).token!;
 
 
-    Future<void> _cadastrarPlaca() async {
+    Future<void> cadastrarPlaca() async {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState?.save();
 
@@ -184,7 +184,7 @@ class _AddViewState extends State<AddView> {
                 // Botão Cadastrar
                 ElevatedButton(
                   onPressed:
-                      _cadastrarPlaca, // Chama a função para cadastrar a placa
+                      cadastrarPlaca, // Chama a função para cadastrar a placa
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF41337A),
                     padding: const EdgeInsets.symmetric(

@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:solosmart_flutter/services/ImageService.dart';
 import 'package:solosmart_flutter/services/perfilService.dart';
-import 'package:http/http.dart' as http;
 
 // Provider para gerenciar o estado do token
 class AllProvider with ChangeNotifier {
