@@ -195,8 +195,8 @@ class _DashboardViewState extends State<DashboardView> {
   List<PieChartSectionData> _buildPieChartSections(
       double umidadeAr, double umidadeSolo) {
     // Define categorias de umidade para o gráfico de pizza
-    final double baixaUmidade = 30.0;
-    final double mediaUmidade = 70.0;
+    const double baixaUmidade = 30.0;
+    const double mediaUmidade = 70.0;
 
     // Calculando os valores para as seções do ar
     double valorBaixaUmidadeAr = umidadeAr < baixaUmidade ? umidadeAr : 0;

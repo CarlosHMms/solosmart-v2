@@ -156,10 +156,10 @@ class _ConfigViewState extends State<ConfigView> {
                                                   });
                                                 },
                                         ),
-                                        Row(
+                                        const Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
-                                          children: const [
+                                          children: [
                                             Text(
                                               '+Baixa',
                                               style: TextStyle(
