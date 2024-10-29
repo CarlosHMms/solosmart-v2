@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [UserController::class, 'getProfile']);
     Route::post('/profileupd', [UserController::class, 'updateProfileImage']);
     Route::get('/imagem/{filename}', [ImageController::class, 'getImage']);
+    Route::put('/usuarios/perfil/{usuario}', [UserController::class, 'edit']);
 });
 
 Route::get('/usuarios', [UserController::class, 'index']);
@@ -34,4 +35,3 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::put('/usuarios/{usuario}', [UserController::class, 'update']);
 Route::delete('/usuarios/{usuario}', [UserController::class, 'destroy']);
 Route::post('/recover', [PasswordResetLinkController::class, 'store']);
-
