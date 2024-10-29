@@ -212,12 +212,7 @@ class _LoginViewState extends State<LoginView> {
                     TextButton(
                       onPressed: () {
                         // Navega para a página de login quando o botão for clicado
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const CadastroView()), // direcionamento para tela de cadastro
-                        );
+                        Navigator.of(context).pushReplacementNamed('/cadastro'); // direcionamento para tela de cadastro
                       },
                       child: const Text(
                         'Cadastre-se aqui',

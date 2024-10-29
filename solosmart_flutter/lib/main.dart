@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solosmart_flutter/utils/provider.dart';
+import 'package:solosmart_flutter/views/cadastro_view.dart';
+import 'package:solosmart_flutter/views/dashborad_view.dart';
 import 'package:solosmart_flutter/views/login_view.dart';
 import 'package:solosmart_flutter/views/redefinir_view.dart';
 
@@ -31,6 +33,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const LoginView(),
         '/reset': (context) => const ResetPasswordView(),
+        '/dashboard': (context) => const DashboardView(),
+        '/cadastro': (context) => const CadastroView(),
       },
     );
   }
