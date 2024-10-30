@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:html' as html;
 import 'package:solosmart_flutter/utils/provider.dart';
+import 'package:solosmart_flutter/views/email_view.dart';
+import 'package:solosmart_flutter/views/senha_view.dart';
 
 class PerfilView extends StatefulWidget {
   const PerfilView({super.key});
@@ -154,29 +156,77 @@ class _PerfilViewState extends State<PerfilView> {
                                   ),
                                 ),
                           const SizedBox(height: 20),
-                          Text(
-                            user?['name'] ?? 'Nome do Usuário',
-                            style: const TextStyle(
-                              fontSize: 48,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'OpenSans-SemiBold',
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                user?['name'] ?? 'Nome do Usuário',
+                                style: const TextStyle(
+                                  fontSize: 48,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'OpenSans-SemiBold',
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  // Ação de alteração do nome
+                                },
+                                icon:
+                                    const Icon(Icons.edit, color: Colors.grey),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 20),
-                          Text(
-                            'E-mail: ' + user?['email'] ?? 'email@exemplo.com',
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontFamily: 'OpenSans-Regular',
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'E-mail: ${user?['email'] ?? 'email@exemplo.com'}',
+                                style: const TextStyle(
+                                  fontSize: 24,
+                                  fontFamily: 'OpenSans-Regular',
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const RedefinirEmailView(),
+                                    ),
+                                  );
+                                },
+                                icon:
+                                    const Icon(Icons.edit, color: Colors.grey),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 10),
-                          const Text(
-                            'Senha: ********',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontFamily: 'OpenSans-Regular',
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Senha: ********',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontFamily: 'OpenSans-Regular',
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const RedefinirSenhaView(),
+                                    ),
+                                  );
+                                },
+                                icon:
+                                    const Icon(Icons.edit, color: Colors.grey),
+                              ),
+                            ],
                           ),
                         ],
                       ),
