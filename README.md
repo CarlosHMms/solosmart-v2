@@ -21,7 +21,6 @@ Este projeto visa fornecer uma solução completa para monitoramento e gerenciam
 - **Git** (para versionamento de código)
 
 ## Configuração do Backend (Laravel)
-```
 
 1. Clone este repositório e acesse a pasta:
 ```bash
