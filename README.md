@@ -53,7 +53,11 @@ DB_PASSWORD=sua_senha
 ```bash
 php artisan migrate
 ```
-6. Inicie o servidor de desenvolvimento:
+6. Crie um link simbólico para a pasta no qual são salvas as imagens de perfil:
+```bash
+php artisan storage:link
+```
+7. Inicie o servidor de desenvolvimento:
 ```bash
 php artisan serve
 ```
