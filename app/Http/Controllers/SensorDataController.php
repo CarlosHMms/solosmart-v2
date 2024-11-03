@@ -58,4 +58,25 @@ class SensorDataController extends Controller
 
         return $this->response('Dados recuperados com sucesso.', 200, $data);
     }
+
+    public function getLastPlacaData($placa_id)
+    {
+        if(!auth()->user()->tokenCan('placa-show')){
+            return $this->error('Unauthorized', 403);
+        }
+
+        // Busca a última gravação feita para a placa específica
+        $data = Gravacoes::where('placa_id', $placa_id)
+                    ->orderBy('data_registro', 'desc')
+                    ->first();
+
+        // Verifica se algum dado foi encontrado
+        if (!$data) {
+            return $this->error('Nenhum dado encontrado para essa placa', 404);
+        }
+
+        // Retorna o dado mais recente encontrado
+        return $this->response('Último dado recuperado com sucesso.', 200, $data);
+    }
+
 }
