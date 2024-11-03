@@ -91,9 +91,9 @@ class _InicioViewState extends State<InicioView> {
     }
   }
 
-  Future<void> _gerarDados(int placaId) async {
+  Future<void> _buscarDados(int placaId) async {
     try {
-      final response = await _generatedata.gerarDados(placaId, token!);
+      final response = await _generatedata.buscarDados(placaId, token!);
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
@@ -121,7 +121,7 @@ class _InicioViewState extends State<InicioView> {
     int? placaId =
         placas.firstWhere((placa) => placa['name'] == newValue)['id'];
     if (placaId != null) {
-      _gerarDados(placaId);
+      _buscarDados(placaId);
       Provider.of<AllProvider>(context, listen: false).setPlacaId(placaId);
     }
   }

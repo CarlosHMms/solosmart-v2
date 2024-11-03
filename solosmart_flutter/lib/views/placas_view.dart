@@ -59,9 +59,9 @@ class _PlacasViewState extends State<PlacasView> {
     }
   }
 
-  Future<void> _gerarDados(int placaId) async {
+  Future<void> _buscarDados(int placaId) async {
     try {
-      final response = await _generatedata.gerarDados(placaId, token!);
+      final response = await _generatedata.buscarDados(placaId, token!);
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
@@ -69,13 +69,13 @@ class _PlacasViewState extends State<PlacasView> {
         if (dados != null) {
           Provider.of<AllProvider>(context, listen: false).setDados(dados);
         }
-        print('Dados gerados com sucesso para a placa $placaId.');
+        print('Dados buscado com sucesso para a placa $placaId.');
         widget.onDashboardSelected(1); // Redireciona para o Dashboard
       } else {
         throw Exception('Erro ao gerar dados: ${response.statusCode}');
       }
     } catch (e) {
-      print('Erro ao gerar dados: $e');
+      print('Erro ao buscar dados: $e');
     }
   }
 
@@ -84,7 +84,7 @@ class _PlacasViewState extends State<PlacasView> {
     widget.selectedPlacaNotifier.value = placaName;
     Provider.of<AllProvider>(context, listen: false)
         .setPlacaId(placaId); // Armazena o ID da placa
-    _gerarDados(placaId);
+    _buscarDados(placaId);
   }
 
   @override

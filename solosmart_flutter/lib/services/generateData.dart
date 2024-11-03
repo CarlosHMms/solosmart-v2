@@ -25,4 +25,22 @@ class Generatedata{
       throw Exception('Erro ao se conectar com o servidor: $e');
     }
   }
+
+  Future<http.Response> buscarDados(int placaId,  String token) async {
+    final url = Uri.parse('$baseUrl/buscar/$placaId');
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      return response;
+    } catch (e) {
+      throw Exception('Erro ao se conectar com o servidor: $e');
+    }
+  }
 }
