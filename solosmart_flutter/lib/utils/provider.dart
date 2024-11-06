@@ -9,6 +9,8 @@ import 'package:solosmart_flutter/services/perfilService.dart';
 // Provider para gerenciar o estado do token
 class AllProvider with ChangeNotifier {
   String? _token;
+  String? _name;
+  String? _email;
   int? _userId;
   Map<String, dynamic>? _user;
   Map<String, dynamic>? _placas;
@@ -20,6 +22,20 @@ class AllProvider with ChangeNotifier {
 
   void setUserId(int userId) {
     _userId = userId;
+    notifyListeners();
+  }
+
+  String? get name => _name;
+
+  void setName(String name){
+    _name = name;
+    notifyListeners();
+  }
+
+  String? get email => _email;
+
+  void setEmail(String email){
+    _email = email;
     notifyListeners();
   }
 
