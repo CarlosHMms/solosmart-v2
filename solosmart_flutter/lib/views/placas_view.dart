@@ -30,16 +30,12 @@ class _PlacasViewState extends State<PlacasView> {
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    token = Provider.of<AllProvider>(context).token;
-
-    if (token != null) {
-      _carregarPlacas();
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      token = Provider.of<AllProvider>(context, listen: false).token;
+      if (token != null) {
+        _carregarPlacas();
+      }
+    });
   }
 
   Future<void> _carregarPlacas() async {
@@ -70,7 +66,7 @@ class _PlacasViewState extends State<PlacasView> {
           Provider.of<AllProvider>(context, listen: false).setDados(dados);
         }
         print('Dados buscado com sucesso para a placa $placaId.');
-        widget.onDashboardSelected(1); // Redireciona para o Dashboard
+        widget.onDashboardSelected(1);
       } else {
         throw Exception('Erro ao gerar dados: ${response.statusCode}');
       }
@@ -82,8 +78,7 @@ class _PlacasViewState extends State<PlacasView> {
   void _onPlacaSelecionada(String placaName, int placaId) {
     print('Placa selecionada: $placaName');
     widget.selectedPlacaNotifier.value = placaName;
-    Provider.of<AllProvider>(context, listen: false)
-        .setPlacaId(placaId); // Armazena o ID da placa
+    Provider.of<AllProvider>(context, listen: false).setPlacaId(placaId);
     _buscarDados(placaId);
   }
 
@@ -136,24 +131,46 @@ class _PlacasViewState extends State<PlacasView> {
                                     itemBuilder: (context, index) {
                                       String placaName = _placas[index]['name'];
                                       int placaId = _placas[index]['id'];
-                                      return ListTile(
-                                        title: ElevatedButton(
-                                          onPressed: () => _onPlacaSelecionada(
-                                              placaName, placaId),
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                const Color.fromRGBO(
-                                                    65, 51, 122, 1),
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10.0),
-                                          ),
-                                          child: Text(
-                                            placaName,
-                                            style: const TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.white,
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () =>
+                                                  _onPlacaSelecionada(
+                                                      placaName, placaId),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    const Color.fromRGBO(
+                                                        65, 51, 122, 1),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 12.0,
+                                                        horizontal: 20.0),
+                                                minimumSize: const Size(150, 0),
+                                              ),
+                                              child: Text(
+                                                placaName,
+                                                style: const TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
                                             ),
-                                          ),
+                                            const SizedBox(width: 10),
+                                            IconButton(
+                                              icon: const Icon(
+                                                Icons.edit,
+                                                color: Color(0xFF41337A),
+                                              ),
+                                              onPressed: () {
+                                                // Aqui se pode adicionar a ação de edição da placa
+                                              },
+                                            ),
+                                          ],
                                         ),
                                       );
                                     },

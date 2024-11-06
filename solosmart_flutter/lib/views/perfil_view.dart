@@ -172,7 +172,7 @@ class _PerfilViewState extends State<PerfilView> {
                                   // Ação de alteração do nome
                                 },
                                 icon:
-                                    const Icon(Icons.edit, color: Colors.grey),
+                                    const Icon(Icons.edit, color: Color(0xFF41337A)),
                               ),
                             ],
                           ),
@@ -198,7 +198,7 @@ class _PerfilViewState extends State<PerfilView> {
                                   );
                                 },
                                 icon:
-                                    const Icon(Icons.edit, color: Colors.grey),
+                                    const Icon(Icons.edit, color: Color(0xFF41337A)),
                               ),
                             ],
                           ),
@@ -224,7 +224,7 @@ class _PerfilViewState extends State<PerfilView> {
                                   );
                                 },
                                 icon:
-                                    const Icon(Icons.edit, color: Colors.grey),
+                                    const Icon(Icons.edit, color: Color(0xFF41337A)),
                               ),
                             ],
                           ),
