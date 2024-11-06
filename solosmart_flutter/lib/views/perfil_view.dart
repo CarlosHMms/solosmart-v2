@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,6 +20,7 @@ class PerfilView extends StatefulWidget {
 class _PerfilViewState extends State<PerfilView> {
   final ImagePicker _picker = ImagePicker();
   bool _isLoading = false;
+  bool _isHovering = false;
 
   Future<void> _pickImage() async {
     if (kIsWeb) {
@@ -138,21 +140,51 @@ class _PerfilViewState extends State<PerfilView> {
                         children: [
                           _isLoading
                               ? const CircularProgressIndicator()
-                              : GestureDetector(
-                                  onTap: _pickImage,
-                                  child: CircleAvatar(
-                                    radius: 80,
-                                    backgroundImage: imageBytes != null
-                                        ? MemoryImage(imageBytes)
-                                        : (imageUrl.isNotEmpty
-                                                ? NetworkImage(imageUrl)
-                                                : const AssetImage(
-                                                    'images/default_profile.png'))
-                                            as ImageProvider,
-                                    child: imageBytes == null &&
-                                            imageUrl.isEmpty
-                                        ? const Icon(Icons.camera_alt, size: 50)
-                                        : null,
+                              : MouseRegion(
+                                  onEnter: (_) =>
+                                      setState(() => _isHovering = true),
+                                  onExit: (_) =>
+                                      setState(() => _isHovering = false),
+                                  cursor: _isHovering
+                                      ? SystemMouseCursors.click
+                                      : SystemMouseCursors.basic,
+                                  child: GestureDetector(
+                                    onTap: _pickImage,
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 80,
+                                          backgroundImage: imageBytes != null
+                                              ? MemoryImage(imageBytes)
+                                              : (imageUrl.isNotEmpty
+                                                      ? NetworkImage(imageUrl)
+                                                      : const AssetImage(
+                                                          'images/default_profile.png'))
+                                                  as ImageProvider,
+                                          child: imageBytes == null &&
+                                                  imageUrl.isEmpty
+                                              ? const Icon(Icons.camera_alt,
+                                                  size: 50)
+                                              : null,
+                                        ),
+                                        if (_isHovering)
+                                          Container(
+                                            width: 160,
+                                            height: 160,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color:
+                                                  Colors.black.withOpacity(0.3),
+                                            ),
+                                            child: const Icon(
+                                              Icons.edit,
+                                              color: Colors.white,
+                                              size: 40,
+                                            ),
+                                          ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                           const SizedBox(height: 20),
@@ -171,8 +203,8 @@ class _PerfilViewState extends State<PerfilView> {
                                 onPressed: () {
                                   // Ação de alteração do nome
                                 },
-                                icon:
-                                    const Icon(Icons.edit, color: Color(0xFF41337A)),
+                                icon: const Icon(Icons.edit,
+                                    color: Color(0xFF41337A)),
                               ),
                             ],
                           ),
@@ -197,8 +229,8 @@ class _PerfilViewState extends State<PerfilView> {
                                     ),
                                   );
                                 },
-                                icon:
-                                    const Icon(Icons.edit, color: Color(0xFF41337A)),
+                                icon: const Icon(Icons.edit,
+                                    color: Color(0xFF41337A)),
                               ),
                             ],
                           ),
@@ -223,8 +255,8 @@ class _PerfilViewState extends State<PerfilView> {
                                     ),
                                   );
                                 },
-                                icon:
-                                    const Icon(Icons.edit, color: Color(0xFF41337A)),
+                                icon: const Icon(Icons.edit,
+                                    color: Color(0xFF41337A)),
                               ),
                             ],
                           ),
