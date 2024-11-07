@@ -35,15 +35,85 @@ class _PerfilViewState extends State<PerfilView> {
   }
 
   Future<void> _pickImage() async {
-    // código para selecionar imagem...
+    if (kIsWeb) {
+      html.File? file = await _pickFile();
+      if (file != null) {
+        final reader = html.FileReader();
+        reader.readAsArrayBuffer(file);
+        reader.onLoadEnd.listen((e) {
+          final imageBytes = reader.result as Uint8List?;
+          Provider.of<ProfileImageProvider>(context, listen: false)
+              .setImageBytes(imageBytes);
+          _uploadImage(imageBytes!);
+        });
+      }
+    } else {
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        final bytes = await pickedFile.readAsBytes();
+        Provider.of<ProfileImageProvider>(context, listen: false)
+            .setImageBytes(bytes);
+        await _uploadImage(bytes);
+      }
+    }
   }
 
   Future<html.File?> _pickFile() async {
-    // código para selecionar arquivo...
+    final completer = Completer<html.File?>();
+    html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
+    uploadInput.accept = 'image/*';
+    uploadInput.click();
+
+    uploadInput.onChange.listen((e) {
+      final files = uploadInput.files;
+      if (files!.isEmpty) {
+        completer.complete(null);
+      } else {
+        completer.complete(files[0]);
+      }
+    });
+
+    return completer.future;
   }
 
   Future<void> _uploadImage(Uint8List imageBytes) async {
-    // código para upload de imagem...
+    setState(() {
+      _isLoading = true;
+    });
+
+    const String baseUrl = 'http://127.0.0.1:8000/api';
+
+    try {
+      final profileProvider = Provider.of<AllProvider>(context, listen: false);
+      final token = profileProvider.token;
+
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse('$baseUrl/profileupd'),
+      );
+      request.headers['Authorization'] = 'Bearer $token';
+
+      request.files.add(http.MultipartFile.fromBytes(
+        'profile_image',
+        imageBytes,
+        filename: 'profile_image.jpg',
+      ));
+
+      final response = await request.send();
+
+      if (response.statusCode == 200) {
+        await profileProvider.fetchUserProfile();
+      } else {
+        throw Exception(
+            'Erro ao atualizar a imagem de perfil: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Erro ao fazer upload da imagem: $e');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   Future<void> _editPerfil() async {
