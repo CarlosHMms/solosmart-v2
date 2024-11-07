@@ -12,6 +12,22 @@ class _ConfigViewState extends State<ConfigView> {
   bool isOn = false; // Estado do botão Ligar/Desligar
   double humidityLevel = 50; // Nível de umidade inicial
 
+  // Função para interpolar a cor com base no valor de umidade
+  Color getHumidityColor(double humidity) {
+    // Definir as cores base para os intervalos de umidade
+    Color low = Colors.red; // Cor para baixa umidade (0%)
+    Color medium = Colors.orange; // Cor para umidade intermediária (~50%)
+    Color high = Colors.blue; // Cor para alta umidade (~100%)
+
+    if (humidity <= 50) {
+      // Interpolando entre vermelho e laranja
+      return Color.lerp(low, medium, humidity / 50)!;
+    } else {
+      // Interpolando entre laranja e verde
+      return Color.lerp(medium, high, (humidity - 50) / 50)!;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -130,7 +146,7 @@ class _ConfigViewState extends State<ConfigView> {
                                       ],
                                     ),
                                     const SizedBox(height: 10),
-                                    // Slider de nível de umidade (ativo apenas no modo automático)
+                                    // Barra de cor baseada no nível de umidade (única barra)
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
@@ -147,6 +163,9 @@ class _ConfigViewState extends State<ConfigView> {
                                           min: 0,
                                           max: 100,
                                           divisions: 100,
+                                          activeColor:
+                                              getHumidityColor(humidityLevel),
+                                          inactiveColor: Colors.grey,
                                           label: '${humidityLevel.round()}%',
                                           onChanged: isManual
                                               ? null
@@ -161,14 +180,14 @@ class _ConfigViewState extends State<ConfigView> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              '+Baixa',
+                                              'Baixa',
                                               style: TextStyle(
                                                 fontSize: 16,
                                                 fontFamily: 'OpenSans-Regular',
                                               ),
                                             ),
                                             Text(
-                                              '+Alta',
+                                              'Alta',
                                               style: TextStyle(
                                                 fontSize: 16,
                                                 fontFamily: 'OpenSans-Regular',
