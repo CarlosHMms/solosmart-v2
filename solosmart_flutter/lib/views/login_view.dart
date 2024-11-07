@@ -148,6 +148,12 @@ class _LoginViewState extends State<LoginView> {
                           print(userId);
                           Map<String, dynamic>? user = responseData['data']['user'];
                           String? name = responseData['data']['user']['name'];
+                          String? email = responseData['data']['user']['email'];
+                          var password = _password;
+                          Provider.of<AllProvider>(context, listen: false).setPassword(password);
+                          if (email != null){
+                            Provider.of<AllProvider>(context, listen: false).setEmail(email);
+                          }
                           if (name != null){
                             Provider.of<AllProvider>(context, listen: false).setName(name);
                           }

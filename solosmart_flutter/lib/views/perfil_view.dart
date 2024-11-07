@@ -21,17 +21,23 @@ class PerfilView extends StatefulWidget {
 class _PerfilViewState extends State<PerfilView> {
   final ImagePicker _picker = ImagePicker();
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _oldPasswordController = TextEditingController();
   final EditService _editService = EditService();
   bool _isLoading = false;
   bool _isHovering = false;
-  bool _isEditingName =
-      false; // Variável para alternar entre visualização e edição
+  bool _isEditingName = false;
+  bool _isEditingEmail = false;
+  bool _isEditingPassword = false;
 
   @override
   void initState() {
     super.initState();
     final userProvider = Provider.of<AllProvider>(context, listen: false);
     _nameController.text = userProvider.name ?? 'Nome do Usuário';
+    _emailController.text = userProvider.email ?? 'Email do Usuário';
+    _passwordController.text = '********';
   }
 
   Future<void> _pickImage() async {
@@ -116,7 +122,7 @@ class _PerfilViewState extends State<PerfilView> {
     }
   }
 
-  Future<void> _editPerfil() async {
+  Future<void> _editName() async {
     setState(() {
       _isLoading = true;
     });
@@ -125,29 +131,101 @@ class _PerfilViewState extends State<PerfilView> {
       final userProvider = Provider.of<AllProvider>(context, listen: false);
       final token = userProvider.token;
       final id = userProvider.userId;
-      const old = "teste123";
+      final old = _oldPasswordController.text;
 
-      final response = await _editService.edit(
+      final response = await _editService.editName(
           id!, token!, {'name': _nameController.text, 'old_password': old});
 
       if (response.statusCode == 200) {
         // Atualiza o nome localmente
         userProvider.setName(_nameController.text);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Perfil atualizado com sucesso')),
+          const SnackBar(content: Text('Nome atualizado com sucesso')),
         );
       } else {
-        throw Exception('Erro ao atualizar o perfil');
+        throw Exception('Erro ao atualizar o nome');
       }
     } catch (e) {
       print('Erro ao salvar o nome: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro ao atualizar o perfil: $e')),
+        SnackBar(content: Text('Erro ao atualizar o nome: $e')),
       );
     } finally {
       setState(() {
         _isLoading = false;
         _isEditingName = false;
+      });
+    }
+  }
+  
+  Future<void> _editEmail() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final userProvider = Provider.of<AllProvider>(context, listen: false);
+      final token = userProvider.token;
+      final id = userProvider.userId;
+      final old = _oldPasswordController.text;
+
+      final response = await _editService.editEmail(
+          id!, token!, {'email': _emailController.text, 'old_password': old});
+
+      if (response.statusCode == 200) {
+        // Atualiza o email localmente
+        userProvider.setEmail(_emailController.text);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Email atualizado com sucesso')),
+        );
+      } else {
+        throw Exception('Erro ao atualizar o email');
+      }
+    } catch (e) {
+      print('Erro ao salvar o nome: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao atualizar o email: $e')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+        _isEditingEmail = false;
+      });
+    }
+  }
+
+  Future<void> _editPassword() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final userProvider = Provider.of<AllProvider>(context, listen: false);
+      final token = userProvider.token;
+      final id = userProvider.userId;
+      final old = _oldPasswordController.text;
+
+      final response = await _editService.editPassword(
+          id!, token!, {'password': _passwordController.text, 'old_password': old});
+
+      if (response.statusCode == 200) {
+        // Atualiza a senha localmente
+        userProvider.setPassword(_passwordController.text);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Senha atualizada com sucesso')),
+        );
+      } else {
+        throw Exception('Erro ao atualizar a senha');
+      }
+    } catch (e) {
+      print('Erro ao salvar o nome: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao atualizar a senha: $e')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+        _isEditingPassword = false;
       });
     }
   }
@@ -240,14 +318,29 @@ class _PerfilViewState extends State<PerfilView> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               _isEditingName
-                                  ? SizedBox(
-                                      width: 200,
-                                      child: TextField(
-                                        controller: _nameController,
-                                        decoration: const InputDecoration(
-                                          hintText: 'Digite o novo nome',
+                                  ? Column(
+                                      children: [
+                                        SizedBox(
+                                          width: 200,
+                                          child: TextField(
+                                            controller: _nameController,
+                                            decoration: const InputDecoration(
+                                              hintText: 'Digite o novo nome',
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        const SizedBox(height: 10),
+                                        SizedBox(
+                                          width: 200,
+                                          child: TextField(
+                                            controller: _oldPasswordController,
+                                            obscureText: true,
+                                            decoration: const InputDecoration(
+                                              hintText: 'Digite a Senha Atual',
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     )
                                   : Text(
                                       userProvider.name ?? 'Nome do Usuário',
@@ -261,9 +354,10 @@ class _PerfilViewState extends State<PerfilView> {
                                 onPressed: () {
                                   setState(() {
                                     if (_isEditingName) {
-                                      _editPerfil(); // Salva o nome se já estiver editando
+                                      _editName(); // Salva o nome se já estiver editando
                                     } else {
                                       _isEditingName = true;
+                                      _oldPasswordController.clear();
                                     }
                                   });
                                 },
@@ -278,25 +372,53 @@ class _PerfilViewState extends State<PerfilView> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                'E-mail: ${user?['email'] ?? 'email@exemplo.com'}',
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                  fontFamily: 'OpenSans-Regular',
-                                ),
-                              ),
+                              _isEditingEmail
+                                  ? Column(
+                                      children: [
+                                        SizedBox(
+                                          width: 200,
+                                          child: TextField(
+                                            controller: _emailController,
+                                            decoration: const InputDecoration(
+                                              hintText: 'Digite o novo email',
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        SizedBox(
+                                          width: 200,
+                                          child: TextField(
+                                            controller: _oldPasswordController,
+                                            obscureText: true,
+                                            decoration: const InputDecoration(
+                                              hintText: 'Digite a Senha Atual',
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : Text(
+                                      userProvider.email ?? 'Email do Usuário',
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        fontFamily: 'OpenSans-SemiBold',
+                                      ),
+                                    ),
                               IconButton(
                                 onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const RedefinirEmailView(),
-                                    ),
-                                  );
+                                  setState(() {
+                                    if (_isEditingEmail) {
+                                      _editEmail(); // Salva o email se já estiver editando
+                                    } else {
+                                      _isEditingEmail = true;
+                                      _oldPasswordController.clear();
+                                    }
+                                  });
                                 },
-                                icon: const Icon(Icons.edit,
-                                    color: Color(0xFF41337A)),
+                                icon: Icon(
+                                  _isEditingEmail ? Icons.check : Icons.edit,
+                                  color: Color(0xFF41337A),
+                                ),
                               ),
                             ],
                           ),
@@ -304,25 +426,53 @@ class _PerfilViewState extends State<PerfilView> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text(
-                                'Senha: ********',
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontFamily: 'OpenSans-Regular',
-                                ),
-                              ),
+                              _isEditingPassword
+                                  ? Column(
+                                      children: [
+                                        SizedBox(
+                                          width: 200,
+                                          child: TextField(
+                                            controller: _passwordController,
+                                            decoration: const InputDecoration(
+                                              hintText: 'Digite a Nova Senha',
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        SizedBox(
+                                          width: 200,
+                                          child: TextField(
+                                            controller: _oldPasswordController,
+                                            obscureText: true,
+                                            decoration: const InputDecoration(
+                                              hintText: 'Digite a Senha Atual',
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : Text(
+                                      'Senha: ********',
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        fontFamily: 'OpenSans-SemiBold',
+                                      ),
+                                    ),
                               IconButton(
                                 onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const RedefinirSenhaView(),
-                                    ),
-                                  );
+                                  setState(() {
+                                    if (_isEditingPassword) {
+                                      _editPassword(); // Salva a senha se já estiver editando
+                                    } else {
+                                      _isEditingPassword = true;
+                                      _oldPasswordController.clear();
+                                    }
+                                  });
                                 },
-                                icon: const Icon(Icons.edit,
-                                    color: Color(0xFF41337A)),
+                                icon: Icon(
+                                  _isEditingPassword ? Icons.check : Icons.edit,
+                                  color: Color(0xFF41337A),
+                                ),
                               ),
                             ],
                           ),
