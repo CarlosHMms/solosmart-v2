@@ -91,14 +91,9 @@ class UserController extends Controller
 
         $validatedData = $validator->validated();
 
-        //Valido e criptografo a senha fornecida caso exista
-        if ($validatedData['password']) {
-            $validatedData['password'] = Hash::make($validatedData['password']);
-
-            //Verifico se a senha antiga é válida
-            if (!Hash::check($validatedData['old_password'], $usuario->password)) {
-                return $this->error('Senha Incorreta', 400);
-            }
+        //Verifico se a senha antiga é válida
+        if (!Hash::check($validatedData['old_password'], $usuario->password)) {
+            return $this->error('Senha Incorreta', 400);
         }
 
         //Atualizo os dados do usuário
