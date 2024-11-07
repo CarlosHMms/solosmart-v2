@@ -71,8 +71,6 @@ class UserController extends Controller
         }
     }
 
-
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -91,13 +89,16 @@ class UserController extends Controller
 
         $validatedData = $validator->validated();
 
+        if (property_exists($validatedData['password'], 'password')) {
+            $validatedData['password'] = Hash::make($validatedData['password']);
+        }
+
+        
         //Verifico se a senha antiga é válida
         if (!Hash::check($validatedData['old_password'], $usuario->password)) {
             return $this->error('Senha Incorreta', 400);
         }
-
         //Atualizo os dados do usuário
-
         try {
             $usuario->update($validatedData);
         } catch (\Exception $e) {
