@@ -187,43 +187,53 @@ class _ConfigViewState extends State<ConfigView> {
                                 ),
                               ),
                             const SizedBox(height: 10),
-                            const Text(
-                              'Nível de Umidade',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: 'OpenSans-Regular',
-                              ),
-                            ),
-                            Slider(
-                              value: humidityLevel,
-                              min: 0,
-                              max: 100,
-                              divisions: 100,
-                              label: '${humidityLevel.round()}%',
-                              onChanged: modoPlaca == Modo.automatico
-                                  ? null
-                                  : (value) {
-                                setState(() {
-                                  humidityLevel = value;
-                                });
-                              },
-                            ),
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.center,
                               children: [
-                                Text(
-                                  '+Baixa',
+                                const Text(
+                                  'Nível de Umidade',
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 18,
                                     fontFamily: 'OpenSans-Regular',
                                   ),
                                 ),
-                                Text(
-                                  '+Alta',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'OpenSans-Regular',
-                                  ),
+                                Slider(
+                                  value: humidityLevel,
+                                  min: 0,
+                                  max: 100,
+                                  divisions: 100,
+                                  activeColor:
+                                  getHumidityColor(humidityLevel),
+                                  inactiveColor: Colors.grey,
+                                  label: '${humidityLevel.round()}%',
+                                  onChanged: modoPlaca != Modo.automatico
+                                      ? null
+                                      : (value) {
+                                    setState(() {
+                                      humidityLevel = value;
+                                    });
+                                  },
+                                ),
+                                const Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Baixa',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'OpenSans-Regular',
+                                      ),
+                                    ),
+                                    Text(
+                                      'Alta',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'OpenSans-Regular',
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
