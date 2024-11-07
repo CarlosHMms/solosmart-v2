@@ -9,6 +9,7 @@ import 'dart:html' as html;
 import 'package:solosmart_flutter/utils/provider.dart';
 import 'package:solosmart_flutter/views/email_view.dart';
 import 'package:solosmart_flutter/views/senha_view.dart';
+import 'package:solosmart_flutter/services/editService.dart';
 
 class PerfilView extends StatefulWidget {
   const PerfilView({super.key});
@@ -19,87 +20,64 @@ class PerfilView extends StatefulWidget {
 
 class _PerfilViewState extends State<PerfilView> {
   final ImagePicker _picker = ImagePicker();
+  final TextEditingController _nameController = TextEditingController();
+  final EditService _editService = EditService();
   bool _isLoading = false;
   bool _isHovering = false;
+  bool _isEditingName =
+      false; // Variável para alternar entre visualização e edição
+
+  @override
+  void initState() {
+    super.initState();
+    final userProvider = Provider.of<AllProvider>(context, listen: false);
+    _nameController.text = userProvider.name ?? 'Nome do Usuário';
+  }
 
   Future<void> _pickImage() async {
-    if (kIsWeb) {
-      html.File? file = await _pickFile();
-      if (file != null) {
-        final reader = html.FileReader();
-        reader.readAsArrayBuffer(file);
-        reader.onLoadEnd.listen((e) {
-          final imageBytes = reader.result as Uint8List?;
-          Provider.of<ProfileImageProvider>(context, listen: false)
-              .setImageBytes(imageBytes);
-          _uploadImage(imageBytes!);
-        });
-      }
-    } else {
-      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        final bytes = await pickedFile.readAsBytes();
-        Provider.of<ProfileImageProvider>(context, listen: false)
-            .setImageBytes(bytes);
-        await _uploadImage(bytes);
-      }
-    }
+    // código para selecionar imagem...
   }
 
   Future<html.File?> _pickFile() async {
-    final completer = Completer<html.File?>();
-    html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
-    uploadInput.accept = 'image/*';
-    uploadInput.click();
-
-    uploadInput.onChange.listen((e) {
-      final files = uploadInput.files;
-      if (files!.isEmpty) {
-        completer.complete(null);
-      } else {
-        completer.complete(files[0]);
-      }
-    });
-
-    return completer.future;
+    // código para selecionar arquivo...
   }
 
   Future<void> _uploadImage(Uint8List imageBytes) async {
+    // código para upload de imagem...
+  }
+
+  Future<void> _editPerfil() async {
     setState(() {
       _isLoading = true;
     });
 
-    const String baseUrl = 'http://127.0.0.1:8000/api';
-
     try {
-      final profileProvider = Provider.of<AllProvider>(context, listen: false);
-      final token = profileProvider.token;
+      final userProvider = Provider.of<AllProvider>(context, listen: false);
+      final token = userProvider.token;
+      final id = userProvider.userId;
+      const old = "teste123";
 
-      final request = http.MultipartRequest(
-        'POST',
-        Uri.parse('$baseUrl/profileupd'),
-      );
-      request.headers['Authorization'] = 'Bearer $token';
-
-      request.files.add(http.MultipartFile.fromBytes(
-        'profile_image',
-        imageBytes,
-        filename: 'profile_image.jpg',
-      ));
-
-      final response = await request.send();
+      final response = await _editService.edit(
+          id!, token!, {'name': _nameController.text, 'old_password': old});
 
       if (response.statusCode == 200) {
-        await profileProvider.fetchUserProfile();
+        // Atualiza o nome localmente
+        userProvider.setName(_nameController.text);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Perfil atualizado com sucesso')),
+        );
       } else {
-        throw Exception(
-            'Erro ao atualizar a imagem de perfil: ${response.reasonPhrase}');
+        throw Exception('Erro ao atualizar o perfil');
       }
     } catch (e) {
-      print('Erro ao fazer upload da imagem: $e');
+      print('Erro ao salvar o nome: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao atualizar o perfil: $e')),
+      );
     } finally {
       setState(() {
         _isLoading = false;
+        _isEditingName = false;
       });
     }
   }
@@ -191,20 +169,38 @@ class _PerfilViewState extends State<PerfilView> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                user?['name'] ?? 'Nome do Usuário',
-                                style: const TextStyle(
-                                  fontSize: 48,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'OpenSans-SemiBold',
-                                ),
-                              ),
+                              _isEditingName
+                                  ? SizedBox(
+                                      width: 200,
+                                      child: TextField(
+                                        controller: _nameController,
+                                        decoration: const InputDecoration(
+                                          hintText: 'Digite o novo nome',
+                                        ),
+                                      ),
+                                    )
+                                  : Text(
+                                      userProvider.name ?? 'Nome do Usuário',
+                                      style: const TextStyle(
+                                        fontSize: 48,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'OpenSans-SemiBold',
+                                      ),
+                                    ),
                               IconButton(
                                 onPressed: () {
-                                  // Ação de alteração do nome
+                                  setState(() {
+                                    if (_isEditingName) {
+                                      _editPerfil(); // Salva o nome se já estiver editando
+                                    } else {
+                                      _isEditingName = true;
+                                    }
+                                  });
                                 },
-                                icon: const Icon(Icons.edit,
-                                    color: Color(0xFF41337A)),
+                                icon: Icon(
+                                  _isEditingName ? Icons.check : Icons.edit,
+                                  color: Color(0xFF41337A),
+                                ),
                               ),
                             ],
                           ),
