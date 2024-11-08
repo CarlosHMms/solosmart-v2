@@ -18,6 +18,10 @@ class Gravacoes extends Model
         'umidade_solo',
         'data_registro'
     ];
+    public function alertas()
+    {
+        return $this->hasMany(Alertas::class);
+    }
 
     public $timestamps = false;
 }

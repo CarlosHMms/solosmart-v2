@@ -5,12 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 
 class Alertas extends Model
-{
-    public function placa_id(): HasMany
+{   
+    use HasApiTokens, HasFactory, Notifiable;
+
+    protected $table = 'alertas';
+    protected $fillable = [
+        'tipo',
+        'descricao',
+        'data',
+    ];
+
+
+    public function gravacoes()
     {
-        return $this->hasMany(Placas::class, 'id', 'placa_id');
+        return $this->belongsTo(Gravacoes::class);
     }
-    use HasFactory;
+   
 }

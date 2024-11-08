@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('assunto', 50);
             $table->text('descricao');
             $table->timestamp('data_ticket', precision: 0);
-            $table->foreignId('users_id')->references('id')->on('users')->onDelete('RESTRICT');
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('RESTRICT');
         });
     }
 
