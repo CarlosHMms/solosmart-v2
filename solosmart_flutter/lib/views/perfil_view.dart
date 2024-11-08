@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,8 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:html' as html;
 import 'package:solosmart_flutter/utils/provider.dart';
-import 'package:solosmart_flutter/views/email_view.dart';
-import 'package:solosmart_flutter/views/senha_view.dart';
 import 'package:solosmart_flutter/services/editService.dart';
 
 class PerfilView extends StatefulWidget {

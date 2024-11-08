@@ -82,6 +82,31 @@ class _PlacasViewState extends State<PlacasView> {
     _buscarDados(placaId);
   }
 
+  void _confirmarExclusao(int placaId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Confirmar exclusão"),
+          content: const Text("Tem certeza de que deseja excluir esta placa?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("Cancelar"),
+            ),
+            TextButton(
+              onPressed: () {
+                // Lógica para excluir a placa aqui
+                Navigator.of(context).pop();
+              },
+              child: const Text("Excluir"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -168,6 +193,15 @@ class _PlacasViewState extends State<PlacasView> {
                                               ),
                                               onPressed: () {
                                                 // Aqui se pode adicionar a ação de edição da placa
+                                              },
+                                            ),
+                                            IconButton(
+                                              icon: const Icon(
+                                                Icons.delete,
+                                                color: Colors.red,
+                                              ),
+                                              onPressed: () {
+                                                _confirmarExclusao(placaId);
                                               },
                                             ),
                                           ],

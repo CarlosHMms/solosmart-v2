@@ -13,6 +13,8 @@ class BarChartSample extends StatelessWidget {
     'Domingo'
   ];
 
+BarChartSample({super.key});
+
 
   @override
   Widget build(BuildContext context) {

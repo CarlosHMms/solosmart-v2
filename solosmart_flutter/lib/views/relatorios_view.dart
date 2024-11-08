@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RelatoriosView extends StatefulWidget {
-  const RelatoriosView({Key? key}) : super(key: key);
+  const RelatoriosView({super.key});
 
   @override
   State<RelatoriosView> createState() => _RelatoriosViewState();
