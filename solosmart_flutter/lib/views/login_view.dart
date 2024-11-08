@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solosmart_flutter/utils/provider.dart';
 import 'package:solosmart_flutter/views/recuperar_view.dart';
-import 'cadastro_view.dart';
 import 'inicio_view.dart';
 import 'package:solosmart_flutter/services/auth_user.dart';
 
@@ -148,6 +147,12 @@ class _LoginViewState extends State<LoginView> {
                           print(userId);
                           Map<String, dynamic>? user = responseData['data']['user'];
                           String? name = responseData['data']['user']['name'];
+                          String? email = responseData['data']['user']['email'];
+                          var password = _password;
+                          Provider.of<AllProvider>(context, listen: false).setPassword(password);
+                          if (email != null){
+                            Provider.of<AllProvider>(context, listen: false).setEmail(email);
+                          }
                           if (name != null){
                             Provider.of<AllProvider>(context, listen: false).setName(name);
                           }
