@@ -89,7 +89,7 @@ class UserController extends Controller
 
         $validatedData = $validator->validated();
 
-        if (property_exists($validatedData['password'], 'password')) {
+        if (array_key_exists('password', $validatedData)) {
             $validatedData['password'] = Hash::make($validatedData['password']);
         }
 

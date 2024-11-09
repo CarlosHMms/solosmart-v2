@@ -20,6 +20,7 @@ class _PerfilViewState extends State<PerfilView> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordconfirmController = TextEditingController();
   final TextEditingController _oldPasswordController = TextEditingController();
   final EditService _editService = EditService();
   bool _isLoading = false;
@@ -35,6 +36,7 @@ class _PerfilViewState extends State<PerfilView> {
     _nameController.text = userProvider.name ?? 'Nome do Usuário';
     _emailController.text = userProvider.email ?? 'Email do Usuário';
     _passwordController.text = '********';
+    _passwordconfirmController.text = '';
   }
 
   Future<void> _pickImage() async {
@@ -203,7 +205,7 @@ class _PerfilViewState extends State<PerfilView> {
       final old = _oldPasswordController.text;
 
       final response = await _editService.editPassword(
-          id!, token!, {'password': _passwordController.text, 'old_password': old});
+          id!, token!, {'password': _passwordController.text, 'password_confirmation': _passwordconfirmController.text, 'old_password': old});
 
       if (response.statusCode == 200) {
         // Atualiza a senha localmente
@@ -435,6 +437,15 @@ class _PerfilViewState extends State<PerfilView> {
                                             ),
                                           ),
                                         ),
+                                        SizedBox(
+                                          width: 200,
+                                          child: TextField(
+                                            controller: _passwordconfirmController,
+                                            decoration: const InputDecoration(
+                                              hintText: 'Repita a Nova Senha',
+                                            ),
+                                          ),
+                                        ),
                                         const SizedBox(height: 10),
                                         SizedBox(
                                           width: 200,
@@ -462,6 +473,8 @@ class _PerfilViewState extends State<PerfilView> {
                                       _editPassword(); // Salva a senha se já estiver editando
                                     } else {
                                       _isEditingPassword = true;
+                                      _passwordController.clear();
+                                      _passwordconfirmController.clear();
                                       _oldPasswordController.clear();
                                     }
                                   });
