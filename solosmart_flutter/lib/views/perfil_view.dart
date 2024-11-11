@@ -397,7 +397,7 @@ class _PerfilViewState extends State<PerfilView> {
                                       ],
                                     )
                                   : Text(
-                                      userProvider.email ?? 'Email do Usuário',
+                                      'E-mail: ${userProvider.email}' ?? 'Email do Usuário',
                                       style: const TextStyle(
                                         fontSize: 24,
                                         fontFamily: 'OpenSans-SemiBold',

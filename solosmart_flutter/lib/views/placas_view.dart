@@ -75,6 +75,21 @@ class _PlacasViewState extends State<PlacasView> {
     }
   }
 
+  Future<void> _deletar(int placaId) async{
+    try{
+      final response = await _placaController.removerPlaca(token!, placaId);
+
+      if (response.statusCode == 200) {
+        print(response.body);
+      
+      } else {
+        print("Erro ao excluir a placa: ${response.body}");
+      }
+    }catch (e){
+      print('Erro ao deletar placa: $e');
+    }
+  }
+
   void _onPlacaSelecionada(String placaName, int placaId) {
     print('Placa selecionada: $placaName');
     widget.selectedPlacaNotifier.value = placaName;
@@ -95,8 +110,9 @@ class _PlacasViewState extends State<PlacasView> {
               child: const Text("Cancelar"),
             ),
             TextButton(
-              onPressed: () {
-                // Lógica para excluir a placa aqui
+              onPressed: () async {
+                await _deletar(placaId);
+                _carregarPlacas();
                 Navigator.of(context).pop();
               },
               child: const Text("Excluir"),

@@ -23,4 +23,9 @@ class Placas extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function gravacoes()
+    {
+        return $this->hasMany(Gravacoes::class, 'placa_id');
+    }
 }
