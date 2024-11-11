@@ -106,7 +106,18 @@ class _InicioViewState extends State<InicioView> {
           _selectedViewIndex = 1; // Muda para o DashboardView
         });
       } else {
-        throw Exception('Erro ao gerar dados: ${response.statusCode}');
+        final response = await _generatedata.gerarDados(placaId, token!);
+
+        if (response.statusCode == 200) {
+          final Map<String, dynamic> responseData = jsonDecode(response.body);
+          Map<String, dynamic>? dados = responseData['data'];
+          if (dados != null) {
+            Provider.of<AllProvider>(context, listen: false).setDados(dados);
+          }
+        setState(() {
+          _selectedViewIndex = 1; // Muda para o DashboardView
+        });
+        }
       }
     } catch (e) {
       print('Erro ao gerar dados: $e');

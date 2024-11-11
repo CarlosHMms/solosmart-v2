@@ -62,9 +62,7 @@ public function destroy($placaId)
     }
 
     // Tenta deletar a placa
-    if ($placa->gravacoes()->delete() && $placa->delete()) {
-        return $this->response('Placa deletada', 200);
-    } elseif ($placa->delete()){
+    if ($placa->gravacoes()->delete() || $placa->delete()) {
         return $this->response('Placa deletada', 200);
     }
 
