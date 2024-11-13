@@ -8,91 +8,153 @@ class SuportView extends StatefulWidget {
 }
 
 class _SuportViewState extends State<SuportView> {
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+
+  void _sendTicket() {
+    String title = _titleController.text;
+    String description = _descriptionController.text;
+
+    if (title.isNotEmpty && description.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Ticket enviado com sucesso!")),
+      );
+      _titleController.clear();
+      _descriptionController.clear();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Por favor, preencha todos os campos.")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
-        children: [
-          // Painel principal
-          Expanded(
-            child: Container(
-              color: const Color(0xFFF5F8DE), // Cor de fundo clara
-              child: Stack(
-                children: [
-                  // Conteúdo do painel principal aqui
-                  Center(
-                    child: Container(
-                      width: 934,
-                      height: 695,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF5F8DE),
-                        borderRadius: BorderRadius.circular(19),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.25),
-                            offset: const Offset(-7, 11),
-                            blurRadius: 25,
-                          ),
-                        ],
-                      ),
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Exemplo de um nome de usuário
-                          Text(
-                            'Breno',
-                            style: TextStyle(
-                              fontSize: 48,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'OpenSans-SemiBold',
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          // Exemplo de informação de contato
-                          Text(
-                            'email@exemplo.com',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontFamily: 'OpenSans-Regular',
-                            ),
-                          ),
-                          Text(
-                            'Senha: ********',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontFamily: 'OpenSans-Regular',
-                            ),
-                          ),
-                        ],
+      backgroundColor: const Color(0xFFF5F8DE),
+      body: Center(
+        child: Container(
+          width: 900,
+          height: 700,
+          decoration: BoxDecoration(
+            color: const Color(0xFFF5F8DE),
+            borderRadius: BorderRadius.circular(19),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.25),
+                offset: const Offset(-7, 11),
+                blurRadius: 25,
+                spreadRadius: 10,
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Enviar Ticket de Suporte',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Open Sans',
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                      'Título do Ticket',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Open Sans',
+                        color: Colors.black,
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: TextField(
+                    controller: _titleController,
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Color(0xFFF5F5F5),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                      hintText: 'Digite o título do ticket',
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                      'Descrição do Problema',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Open Sans',
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: TextField(
+                    controller: _descriptionController,
+                    maxLines: 5,
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Color(0xFFF5F5F5),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                      hintText: 'Descreva o problema',
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: _sendTicket,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF41337A),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 115,
+                      vertical: 18,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  child: const Text(
+                    'Enviar Ticket',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Open Sans',
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  // Widget para os itens do menu
-  Widget _menuItem(String title, IconData icon, double topPosition) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 71.0, top: 16.0),
-      child: Row(
-        children: [
-          Icon(icon, color: Colors.white, size: 26),
-          const SizedBox(width: 10),
-          Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontFamily: 'Inter-Regular',
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
