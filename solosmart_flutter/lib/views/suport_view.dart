@@ -64,7 +64,6 @@ class _SuportViewState extends State<SuportView> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Campo Título
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
@@ -97,7 +96,6 @@ class _SuportViewState extends State<SuportView> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Campo Descrição
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
@@ -131,7 +129,6 @@ class _SuportViewState extends State<SuportView> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                // Botão Enviar Ticket
                 ElevatedButton(
                   onPressed: _sendTicket,
                   style: ElevatedButton.styleFrom(
