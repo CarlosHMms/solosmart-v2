@@ -13,6 +13,9 @@ return new class extends Migration
             $table->id()->autoIncrement();
             $table->string('name', 255);
             $table->string('numero_serie', 50);
+            $table->float('temperatura_ar_minima');
+            $table->float('umidade_ar_minima');
+            $table->float('umidade_solo_minima');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('RESTRICT');
         });
     }
