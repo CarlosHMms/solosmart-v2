@@ -26,4 +26,5 @@ class Tickets extends Model
         return $this->belongsTo(User::class);
     }
 
+    public $timestamps = false;
 }

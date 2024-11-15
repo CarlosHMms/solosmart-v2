@@ -19,7 +19,8 @@ public function login(Request $request)
             'placa-store',
             'placa-show',
             'auth-logout',
-            'placa-destroy'
+            'placa-destroy',
+            'ticket-store'
         ], now()->addHours(16));
 
         return $this->response('Login Realizado!', 200, [

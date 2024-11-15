@@ -14,15 +14,12 @@ return new class extends Migration
             $table->string('assunto', 50);
             $table->text('descricao');
             $table->timestamp('data_ticket', precision: 0);
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('RESTRICT');
+            $table->foreignId('user_id')->constrained('users')->onDelete('RESTRICT');
         });
     }
 
     public function down(): void
     {
-        Schema::drop('tickets', function (Blueprint $table) {
-            $table->dropForeign('user_id');
-            $table->drop('tickets');
-        });
+        Schema::dropIfExists('tickets');
     }
 };

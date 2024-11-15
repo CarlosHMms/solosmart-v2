@@ -8,6 +8,7 @@ use App\Http\Controllers\PlacaController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\SensorDataController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\TicketsController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -28,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/usuarios/perfil/{usuario}', [UserController::class, 'edit']);
     Route::get('/buscar/{placa_id}', [SensorDataController::class, 'getLastPlacaData']);
     Route::delete('/placas/delete/{placaId}', [PlacaController::class, 'destroy']);
+    Route::post('/ticket', [TicketsController::class, 'store']);
 });
 
 Route::get('/usuarios', [UserController::class, 'index']);
