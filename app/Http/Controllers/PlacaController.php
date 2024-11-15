@@ -81,8 +81,8 @@ class PlacaController extends Controller
 
         return new PlacaResource($placa);
     }
-        
-    public function edit($id, $request)
+
+    public function editName($id, $request)
     {
         $placa = Placas::find($id);
 
@@ -102,7 +102,7 @@ class PlacaController extends Controller
             return $this->error('Placa não foi atualizada', 400);
         }
     }
-    
+
     public function validateName(Request $request)
     {
         return Validator::make($request->all(), [
