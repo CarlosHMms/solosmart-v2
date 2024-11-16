@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solosmart_flutter/services/placaService.dart';
 import 'package:solosmart_flutter/services/generateData.dart';
+import 'package:solosmart_flutter/services/alertaService.dart';
 import 'package:solosmart_flutter/utils/provider.dart';
 import 'package:solosmart_flutter/views/dashborad_view.dart';
 import 'package:solosmart_flutter/views/placas_view.dart';
@@ -32,6 +33,7 @@ class _InicioViewState extends State<InicioView> {
       ValueNotifier<String?>(null);
   final PlacaService _placaController = PlacaService();
   final Generatedata _generatedata = Generatedata();
+  final AlertaService _alertaController = AlertaService();
   String? token;
 
   final List<Widget> _views = [];
@@ -110,9 +112,13 @@ class _InicioViewState extends State<InicioView> {
 
         if (response.statusCode == 200) {
           final Map<String, dynamic> responseData = jsonDecode(response.body);
-          Map<String, dynamic>? dados = responseData['data'];
+          Map<String, dynamic>? dados = responseData['data']['gravacao'];
+          Map<String, dynamic>? alertas = responseData['data']?['alerta'];
           if (dados != null) {
             Provider.of<AllProvider>(context, listen: false).setDados(dados);
+          }
+          if (alertas != null) {
+            Provider.of<AllProvider>(context, listen: false).setAlertas(alertas);
           }
         setState(() {
           _selectedViewIndex = 1; // Muda para o DashboardView
@@ -121,6 +127,25 @@ class _InicioViewState extends State<InicioView> {
       }
     } catch (e) {
       print('Erro ao gerar dados: $e');
+    }
+  }
+
+  Future<void> _configurar(int placaId, String token) async {
+    try {
+      final response = await _alertaController.configAlerta(placaId, token);
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        Map<String, dynamic>? configs = responseData['data'];
+        if (configs != null) {
+          Provider.of<AllProvider>(context, listen: false).setConfigs(configs);
+        }
+        print(response.body);
+      } else {
+        print("Erro ao criar configurações: ${response.body}");
+      }
+    } catch (e) {
+      print('Erro: $e');
     }
   }
 
@@ -133,6 +158,7 @@ class _InicioViewState extends State<InicioView> {
         placas.firstWhere((placa) => placa['name'] == newValue)['id'];
     if (placaId != null) {
       _buscarDados(placaId);
+      _configurar(placaId, token!);
       Provider.of<AllProvider>(context, listen: false).setPlacaId(placaId);
     }
   }

@@ -18,9 +18,15 @@ class Gravacoes extends Model
         'umidade_solo',
         'data_registro'
     ];
+
     public function alertas()
     {
-        return $this->hasMany(Alertas::class);
+        return $this->hasMany(Alertas::class, 'gravacoes_id');
+    }
+
+    public function placa()
+    {
+        return $this->belongsTo(Placas::class, 'placa_id');
     }
 
     public $timestamps = false;

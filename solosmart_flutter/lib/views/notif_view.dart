@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:solosmart_flutter/services/alertaService.dart';
+import 'package:solosmart_flutter/utils/provider.dart';
 
 class NotifView extends StatefulWidget {
   const NotifView({super.key});
@@ -8,50 +13,34 @@ class NotifView extends StatefulWidget {
 }
 
 class _NotifViewState extends State<NotifView> {
-  List<Map<String, String>> _notificacoes = [
-    {
-      "titulo": "Sensor 1",
-      "descricao": "Alerta de umidade alta",
-      "data": "08/11/2024",
-      "hora": "14:30"
-    },
-    {
-      "titulo": "Sensor 2",
-      "descricao": "Temperatura acima do limite",
-      "data": "08/11/2024",
-      "hora": "12:45"
-    },
-    {
-      "titulo": "Sistema",
-      "descricao": "Manutenção programada para amanhã",
-      "data": "07/11/2024",
-      "hora": "09:15"
-    },
-    {
-      "titulo": "Notificação de atualização",
-      "descricao": "Nova versão disponível",
-      "data": "06/11/2024",
-      "hora": "18:00"
-    },
-  ];
+  final AlertaService _alertaService = AlertaService();
+  List<dynamic> _alertas = []; // Lista que armazenará os alertas recebidos
 
-  void _marcarComoVisualizada(int index) {
-    setState(() {
-      _notificacoes[index]["descricao"] =
-          "[Visualizada] ${_notificacoes[index]["descricao"]}";
-    });
+  @override
+  void initState() {
+    super.initState();
+    _carregarAlertas(); // Carrega os alertas ao inicializar a tela
   }
 
-  void _removerNotificacao(int index) {
-    setState(() {
-      _notificacoes.removeAt(index);
-    });
-  }
+  Future<void> _carregarAlertas() async {
+    final userProvider = Provider.of<AllProvider>(context, listen: false);
+    final token = userProvider.token;
+    final placaId = userProvider.placaId;
+    try {
+      final response = await _alertaService.listarAlertas(placaId!, token!);
 
-  void _removerTodasNotificacoes() {
-    setState(() {
-      _notificacoes.clear();
-    });
+      if (response.statusCode == 200) {
+        List<dynamic> alertasJson = json.decode(response.body)['data'];
+        setState(() {
+          _alertas =
+              alertasJson; // Atualiza a lista de alertas com os dados da API
+        });
+      } else {
+        throw Exception('Erro ao carregar os alertas: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erro ao carregar os alertas: $e');
+    }
   }
 
   @override
@@ -98,9 +87,9 @@ class _NotifViewState extends State<NotifView> {
                           ElevatedButton(
                             onPressed: () {
                               setState(() {
-                                for (var notificacao in _notificacoes) {
-                                  notificacao["descricao"] =
-                                      "[Visualizada] ${notificacao["descricao"]}";
+                                for (var alerta in _alertas) {
+                                  alerta["descricao"] =
+                                      "[Visualizada] ${alerta["descricao"]}";
                                 }
                               });
                             },
@@ -123,7 +112,11 @@ class _NotifViewState extends State<NotifView> {
                           ),
                           const SizedBox(width: 20),
                           ElevatedButton(
-                            onPressed: _removerTodasNotificacoes,
+                            onPressed: () {
+                              setState(() {
+                                _alertas.clear(); // Remove todos os alertas
+                              });
+                            },
                             child: const Text(
                               "Remover todas",
                               style: TextStyle(
@@ -147,9 +140,18 @@ class _NotifViewState extends State<NotifView> {
                       Expanded(
                         child: ListView.builder(
                           padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                          itemCount: _notificacoes.length,
+                          itemCount: _alertas.length,
                           itemBuilder: (context, index) {
+                            // Define a cor de fundo com base no tipo do alerta
+                            Color backgroundColor = Colors.white; // Cor padrão
+                            if (_alertas[index]["tipo"] ==
+                                "Temperatura Baixa") {
+                              backgroundColor =
+                                  Colors.red[100]!; // Fundo vermelho claro
+                            }
+
                             return Card(
+                              color: backgroundColor, // Define a cor do cartão
                               margin: const EdgeInsets.symmetric(vertical: 8.0),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),
@@ -161,7 +163,7 @@ class _NotifViewState extends State<NotifView> {
                                   color: Color(0xFF41337A),
                                 ),
                                 title: Text(
-                                  _notificacoes[index]["titulo"]!,
+                                  _alertas[index]["tipo"]!,
                                   style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -171,12 +173,12 @@ class _NotifViewState extends State<NotifView> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      _notificacoes[index]["descricao"]!,
+                                      _alertas[index]["descricao"]!,
                                       style: const TextStyle(fontSize: 16),
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
-                                      "Data: ${_notificacoes[index]["data"]} - ${_notificacoes[index]["hora"]}",
+                                      "Data: ${_alertas[index]["data_alerta"]}",
                                       style: const TextStyle(
                                         fontSize: 14,
                                         color: Colors.grey,
@@ -189,14 +191,21 @@ class _NotifViewState extends State<NotifView> {
                                   children: [
                                     IconButton(
                                       icon: const Icon(Icons.remove_red_eye),
-                                      onPressed: () =>
-                                          _marcarComoVisualizada(index),
+                                      onPressed: () {
+                                        setState(() {
+                                          _alertas[index]["descricao"] =
+                                              "[Visualizada] ${_alertas[index]["descricao"]}";
+                                        });
+                                      },
                                       color: const Color(0xFF41337A),
                                     ),
                                     IconButton(
                                       icon: const Icon(Icons.close),
-                                      onPressed: () =>
-                                          _removerNotificacao(index),
+                                      onPressed: () {
+                                        setState(() {
+                                          _alertas.removeAt(index);
+                                        });
+                                      },
                                       color: Colors.red,
                                     ),
                                   ],

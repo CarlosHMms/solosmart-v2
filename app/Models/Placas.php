@@ -28,4 +28,9 @@ class Placas extends Model
     {
         return $this->hasMany(Gravacoes::class, 'placa_id');
     }
+
+    public function configAlertas()
+    {
+        return $this->hasOne(ConfigAlertas::class, 'placa_id');
+    }
 }

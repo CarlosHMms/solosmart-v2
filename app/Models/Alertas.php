@@ -16,13 +16,14 @@ class Alertas extends Model
     protected $fillable = [
         'tipo',
         'descricao',
-        'data',
+        'data_alerta',
+        'gravacoes_id',
     ];
-
 
     public function gravacoes()
     {
-        return $this->belongsTo(Gravacoes::class);
+        return $this->belongsTo(Gravacoes::class, 'gravacoes_id');
     }
-   
+
+    public $timestamps = false;
 }

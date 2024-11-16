@@ -7,6 +7,7 @@ use App\Traits\HttpResponse;
 use Illuminate\Http\Request;
 use App\Models\Gravacoes;
 use App\Models\Placas;
+use App\Models\Alertas;
 use Illuminate\Support\Facades\Validator;
 
 class SensorDataController extends Controller
@@ -15,7 +16,7 @@ class SensorDataController extends Controller
 
     public function generateData(Request $request)
     {
-        if(!auth()->user()->tokenCan('placa-store')){
+        if (!auth()->user()->tokenCan('placa-store')) {
             return $this->error('Unauthorized', 403);
         }
 
@@ -23,26 +24,50 @@ class SensorDataController extends Controller
             'placa_id' => 'required|exists:placas,id',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return $this->error('Dados inválidos', 422, $validator->errors());
         }
 
         $data = [
             'placa_id' => $request->placa_id,
-            'temperatura_ar' => rand(20, 35),
+            'temperatura_ar' => rand(15, 35),
             'umidade_ar' => rand(30, 90),
             'umidade_solo' => rand(10, 70),
             'data_registro' => now(),
         ];
 
-        $created = Gravacoes::create($data);
+        // Cria a gravação
+        $gravacao = Gravacoes::create($data);
 
-        if($created){
-            return $this->response('Dados gerados e salvos com sucesso.', 200, $created);
+        if (!$gravacao) {
+            return $this->error('Falha ao gerar os dados', 500);
         }
 
-        return $this->error('Falha ao gerar os dados', 500);
+        $alerta = null;
+
+        // Verifica os limites configurados na tabela ConfigAlertas
+        $placa = Placas::with('configAlertas')->find($request->placa_id);
+
+        if ($placa && $placa->configAlertas) {
+            $configAlertas = $placa->configAlertas;
+
+            // Verifica se a temperatura está abaixo do limite mínimo
+            if ($gravacao->temperatura_ar < $configAlertas->temp_minima) {
+                $alerta = Alertas::create([
+                    'tipo' => 'Temperatura Baixa',
+                    'descricao' => "A temperatura registrada foi de {$gravacao->temperatura_ar}° que está abaixo do limite configurado.",
+                    'data_alerta' => now(),
+                    'gravacoes_id' => $gravacao->id,
+                ]);
+            }
+        }
+
+        return $this->response('Dados gerados e salvos com sucesso.', 200, [
+            'gravacao' => $gravacao,
+            'alerta' => $alerta,
+        ]);
     }
+
 
     public function getPlacaData($placa_id)
     {

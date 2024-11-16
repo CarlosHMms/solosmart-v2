@@ -17,6 +17,8 @@ class AllProvider with ChangeNotifier {
   Map<String, dynamic>? _placas;
   Map<String, dynamic>? _dados;
   Map<String, dynamic>? _profile;
+  Map<String, dynamic>? _configs;
+  Map<String, dynamic>? _alertas;
   int? _placaId;
 
   int? get userId => _userId;
@@ -75,6 +77,20 @@ class AllProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Map<String, dynamic>? get configs => _configs;
+
+  void setConfigs(Map<String, dynamic> configs) {
+    _configs = configs;
+    notifyListeners();
+  }
+
+  Map<String, dynamic>? get alertas => _alertas;
+
+  void setAlertas(Map<String, dynamic> alertas) {
+    _alertas = alertas;
+    notifyListeners();
+  }
+
   Future<void> atualizarDados(int placaId) async {
     if (_token == null) return;
 
@@ -85,9 +101,13 @@ class AllProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
-        Map<String, dynamic>? novoDados = responseData['data'];
+        Map<String, dynamic>? novoDados = responseData['data']?['gravacao'];
+        Map<String, dynamic>? alertas = responseData['data']?['alerta'];
         if (dados != null) {
           setDados(novoDados!);
+        }
+        if (alertas != null) {
+          setAlertas(alertas);
         }
       } else {
         print('Erro ao gerar dados: ${response.statusCode}');
