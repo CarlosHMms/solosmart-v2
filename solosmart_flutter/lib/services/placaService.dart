@@ -18,7 +18,10 @@ class PlacaService{
         },
         body: jsonEncode({
           'name': name,
-          'numero_serie': numeroSerie
+          'numero_serie': numeroSerie,
+          'temperatura_ar_minima': 12.0,
+          'umidade_ar_minima': 0,
+          'umidade_solo_minima': 30.0
         }),
       );
       return response;
