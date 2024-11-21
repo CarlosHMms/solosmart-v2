@@ -6,6 +6,8 @@ return [
 
     'allowed_methods' => ['*'],
 
+    'Access-Control-Allow-Origin' => ['*'],
+
     'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],

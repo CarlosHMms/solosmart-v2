@@ -29,7 +29,10 @@ class PlacaController extends Controller
         }
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'numero_serie' => 'required|string|max:50'
+            'numero_serie' => 'required|string|max:50',
+            'temperatura_ar_minima' => 'required|numeric',
+            'umidade_ar_minima'=> 'required|numeric',
+            'umidade_solo_minima'=> 'required|numeric',
         ]);
         if ($validator->fails()) {
             return $this->error('Dados inválidos', 422, $validator->errors());
@@ -38,6 +41,9 @@ class PlacaController extends Controller
         $created = Placas::create([
             'name' => $validator->validated()['name'],
             'numero_serie' => $validator->validated()['numero_serie'],
+            'temperatura_ar_minima' => $validator->validated()['temperatura_ar_minima'],
+            'umidade_ar_minima' => $validator->validated()['umidade_ar_minima'],
+            'umidade_solo_minima' => $validator->validated()['umidade_solo_minima'],
             'user_id' => auth()->id()
         ]);
         if ($created) {
