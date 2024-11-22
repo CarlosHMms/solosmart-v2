@@ -110,7 +110,7 @@ class _MyDrawerState extends State<MyDrawer> {
             const Spacer(),
             // Caixa de seleção (DropdownButton) para selecionar a placa
             SizedBox(
-              width: 170, // Ajuste da largura do Dropdown
+              width: 170, 
               child: DropdownButtonFormField<String>(
                 decoration: const InputDecoration(
                   labelText: 'Selecionar Central',

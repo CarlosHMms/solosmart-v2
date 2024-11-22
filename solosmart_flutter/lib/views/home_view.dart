@@ -57,7 +57,7 @@ class _HomeViewState extends State<HomeView> {
         children: [
           Expanded(
             child: Container(
-              color: const Color(0xFFF5F8DE), // Cor de fundo clara
+              color: const Color(0xFFF5F8DE), 
               child: Stack(
                 children: [
                   Center(

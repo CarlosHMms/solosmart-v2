@@ -49,7 +49,6 @@ class MyApp extends StatelessWidget {
         'notificações': (context) => const NotifView(),
         '/recuperar': (context) => const PasswordRecoveryView(),
         '/relatórios': (context) => const RelatoriosView(),
-        '/suporte': (context) => const SuportView(),
         '/home': (context) => const InicioView(),
       },
     );
