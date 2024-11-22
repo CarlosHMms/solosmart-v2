@@ -13,8 +13,10 @@ class Placas extends Model
     protected $fillable = [
         'name',
         'numero_serie',
+        'temperatura_ar_minima',
+        'umidade_ar_minima',
+        'umidade_solo_minima',
         'user_id',
-
     ];
 
     public $timestamps = false;
