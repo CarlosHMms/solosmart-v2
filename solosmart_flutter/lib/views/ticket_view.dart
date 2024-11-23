@@ -1,30 +1,90 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:solosmart_flutter/services/ticketsService.dart';
+import 'package:solosmart_flutter/utils/provider.dart';
 
 class TicketView extends StatefulWidget {
   const TicketView({super.key});
 
   @override
-  State<TicketView> createState() => _SuportViewState();
+  State<TicketView> createState() => _TicketViewState();
 }
 
-class _SuportViewState extends State<TicketView> {
+class _TicketViewState extends State<TicketView> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final Ticketsservice _ticketsservice = Ticketsservice();
+  bool isLoading = false; // Controla o estado do botão
 
-  void _sendTicket() {
-    String title = _titleController.text;
-    String description = _descriptionController.text;
-
-    if (title.isNotEmpty && description.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Ticket enviado com sucesso!")),
-      );
-      _titleController.clear();
-      _descriptionController.clear();
-    } else {
+  Future<void> _abrirTicket() async {
+    if (_titleController.text.isEmpty || _descriptionController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Por favor, preencha todos os campos.")),
       );
+      return;
+    }
+
+    setState(() {
+      isLoading = true; // Exibe o indicador de carregamento
+    });
+
+    try {
+      final userProvider = Provider.of<AllProvider>(context, listen: false);
+      int status = 1;
+      final token = userProvider.token;
+      final email = userProvider.email;
+      final assunto = _titleController.text;
+      final descricao = _descriptionController.text;
+
+      final response = await _ticketsservice.ticket(
+        token!,
+        email!,
+        status,
+        assunto,
+        descricao,
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> tickets = json.decode(response.body)['data'];
+        if (tickets != null) {
+          Provider.of<AllProvider>(context, listen: false).setTickets(tickets);
+        }
+
+        // Exibe um diálogo de sucesso
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Sucesso!'),
+              content: const Text('Ticket enviado com sucesso!'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+
+        // Limpa os campos após o sucesso
+        _titleController.clear();
+        _descriptionController.clear();
+      } else {
+        throw Exception('Erro ao enviar ticket: ${response.statusCode}');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao enviar ticket: $e')),
+      );
+    } finally {
+      setState(() {
+        isLoading = false; // Restaura o estado do botão
+      });
     }
   }
 
@@ -130,9 +190,14 @@ class _SuportViewState extends State<TicketView> {
                 ),
                 const SizedBox(height: 30),
                 ElevatedButton(
-                  onPressed: _sendTicket,
+                  onPressed: isLoading
+                      ? null
+                      : _abrirTicket, // Desabilita enquanto carrega
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF41337A),
+                    backgroundColor: isLoading
+                        ? Colors.grey
+                        : const Color(
+                            0xFF41337A), // Cor diferente durante o carregamento
                     padding: const EdgeInsets.symmetric(
                       horizontal: 115,
                       vertical: 18,
@@ -141,15 +206,19 @@ class _SuportViewState extends State<TicketView> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  child: const Text(
-                    'Enviar Ticket',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Open Sans',
-                      color: Colors.white,
-                    ),
-                  ),
+                  child: isLoading
+                      ? const CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                      : const Text(
+                          'Enviar Ticket',
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Open Sans',
+                            color: Colors.white,
+                          ),
+                        ),
                 ),
               ],
             ),
