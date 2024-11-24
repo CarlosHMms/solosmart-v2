@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SuportView extends StatefulWidget {
-  const SuportView({super.key});
+  const SuportView({super.key, required void Function() onBackButtonPressed});
 
   @override
   State<SuportView> createState() => _SuportViewState();
@@ -54,7 +54,7 @@ class _SuportViewState extends State<SuportView> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  'Enviar Ticket de Suporte',
+                  'BURRRO',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 40,
@@ -63,38 +63,7 @@ class _SuportViewState extends State<SuportView> {
                     color: Colors.black,
                   ),
                 ),
-                const SizedBox(height: 20),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      'Título do Ticket',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Open Sans',
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: TextField(
-                    controller: _titleController,
-                    decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Color(0xFFF5F5F5),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(color: Colors.black),
-                      ),
-                      hintText: 'Digite o título do ticket',
-                    ),
-                  ),
-                ),
+                
                 const SizedBox(height: 20),
                 const Align(
                   alignment: Alignment.centerLeft,

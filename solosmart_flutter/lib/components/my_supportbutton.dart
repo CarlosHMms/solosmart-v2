@@ -23,7 +23,7 @@ class MySupportButton extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.headset_mic, color: Colors.white),
-            iconSize: 40, // Tamanho do ícone
+            iconSize: 40, 
             onPressed: onPressed,
           ),
         ],

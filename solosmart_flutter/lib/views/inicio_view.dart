@@ -10,6 +10,8 @@ import 'package:solosmart_flutter/views/relatorios_view.dart';
 import 'package:solosmart_flutter/views/add_view.dart';
 import 'package:solosmart_flutter/views/config_view.dart';
 import 'package:solosmart_flutter/views/notif_view.dart';
+import 'package:solosmart_flutter/views/faq_view.dart';
+import 'package:solosmart_flutter/views/ticket_view.dart';
 import 'package:solosmart_flutter/views/suport_view.dart';
 import 'package:solosmart_flutter/components/my_drawer.dart';
 import 'package:solosmart_flutter/components/my_supportbutton.dart';
@@ -60,7 +62,10 @@ class _InicioViewState extends State<InicioView> {
       const AddView(),
       const ConfigView(),
       const NotifView(),
-      const SuportView(),
+      FAQView(
+        onTicketButtonPressed: _onTicketButtonPressed, // Passa a função aqui
+      ),
+      const TicketView(),
     ]);
   }
 
@@ -114,9 +119,9 @@ class _InicioViewState extends State<InicioView> {
           if (dados != null) {
             Provider.of<AllProvider>(context, listen: false).setDados(dados);
           }
-        setState(() {
-          _selectedViewIndex = 1; // Muda para o DashboardView
-        });
+          setState(() {
+            _selectedViewIndex = 1; // Muda para o DashboardView
+          });
         }
       }
     } catch (e) {
@@ -135,6 +140,13 @@ class _InicioViewState extends State<InicioView> {
       _buscarDados(placaId);
       Provider.of<AllProvider>(context, listen: false).setPlacaId(placaId);
     }
+  }
+
+  // Função que será chamada para mudar para a tela de TicketView
+  void _onTicketButtonPressed() {
+    setState(() {
+      _selectedViewIndex = 8; // Define o índice da TicketView
+    });
   }
 
   @override
