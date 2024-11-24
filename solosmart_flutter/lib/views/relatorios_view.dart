@@ -34,10 +34,11 @@ class _RelatoriosViewState extends State<RelatoriosView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Relatórios'),
-        backgroundColor: const Color(0xFF41337A), // Cor do AppBar
+        centerTitle: true,
+        backgroundColor: const Color(0xFFF5F8DE),
       ),
       body: Container(
-        color: const Color(0xFFF5F8DE), // Cor de fundo das outras views
+        color: const Color(0xFFF5F8DE), // Cor de fundo
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
@@ -81,43 +82,75 @@ class _RelatoriosViewState extends State<RelatoriosView> {
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  columns: const [
-                    DataColumn(
-                      label: Text(
-                        'Hora',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.white, // Cor de fundo para os dados
+                  ),
+                  child: DataTable(
+                    headingRowColor: MaterialStateProperty.all(
+                    const Color(0xFF41337A)), // Cor de fundo dos títulos
+                    columnSpacing: 280,
+                    columns: const [
+                      DataColumn(
+                        label: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Hora',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Colors.white, // Cor do texto
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        'Data',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                      DataColumn(
+                        label: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Data',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        'Situação',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                      DataColumn(
+                        label: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Situação',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                  rows: _tabelaDados.map((dados) {
-                    return DataRow(cells: [
-                      DataCell(Text(dados['hora']!)),
-                      DataCell(Text(dados['data']!)),
-                      DataCell(Text(dados['situacao']!)),
-                    ]);
-                  }).toList(),
+                    ],
+                    rows: _tabelaDados.map((dados) {
+                      return DataRow(
+                        cells: [
+                          DataCell(Text(
+                            dados['hora']!,
+                            style: const TextStyle(fontSize: 16),
+                          )),
+                          DataCell(Text(
+                            dados['data']!,
+                            style: const TextStyle(fontSize: 16),
+                          )),
+                          DataCell(Text(
+                            dados['situacao']!,
+                            style: const TextStyle(fontSize: 16),
+                          )),
+                        ],
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
             ),
@@ -128,7 +161,7 @@ class _RelatoriosViewState extends State<RelatoriosView> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF41337A),
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
