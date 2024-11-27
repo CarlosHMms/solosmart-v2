@@ -6,162 +6,209 @@ class RelatoriosView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Relatórios'),
-        centerTitle: true,
-        backgroundColor: const Color(0xFFF5F8DE),
-      ), // Cor de fundo
-      backgroundColor: const Color(0xFFF5F8DE),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildDatePicker(context, label: 'Sexta, 13/10/23'),
-                const SizedBox(width: 16),
-                _buildDatePicker(context, label: 'Quinta, 29/11/23'),
-                const SizedBox(width: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    // Implementar funcionalidade de filtro
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF41337A),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                  ),
-                  child: const Text(
-                    'Filtrar',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
+      backgroundColor: const Color(0xFFF5F8DE), // Fundo padrão da tela
+      body: Stack(
+        children: [
+          Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  margin: const EdgeInsets.only(top: 20.0),
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(
-                        255, 255, 255, 255), // Cor de fundo
-                    borderRadius:
-                        BorderRadius.circular(16), // Bordas arredondadas
-                    border: Border.all(
-                        color: Colors.grey,
-                        width: 1), // Borda ao redor da tabela
-                  ),
-                  padding: const EdgeInsets.all(8), // Espaçamento interno
-                  child: SingleChildScrollView(
-                    child: Table(
-                      columnWidths: const {
-                        0: FlexColumnWidth(1),
-                        1: FlexColumnWidth(1),
-                        2: FlexColumnWidth(1),
-                      },
-                      border: TableBorder(
-                        horizontalInside: BorderSide(
-                            color: Colors.grey[400]!,
-                            width: 1), // Linhas horizontais
-                        verticalInside: BorderSide(
-                            color: Colors.grey[400]!,
-                            width: 1), // Linhas verticais
+                    color: const Color(0xFFF5F8DE),
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 8,
+                        offset: Offset(0, 4),
                       ),
-                      children: [
-                        // Cabeçalho da Tabela
-                        TableRow(
-                          decoration: const BoxDecoration(
-                            color: Color(0xFF41337A), // Fundo do cabeçalho
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 20),
+                      const Center(
+                        child: Text(
+                          'Relatórios',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Open Sans',
+                            color: Colors.black,
                           ),
-                          children: const [
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8),
-                              child: Center(
-                                child: Text(
-                                  'Hora',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                _buildDatePicker(context,
+                                    label: 'Sexta, 13/10/23'),
+                                const SizedBox(width: 16),
+                                _buildDatePicker(context,
+                                    label: 'Quinta, 29/11/23'),
+                                const SizedBox(width: 16),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    // Implementar funcionalidade de filtro
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF41337A),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
+                                  ),
+                                  child: const Text(
+                                    'Filtrar',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8),
-                              child: Center(
-                                child: Text(
-                                  'Data',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                            const SizedBox(height: 20),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.5,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1,
+                                  ),
                                 ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8),
-                              child: Center(
-                                child: Text(
-                                  'Situação',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                padding: const EdgeInsets.all(8),
+                                child: SingleChildScrollView(
+                                  child: Table(
+                                    columnWidths: const {
+                                      0: FlexColumnWidth(1),
+                                      1: FlexColumnWidth(1),
+                                      2: FlexColumnWidth(1),
+                                    },
+                                    border: TableBorder(
+                                      horizontalInside: BorderSide(
+                                        color: Colors.grey[400]!,
+                                        width: 1,
+                                      ),
+                                      verticalInside: BorderSide(
+                                        color: Colors.grey[400]!,
+                                        width: 1,
+                                      ),
+                                    ),
+                                    children: [
+                                      TableRow(
+                                        decoration: const BoxDecoration(
+                                          color: Color(0xFF41337A),
+                                        ),
+                                        children: const [
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 8),
+                                            child: Center(
+                                              child: Text(
+                                                'Hora',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 8),
+                                            child: Center(
+                                              child: Text(
+                                                'Data',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 8),
+                                            child: Center(
+                                              child: Text(
+                                                'Situação',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      ...List.generate(15, (index) {
+                                        return TableRow(
+                                          decoration: BoxDecoration(
+                                            color: index % 2 == 0
+                                                ? Colors.white
+                                                : Colors.grey[200],
+                                          ),
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.all(8),
+                                              child: Center(
+                                                  child: Text(
+                                                      'Hora ${index + 1}')),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.all(8),
+                                              child: Center(
+                                                  child: Text(
+                                                      'Data ${index + 1}')),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.all(8),
+                                              child: Center(
+                                                child: Text(index % 2 == 0
+                                                    ? 'Bom'
+                                                    : 'Ruim'),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      }),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ],
                         ),
-                        // Linhas da Tabela
-                        ...List.generate(15, (index) {
-                          return TableRow(
-                            decoration: BoxDecoration(
-                              color: index % 2 == 0
-                                  ? Colors.white
-                                  : Colors
-                                      .grey[200], // Cor alternada para linhas
-                            ),
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Center(child: Text('Hora ${index + 1}')),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Center(child: Text('Data ${index + 1}')),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Center(
-                                  child: Text(index % 2 == 0 ? 'Bom' : 'Ruim'),
-                                ),
-                              ),
-                            ],
-                          );
-                        }),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment:
-            MainAxisAlignment.end, // Garante alinhamento ao final
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 100), // Ajuste aqui a altura
+          ),
+          Positioned(
+            bottom: 125,
+            right: 20,
             child: FloatingActionButton(
               heroTag: 'exportButton',
               onPressed: () {
                 // Implementar funcionalidade de exportar dados
               },
               backgroundColor: const Color(0xFF41337A),
-              child: const Icon(Icons.download),
+              child: const Icon(
+                Icons.download,
+                color: Colors.white, // Cor do ícone alterada para branco
+              ),
             ),
           ),
         ],
