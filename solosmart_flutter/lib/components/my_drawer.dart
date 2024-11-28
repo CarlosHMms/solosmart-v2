@@ -19,7 +19,7 @@ class MyDrawer extends StatefulWidget {
     required this.onToggleDrawer,
     required this.placas,
     required this.selectedPlaca,
-    required this.onPlacaSelected,
+    required this.onPlacaSelected, required void Function() onMinhasSolicitacoesPressed,
   });
 
   @override

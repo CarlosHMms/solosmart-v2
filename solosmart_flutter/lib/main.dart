@@ -12,7 +12,7 @@ import 'package:solosmart_flutter/views/perfil_view.dart';
 import 'package:solosmart_flutter/views/recuperar_view.dart';
 import 'package:solosmart_flutter/views/redefinir_view.dart';
 import 'package:solosmart_flutter/views/relatorios_view.dart';
-import 'package:solosmart_flutter/views/suport_view.dart';
+import 'package:solosmart_flutter/views/listas_view.dart';
 
 void main() {
   runApp(

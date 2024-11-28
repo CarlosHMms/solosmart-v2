@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 
 class FAQView extends StatelessWidget {
-  final Function() onTicketButtonPressed;  // Função que será chamada quando o botão for pressionado
+  final Function()
+      onTicketButtonPressed; // Função que será chamada quando o botão for pressionado
+  final Function()
+      onMinhasSolicitacoesPressed; // Função para o botão "Minhas Solicitações"
 
-  const FAQView({super.key, required this.onTicketButtonPressed});
+  const FAQView(
+      {super.key,
+      required this.onTicketButtonPressed,
+      required this.onMinhasSolicitacoesPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +49,12 @@ class FAQView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
+                // Botão "Minhas Solicitações"
                 Align(
                   alignment: Alignment.centerRight,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Navegação para "Minhas Solicitações"
-                    },
+                    onPressed:
+                        onMinhasSolicitacoesPressed, // Chama a função para mudar para "Minhas Solicitações"
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF41337A),
                       padding: const EdgeInsets.symmetric(
@@ -102,10 +108,12 @@ class FAQView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
+                // Botão "Entre em Contato"
                 Align(
                   alignment: Alignment.centerRight,
                   child: ElevatedButton(
-                    onPressed: onTicketButtonPressed,  // Chama a função passada para a troca de tela
+                    onPressed:
+                        onTicketButtonPressed, // Chama a função para trocar para TicketView
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF41337A),
                       padding: const EdgeInsets.symmetric(
