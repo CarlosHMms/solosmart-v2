@@ -12,7 +12,7 @@ import 'package:solosmart_flutter/views/config_view.dart';
 import 'package:solosmart_flutter/views/notif_view.dart';
 import 'package:solosmart_flutter/views/faq_view.dart';
 import 'package:solosmart_flutter/views/ticket_view.dart';
-import 'package:solosmart_flutter/views/listas_view.dart'; // Certifique-se de que este import está correto
+import 'package:solosmart_flutter/views/listas_view.dart';
 import 'package:solosmart_flutter/components/my_drawer.dart';
 import 'package:solosmart_flutter/components/my_supportbutton.dart';
 import 'dart:convert';
@@ -64,14 +64,11 @@ class _InicioViewState extends State<InicioView> {
       const NotifView(),
       FAQView(
         onTicketButtonPressed: _onTicketButtonPressed,
-        onMinhasSolicitacoesPressed:
-            _onMinhasSolicitacoesPressed, // Passando a função para o FAQView
+        onMinhasSolicitacoesPressed: _onMinhasSolicitacoesPressed,
       ),
       const TicketView(),
       ListasView(
-        onBackButtonPressed: () {
-          // Esse método pode ser ajustado conforme o comportamento desejado ao voltar
-        },
+        onBackButtonPressed: () {},
       ),
     ]);
   }
@@ -148,7 +145,6 @@ class _InicioViewState extends State<InicioView> {
     }
   }
 
-  // Função que será chamada para exibir a ListasView ao clicar no botão "Minhas Solicitações"
   void _onMinhasSolicitacoesPressed() {
     setState(() {
       _selectedViewIndex =
@@ -156,31 +152,40 @@ class _InicioViewState extends State<InicioView> {
     });
   }
 
-  // Função que será chamada para mudar para a tela de TicketView
   void _onTicketButtonPressed() {
     setState(() {
       _selectedViewIndex = 8; // Define o índice da TicketView
     });
   }
 
+  Widget _buildDrawerToggle(bool isMobile) {
+    return isMobile
+        ? IconButton(
+            icon: Icon(_isDrawerExpanded ? Icons.arrow_back : Icons.menu),
+            onPressed: () {
+              setState(() {
+                _isDrawerExpanded = !_isDrawerExpanded;
+              });
+            },
+          )
+        : const SizedBox(); // Retorna um SizedBox vazio se não for mobile
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F8DE),
-      body: Stack(
-        children: [
-          Row(
-            children: [
-              MyDrawer(
-                isDrawerExpanded: _isDrawerExpanded,
-                onSelectView: (int index) {
-                  setState(() {
-                    _selectedViewIndex = index;
-                  });
-                },
+      drawer: MediaQuery.of(context).size.width < 600
+          ? Drawer(
+              child: MyDrawer(
                 onToggleDrawer: (bool isExpanded) {
                   setState(() {
                     _isDrawerExpanded = isExpanded;
+                  });
+                },
+                onSelectView: (int index) {
+                  setState(() {
+                    _selectedViewIndex = index;
                   });
                 },
                 placas: placas.isNotEmpty
@@ -188,26 +193,69 @@ class _InicioViewState extends State<InicioView> {
                     : [],
                 selectedPlaca: selectedPlacaNotifier.value,
                 onPlacaSelected: _onPlacaSelecionada,
-                onMinhasSolicitacoesPressed:
-                    _onMinhasSolicitacoesPressed, // Passando a função para o Drawer
+                onMinhasSolicitacoesPressed: _onMinhasSolicitacoesPressed,
+                isDrawerExpanded:
+                    _isDrawerExpanded, // Passando o parâmetro correto
               ),
-              Expanded(
-                child: Container(
-                  color: const Color(0xFFF5F8DE),
-                  child: _views[
-                      _selectedViewIndex], // Aqui ele vai exibir a tela correta
+            )
+          : null,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          bool isMobile = constraints.maxWidth < 600;
+
+          return Stack(
+            children: [
+              Row(
+                children: [
+                  if (!isMobile)
+                    MyDrawer(
+                      onToggleDrawer: (bool isExpanded) {
+                        setState(() {
+                          _isDrawerExpanded = isExpanded;
+                        });
+                      },
+                      isDrawerExpanded:
+                          _isDrawerExpanded, // Passando o parâmetro correto
+                      onSelectView: (int index) {
+                        setState(() {
+                          _selectedViewIndex = index;
+                        });
+                      },
+                      placas: placas.isNotEmpty
+                          ? placas
+                              .map((placa) => placa['name'].toString())
+                              .toList()
+                          : [],
+                      selectedPlaca: selectedPlacaNotifier.value,
+                      onPlacaSelected: _onPlacaSelecionada,
+                      onMinhasSolicitacoesPressed: _onMinhasSolicitacoesPressed,
+                    ),
+                  Expanded(
+                    child: Container(
+                      color: const Color(0xFFF5F8DE),
+                      child: _views[_selectedViewIndex],
+                    ),
+                  ),
+                ],
+              ),
+              if (isMobile) ...[
+                Positioned(
+                  top: 16,
+                  left: 16,
+                  child:
+                      _buildDrawerToggle(isMobile), // Mostra o ícone no mobile
                 ),
-              ),
+                MySupportButton(
+                  onPressed: () {
+                    setState(() {
+                      _selectedViewIndex = 7;
+                    });
+                  },
+                ),
+              ],
             ],
-          ),
-          MySupportButton(
-            onPressed: () {
-              setState(() {
-                _selectedViewIndex = 7;
-              });
-            },
-          ),
-        ],
+          );
+        },
       ),
     );
   }
