@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/usuarios/perfil/{usuario}', [UserController::class, 'edit']);
     Route::get('/buscar/{placa_id}', [SensorDataController::class, 'getLastPlacaData']);
     Route::delete('/placas/delete/{placaId}', [PlacaController::class, 'destroy']);
+    Route::put('/placas/editar/{id}', [PlacaController::class, 'editName']);
     Route::post('/ticket', [TicketsController::class, 'store']);
 });
 
