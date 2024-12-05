@@ -12,7 +12,7 @@ import 'package:solosmart_flutter/views/config_view.dart';
 import 'package:solosmart_flutter/views/notif_view.dart';
 import 'package:solosmart_flutter/views/faq_view.dart';
 import 'package:solosmart_flutter/views/ticket_view.dart';
-import 'package:solosmart_flutter/views/listas_view.dart'; // Certifique-se de que este import está correto
+import 'package:solosmart_flutter/views/listas_view.dart';
 import 'package:solosmart_flutter/components/my_drawer.dart';
 import 'package:solosmart_flutter/components/my_supportbutton.dart';
 import 'dart:convert';
