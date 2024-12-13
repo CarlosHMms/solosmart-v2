@@ -22,7 +22,8 @@ public function login(Request $request)
             'placa-destroy',
             'ticket-store',
             'gravacoes-index',
-            'placa-editName'
+            'placa-editName',
+            'ticket-list'
             
         ], now()->addHours(16));
 
