@@ -7,6 +7,7 @@ use App\Models\Gravacoes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\HttpResponse;
+use Illuminate\Support\Facades\Validator;
 
 class GravacaoController extends Controller
 {
@@ -26,11 +27,29 @@ class GravacaoController extends Controller
             return $this->error("Unauthorized", 403);
         }
 
-        $initialDate = $request->initialDate;
-        $finalDate = $request->finalDate;
+        $validatedData = $this->validateName($request);
+        if ($validatedData->fails()) {
+            return $this->error("Dados inválidos", 422, $validatedData->errors());
+        }
+        $startDate = $request->initialDate;
+        $endDate = $request->finalDate;
 
-        $gravacoes = Gravacoes::whereInBetween('data', [$initialDate, $finalDate]);
+        $startDate = date('Y-m-d H:i:s', strtotime($startDate));
+        $endDate = date('Y-m-d H:i:s', strtotime($endDate));
 
-        return $this->response("Gravações encontradas", 200, $gravacoes);
+        $gravacoes = Gravacoes::query()
+            ->where('data_registro', '>=', $startDate)
+            ->where('data_registro', '<=', $endDate)
+            ->get();
+
+        return $this->response("Gravações encontradas", 200, $gravacoes->toArray());
+    }
+    public function validateName(Request $request)
+    {
+        return Validator::make($request->all(), [
+            'initialDate' => 'required',
+            'finalDate' => 'required',
+
+        ]);
     }
 }
