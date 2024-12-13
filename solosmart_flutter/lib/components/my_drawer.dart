@@ -19,7 +19,8 @@ class MyDrawer extends StatefulWidget {
     required this.onToggleDrawer,
     required this.placas,
     required this.selectedPlaca,
-    required this.onPlacaSelected, required void Function() onMinhasSolicitacoesPressed,
+    required this.onPlacaSelected,
+    required void Function() onMinhasSolicitacoesPressed,
   });
 
   @override
@@ -29,9 +30,20 @@ class MyDrawer extends StatefulWidget {
 class _MyDrawerState extends State<MyDrawer> {
   final AuthService _authService = AuthService();
   String token = '';
+
   @override
   Widget build(BuildContext context) {
     token = Provider.of<AllProvider>(context).token!;
+
+    // Remover duplicatas da lista de placas, caso haja
+    List<String> uniquePlacas = widget.placas.toSet().toList();
+
+    // Verificar se o valor selecionado é válido na lista de placas
+    String? selectedPlaca = widget.selectedPlaca;
+    if (selectedPlaca != null && !uniquePlacas.contains(selectedPlaca)) {
+      selectedPlaca = uniquePlacas.isNotEmpty ? uniquePlacas[0] : null;
+    }
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       width: widget.isDrawerExpanded ? 210 : 70, // Largura da barra lateral
@@ -106,28 +118,42 @@ class _MyDrawerState extends State<MyDrawer> {
                 widget.onSelectView(5); // Mudar para a tela de Configurações
               },
             ),
-
             const Spacer(),
             // Caixa de seleção (DropdownButton) para selecionar a placa
             SizedBox(
-              width: 170, 
+              width: 165,
               child: DropdownButtonFormField<String>(
                 decoration: const InputDecoration(
                   labelText: 'Selecionar Central',
                   labelStyle: TextStyle(color: Colors.white),
                 ),
-                value: widget.selectedPlaca,
+                value:
+                    selectedPlaca, // O valor agora é o valor atual de selectedPlaca
                 dropdownColor: const Color(0xFF6D4C3D),
-                onChanged: widget.onPlacaSelected,
-                items: widget.placas.map((String placa) {
-                  return DropdownMenuItem<String>(
-                    value: placa,
+                onChanged: (String? newValue) {
+                  if (newValue != null && uniquePlacas.contains(newValue)) {
+                    widget.onPlacaSelected(newValue);
+                  }
+                },
+                items: [
+                  const DropdownMenuItem<String>(
+                    value: null,
                     child: Text(
-                      placa,
-                      style: const TextStyle(color: Colors.white),
+                      '--',
+                      style: TextStyle(color: Colors.grey),
                     ),
-                  );
-                }).toList(),
+                  ),
+                  // Lista de placas
+                  ...uniquePlacas.map((String placa) {
+                    return DropdownMenuItem<String>(
+                      value: placa,
+                      child: Text(
+                        placa,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    );
+                  }).toList(),
+                ],
               ),
             ),
             const Spacer(),
