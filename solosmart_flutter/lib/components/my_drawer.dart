@@ -127,33 +127,39 @@ class _MyDrawerState extends State<MyDrawer> {
                   labelText: 'Selecionar Central',
                   labelStyle: TextStyle(color: Colors.white),
                 ),
-                value:
-                    selectedPlaca, // O valor agora é o valor atual de selectedPlaca
+                value: selectedPlaca?.isEmpty ?? true
+                    ? null
+                    : selectedPlaca, // Corrigido para null
                 dropdownColor: const Color(0xFF6D4C3D),
                 onChanged: (String? newValue) {
                   if (newValue != null && uniquePlacas.contains(newValue)) {
                     widget.onPlacaSelected(newValue);
                   }
                 },
-                items: [
-                  const DropdownMenuItem<String>(
-                    value: null,
-                    child: Text(
-                      '--',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                  // Lista de placas
-                  ...uniquePlacas.map((String placa) {
-                    return DropdownMenuItem<String>(
-                      value: placa,
-                      child: Text(
-                        placa,
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    );
-                  }).toList(),
-                ],
+                items: uniquePlacas.isEmpty
+                    ? [] // Se não houver placas, não exibe o Dropdown
+                    : [
+                        // Adiciona o placeholder como o primeiro item, se selectedPlaca for null
+                        if (selectedPlaca == null || selectedPlaca!.isEmpty)
+                          const DropdownMenuItem<String>(
+                            value:
+                                null, // Corrigido para null no caso de placeholder
+                            child: Text(
+                              '--',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                        // Lista de placas
+                        ...uniquePlacas.map((String placa) {
+                          return DropdownMenuItem<String>(
+                            value: placa,
+                            child: Text(
+                              placa,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          );
+                        }).toList(),
+                      ],
               ),
             ),
             const Spacer(),
