@@ -17,7 +17,7 @@ class PlacaController extends Controller
         if (!auth()->user()->tokenCan('placa-index')) {
             return $this->error('Unauthorized', 403);
         }
-        $placas = Placas::with(['user','gravacoes'])->where('user_id', auth()->id())->get();
+        $placas = Placas::with('user')->where('user_id', auth()->id())->get();
 
         return PlacaResource::collection($placas);
     }

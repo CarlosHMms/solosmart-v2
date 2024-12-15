@@ -125,277 +125,277 @@ class _RelatoriosViewState extends State<RelatoriosView> {
                             const SizedBox(height: 20),
                             isLoading
                                 ? const Center(
-                                    child: CircularProgressIndicator())
+                                child: CircularProgressIndicator())
                                 : SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.5,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(16),
-                                        border: Border.all(
-                                          color: Colors.grey,
+                              scrollDirection: Axis.horizontal,
+                              child: Container(
+                                width: MediaQuery.of(context).size.width *
+                                    0.5,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1,
+                                  ),
+                                ),
+                                padding: const EdgeInsets.all(8),
+                                child: Column(
+                                  children: [
+                                    Table(
+                                      columnWidths: const {
+                                        0: FlexColumnWidth(1),
+                                        1: FlexColumnWidth(2),
+                                        2: FlexColumnWidth(2),
+                                        3: FlexColumnWidth(2),
+                                        4: FlexColumnWidth(2),
+                                        5: FlexColumnWidth(2),
+                                      },
+                                      border: TableBorder(
+                                        horizontalInside: BorderSide(
+                                          color: Colors.grey[400]!,
+                                          width: 1,
+                                        ),
+                                        verticalInside: BorderSide(
+                                          color: Colors.grey[400]!,
                                           width: 1,
                                         ),
                                       ),
-                                      padding: const EdgeInsets.all(8),
-                                      child: Column(
-                                        children: [
-                                          Table(
-                                            columnWidths: const {
-                                              0: FlexColumnWidth(1),
-                                              1: FlexColumnWidth(2),
-                                              2: FlexColumnWidth(2),
-                                              3: FlexColumnWidth(2),
-                                              4: FlexColumnWidth(2),
-                                              5: FlexColumnWidth(2),
-                                            },
-                                            border: TableBorder(
-                                              horizontalInside: BorderSide(
-                                                color: Colors.grey[400]!,
-                                                width: 1,
-                                              ),
-                                              verticalInside: BorderSide(
-                                                color: Colors.grey[400]!,
-                                                width: 1,
+                                      children: [
+                                        TableRow(
+                                          decoration: const BoxDecoration(
+                                            color: Color(0xFF41337A),
+                                          ),
+                                          children: const [
+                                            Padding(
+                                              padding:
+                                              EdgeInsets.symmetric(
+                                                  vertical: 8),
+                                              child: Center(
+                                                child: Text(
+                                                  'ID',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .bold),
+                                                ),
                                               ),
                                             ),
-                                            children: [
-                                              TableRow(
-                                                decoration: const BoxDecoration(
-                                                  color: Color(0xFF41337A),
-                                                ),
-                                                children: const [
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 8),
-                                                    child: Center(
-                                                      child: Text(
-                                                        'ID',
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 8),
-                                                    child: Center(
-                                                      child: Text(
-                                                        'Placa ID',
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 8),
-                                                    child: Center(
-                                                      child: Text(
-                                                        'Temp. Ar (°C)',
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 8),
-                                                    child: Center(
-                                                      child: Text(
-                                                        'Umid. Ar (%)',
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 8),
-                                                    child: Center(
-                                                      child: Text(
-                                                        'Umid. Solo (%)',
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 8),
-                                                    child: Center(
-                                                      child: Text(
-                                                        'Data e Hora',
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          // Exibe os itens da página atual
-                                          Table(
-                                            children: currentPageItems
-                                                .asMap()
-                                                .entries
-                                                .map((entry) {
-                                              final index = entry.key;
-                                              final gravacao = entry.value;
-
-                                              return TableRow(
-                                                decoration: BoxDecoration(
-                                                  color: index % 2 == 0
-                                                      ? Colors.white
-                                                      : Colors.grey[200],
-                                                ),
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(8),
-                                                    child: Center(
-                                                        child: Text(
-                                                            gravacao['id']
-                                                                .toString())),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(8),
-                                                    child: Center(
-                                                        child: Text(
-                                                            gravacao['placa_id']
-                                                                .toString())),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(8),
-                                                    child: Center(
-                                                        child: Text(gravacao[
-                                                                'temperatura_ar']
-                                                            .toString())),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(8),
-                                                    child: Center(
-                                                        child: Text(gravacao[
-                                                                'umidade_ar']
-                                                            .toString())),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(8),
-                                                    child: Center(
-                                                        child: Text(gravacao[
-                                                                'umidade_solo']
-                                                            .toString())),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(8),
-                                                    child: Center(
-                                                        child: Text(gravacao[
-                                                                'data_registro']
-                                                            .toString())),
-                                                  ),
-                                                ],
-                                              );
-                                            }).toList(),
-                                          ),
-                                          // Controle de página
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              ElevatedButton(
-                                                onPressed: currentPage > 1
-                                                    ? () {
-                                                        setState(() {
-                                                          currentPage--;
-                                                        });
-                                                      }
-                                                    : null,
-                                                child: const Text('Voltar'),
-                                              ),
-                                              const SizedBox(width: 16),
-                                              ElevatedButton(
-                                                onPressed: currentPage <
-                                                        (gravacoes.length /
-                                                                itemsPerPage)
-                                                            .ceil()
-                                                    ? () {
-                                                        setState(() {
-                                                          currentPage++;
-                                                        });
-                                                      }
-                                                    : null,
-                                                child: const Text('Avançar'),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 16),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              const Text(
-                                                'Itens por página: ',
-                                                style: TextStyle(
-                                                  fontSize: 16,
+                                            Padding(
+                                              padding:
+                                              EdgeInsets.symmetric(
+                                                  vertical: 8),
+                                              child: Center(
+                                                child: Text(
+                                                  'Placa ID',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .bold),
                                                 ),
                                               ),
-                                              DropdownButton<int>(
-                                                value: itemsPerPage,
-                                                onChanged: (newValue) {
-                                                  setState(() {
-                                                    itemsPerPage = newValue!;
-                                                    currentPage =
-                                                        1; // Reinicia a página
-                                                  });
-                                                },
-                                                items: [10, 20, 30, 50]
-                                                    .map<DropdownMenuItem<int>>(
-                                                        (int value) {
-                                                  return DropdownMenuItem<int>(
-                                                    value: value,
-                                                    child:
-                                                        Text(value.toString()),
-                                                  );
-                                                }).toList(),
+                                            ),
+                                            Padding(
+                                              padding:
+                                              EdgeInsets.symmetric(
+                                                  vertical: 8),
+                                              child: Center(
+                                                child: Text(
+                                                  'Temp. Ar (°C)',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .bold),
+                                                ),
                                               ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                              EdgeInsets.symmetric(
+                                                  vertical: 8),
+                                              child: Center(
+                                                child: Text(
+                                                  'Umid. Ar (%)',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .bold),
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                              EdgeInsets.symmetric(
+                                                  vertical: 8),
+                                              child: Center(
+                                                child: Text(
+                                                  'Umid. Solo (%)',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .bold),
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                              EdgeInsets.symmetric(
+                                                  vertical: 8),
+                                              child: Center(
+                                                child: Text(
+                                                  'Data e Hora',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .bold),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                  ),
+                                    // Exibe os itens da página atual
+                                    Table(
+                                      children: currentPageItems
+                                          .asMap()
+                                          .entries
+                                          .map((entry) {
+                                        final index = entry.key;
+                                        final gravacao = entry.value;
+
+                                        return TableRow(
+                                          decoration: BoxDecoration(
+                                            color: index % 2 == 0
+                                                ? Colors.white
+                                                : Colors.grey[200],
+                                          ),
+                                          children: [
+                                            Padding(
+                                              padding:
+                                              const EdgeInsets.all(8),
+                                              child: Center(
+                                                  child: Text(
+                                                      gravacao['id']
+                                                          .toString())),
+                                            ),
+                                            Padding(
+                                              padding:
+                                              const EdgeInsets.all(8),
+                                              child: Center(
+                                                  child: Text(
+                                                      gravacao['placa_id']
+                                                          .toString())),
+                                            ),
+                                            Padding(
+                                              padding:
+                                              const EdgeInsets.all(8),
+                                              child: Center(
+                                                  child: Text(gravacao[
+                                                  'temperatura_ar']
+                                                      .toString())),
+                                            ),
+                                            Padding(
+                                              padding:
+                                              const EdgeInsets.all(8),
+                                              child: Center(
+                                                  child: Text(gravacao[
+                                                  'umidade_ar']
+                                                      .toString())),
+                                            ),
+                                            Padding(
+                                              padding:
+                                              const EdgeInsets.all(8),
+                                              child: Center(
+                                                  child: Text(gravacao[
+                                                  'umidade_solo']
+                                                      .toString())),
+                                            ),
+                                            Padding(
+                                              padding:
+                                              const EdgeInsets.all(8),
+                                              child: Center(
+                                                  child: Text(gravacao[
+                                                  'data_registro']
+                                                      .toString())),
+                                            ),
+                                          ],
+                                        );
+                                      }).toList(),
+                                    ),
+                                    // Controle de página
+                                    Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: currentPage > 1
+                                              ? () {
+                                            setState(() {
+                                              currentPage--;
+                                            });
+                                          }
+                                              : null,
+                                          child: const Text('Voltar'),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        ElevatedButton(
+                                          onPressed: currentPage <
+                                              (gravacoes.length /
+                                                  itemsPerPage)
+                                                  .ceil()
+                                              ? () {
+                                            setState(() {
+                                              currentPage++;
+                                            });
+                                          }
+                                              : null,
+                                          child: const Text('Avançar'),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                      children: [
+                                        const Text(
+                                          'Itens por página: ',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        DropdownButton<int>(
+                                          value: itemsPerPage,
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              itemsPerPage = newValue!;
+                                              currentPage =
+                                              1; // Reinicia a página
+                                            });
+                                          },
+                                          items: [10, 20, 30, 50]
+                                              .map<DropdownMenuItem<int>>(
+                                                  (int value) {
+                                                return DropdownMenuItem<int>(
+                                                  value: value,
+                                                  child:
+                                                  Text(value.toString()),
+                                                );
+                                              }).toList(),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -404,30 +404,6 @@ class _RelatoriosViewState extends State<RelatoriosView> {
                 ),
               ),
             ),
-<<<<<<< HEAD
-          ],
-        ),
-      ),
-      floatingActionButton: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment:
-            MainAxisAlignment.end, // Garante alinhamento ao final
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 100), // Ajuste aqui a altura
-            child: FloatingActionButton(
-              heroTag: 'exportButton',
-              onPressed: () {
-                // Implementar funcionalidade de exportar dados
-              },
-              backgroundColor: const Color(0xFF41337A),
-              child: const Icon(
-                Icons.download,
-                color: Colors.white
-              ),
-            ),
-=======
->>>>>>> d24b42226c9ec8aa9aa4f8b613ff9de2c1f108f8
           ),
         ],
       ),
