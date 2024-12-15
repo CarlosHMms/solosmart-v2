@@ -10,6 +10,7 @@ use App\Http\Controllers\SensorDataController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\TicketsController;
 use App\Http\Controllers\AlertasController;
+use App\Http\Controllers\GravacaoController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -30,7 +31,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/usuarios/perfil/{usuario}', [UserController::class, 'edit']);
     Route::get('/buscar/{placa_id}', [SensorDataController::class, 'getLastPlacaData']);
     Route::delete('/placas/delete/{placaId}', [PlacaController::class, 'destroy']);
+    Route::put('/placas/editar/{id}', [PlacaController::class, 'editName']);
     Route::post('/ticket', [TicketsController::class, 'store']);
+    Route::get('/gravacoes', [GravacaoController::class, 'index']);
+    Route::get('/tickets', [TicketsController::class, 'ticket_list']);
 });
 
 Route::get('/plaquinhas', [AlertasController::class, 'verifyTemperature']);

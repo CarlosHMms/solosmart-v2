@@ -11,8 +11,8 @@ class ConfigView extends StatefulWidget {
 enum Modo { manual, automatico, temporizador }
 
 class _ConfigViewState extends State<ConfigView> {
-  Modo modoPlaca = Modo.manual; // Estado do checkbox para modo manual/automático/temporizador
-
+  Modo modoPlaca = Modo
+      .manual; // Estado do checkbox para modo manual/automático/temporizador
 
   bool isOn = false; // Estado do botão Ligar/Desligar
   double humidityLevel = 50; // Nível de umidade inicial
@@ -35,7 +35,6 @@ class _ConfigViewState extends State<ConfigView> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: const Color(0xFFF5F8DE),
       body: Center(
@@ -60,12 +59,17 @@ class _ConfigViewState extends State<ConfigView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Título Configurações
-                const Text(
-                  'Configurações',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'OpenSans-SemiBold',
+                const SizedBox(height: 20),
+                const Center(
+                  child: Text(
+                    'Configurações',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Open Sans',
+                      color: Colors.black,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -93,8 +97,8 @@ class _ConfigViewState extends State<ConfigView> {
                         child: Column(
                           children: [
                             Center(
-                             child:Row(
-                               mainAxisAlignment: MainAxisAlignment.center,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Checkbox(
                                     value: modoPlaca == Modo.manual,
@@ -119,13 +123,14 @@ class _ConfigViewState extends State<ConfigView> {
                             ElevatedButton(
                               onPressed: modoPlaca == Modo.manual
                                   ? () {
-                                setState(() {
-                                  isOn = !isOn;
-                                });
-                              }
+                                      setState(() {
+                                        isOn = !isOn;
+                                      });
+                                    }
                                   : null,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: isOn ? Colors.green : Colors.red,
+                                backgroundColor:
+                                    isOn ? Colors.green : Colors.red,
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 16,
                                   vertical: 8,
@@ -164,32 +169,31 @@ class _ConfigViewState extends State<ConfigView> {
                         child: Column(
                           children: [
                             Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Checkbox(
-                                      value: modoPlaca == Modo.automatico,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          modoPlaca = Modo.automatico;
-                                        });
-                                      },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Checkbox(
+                                    value: modoPlaca == Modo.automatico,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        modoPlaca = Modo.automatico;
+                                      });
+                                    },
+                                  ),
+                                  const Text(
+                                    'Automático',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'OpenSans-Regular',
                                     ),
-                                    const Text(
-                                      'Automático',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'OpenSans-Regular',
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
+                            ),
                             const SizedBox(height: 10),
                             Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 const Text(
                                   'Nível de Umidade',
@@ -203,21 +207,20 @@ class _ConfigViewState extends State<ConfigView> {
                                   min: 0,
                                   max: 100,
                                   divisions: 100,
-                                  activeColor:
-                                  getHumidityColor(humidityLevel),
+                                  activeColor: getHumidityColor(humidityLevel),
                                   inactiveColor: Colors.grey,
                                   label: '${humidityLevel.round()}%',
                                   onChanged: modoPlaca != Modo.automatico
                                       ? null
                                       : (value) {
-                                    setState(() {
-                                      humidityLevel = value;
-                                    });
-                                  },
+                                          setState(() {
+                                            humidityLevel = value;
+                                          });
+                                        },
                                 ),
                                 const Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       'Baixa',
@@ -298,7 +301,8 @@ class _ConfigViewState extends State<ConfigView> {
                                         onSelectedItemChanged: (int index) {
                                           // Atualize a variável de horas aqui
                                         },
-                                        children: List<Widget>.generate(25, (int index) {
+                                        children: List<Widget>.generate(25,
+                                            (int index) {
                                           return Center(child: Text('$index'));
                                         }),
                                       ),
@@ -315,7 +319,8 @@ class _ConfigViewState extends State<ConfigView> {
                                         onSelectedItemChanged: (int index) {
                                           // Atualize a variável de minutos aqui
                                         },
-                                        children: List<Widget>.generate(61, (int index) {
+                                        children: List<Widget>.generate(61,
+                                            (int index) {
                                           return Center(child: Text('$index'));
                                         }),
                                       ),
@@ -332,7 +337,8 @@ class _ConfigViewState extends State<ConfigView> {
                                         onSelectedItemChanged: (int index) {
                                           // Atualize a variável de segundos aqui
                                         },
-                                        children: List<Widget>.generate(61, (int index) {
+                                        children: List<Widget>.generate(61,
+                                            (int index) {
                                           return Center(child: Text('$index'));
                                         }),
                                       ),

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:solosmart_flutter/services/ticketsService.dart';
+import 'package:solosmart_flutter/services/ticketService.dart';
 import 'package:solosmart_flutter/utils/provider.dart';
 
 class TicketView extends StatefulWidget {
@@ -48,10 +48,8 @@ class _TicketViewState extends State<TicketView> {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> tickets = json.decode(response.body)['data'];
-        if (tickets != null) {
-          Provider.of<AllProvider>(context, listen: false).setTickets(tickets);
-        }
-
+        Provider.of<AllProvider>(context, listen: false).setTickets(tickets);
+        
         // Exibe um diálogo de sucesso
         showDialog(
           context: context,

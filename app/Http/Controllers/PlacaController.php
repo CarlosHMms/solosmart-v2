@@ -88,8 +88,12 @@ class PlacaController extends Controller
         return new PlacaResource($placa);
     }
 
-    public function editName($id, $request)
+    public function editName($id, Request $request)
     {
+        if (!auth()->user()->tokenCan('placa-editName')) {
+            return $this->error('Unauthorized', 403);
+        }
+
         $placa = Placas::find($id);
 
         if (!$placa) {

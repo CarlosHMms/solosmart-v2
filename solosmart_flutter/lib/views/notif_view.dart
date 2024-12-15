@@ -8,7 +8,7 @@ class NotifView extends StatefulWidget {
 }
 
 class _NotifViewState extends State<NotifView> {
-  List<Map<String, String>> _notificacoes = [
+  final List<Map<String, String>> _notificacoes = [
     {
       "titulo": "Sensor 1",
       "descricao": "Alerta de umidade alta",
@@ -104,6 +104,14 @@ class _NotifViewState extends State<NotifView> {
                                 }
                               });
                             },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF41337A),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 40, vertical: 18),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
                             child: const Text(
                               "Visualizar todas",
                               style: TextStyle(
@@ -112,6 +120,10 @@ class _NotifViewState extends State<NotifView> {
                                 fontSize: 16,
                               ),
                             ),
+                          ),
+                          const SizedBox(width: 20),
+                          ElevatedButton(
+                            onPressed: _removerTodasNotificacoes,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF41337A),
                               padding: const EdgeInsets.symmetric(
@@ -120,24 +132,12 @@ class _NotifViewState extends State<NotifView> {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 20),
-                          ElevatedButton(
-                            onPressed: _removerTodasNotificacoes,
                             child: const Text(
                               "Remover todas",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
-                              ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF41337A),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 40, vertical: 18),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
                               ),
                             ),
                           ),

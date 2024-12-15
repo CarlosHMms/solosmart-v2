@@ -27,4 +27,22 @@ class Ticketsservice {
       throw Exception('Erro ao se conectar com o servidor: $e');
     }
   }
+
+  Future<http.Response> listarTickets(String token) async {
+    final url = Uri.parse('$baseUrl/tickets');
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      return response;
+    } catch (e) {
+      throw Exception('Erro ao se conectar com o servidor: $e');
+    }
+  }
 }

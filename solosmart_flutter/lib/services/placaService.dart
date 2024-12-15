@@ -68,5 +68,27 @@ Future<http.Response> removerPlaca(String token, int id)
     }
   }
 
+Future<http.Response> editPlaca(String token, int id, String name)
+    async {
+    final url = Uri.parse('$baseUrl/placas/editar/$id');
+
+    try {
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'name': name
+        }),
+      );
+      return response;
+    } catch (e) {
+      throw Exception('Erro ao se conectar com o servidor: $e');
+    }
+  }
+
 
 }

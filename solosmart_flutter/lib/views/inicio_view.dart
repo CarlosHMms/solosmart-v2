@@ -12,7 +12,7 @@ import 'package:solosmart_flutter/views/config_view.dart';
 import 'package:solosmart_flutter/views/notif_view.dart';
 import 'package:solosmart_flutter/views/faq_view.dart';
 import 'package:solosmart_flutter/views/ticket_view.dart';
-import 'package:solosmart_flutter/views/suport_view.dart';
+import 'package:solosmart_flutter/views/listas_view.dart';
 import 'package:solosmart_flutter/components/my_drawer.dart';
 import 'package:solosmart_flutter/components/my_supportbutton.dart';
 import 'dart:convert';
@@ -63,9 +63,16 @@ class _InicioViewState extends State<InicioView> {
       const ConfigView(),
       const NotifView(),
       FAQView(
-        onTicketButtonPressed: _onTicketButtonPressed, // Passa a função aqui
+        onTicketButtonPressed: _onTicketButtonPressed,
+        onMinhasSolicitacoesPressed:
+            _onMinhasSolicitacoesPressed, // Passando a função para o FAQView
       ),
       const TicketView(),
+      ListasView(
+        onBackButtonPressed: () {
+          // Esse método pode ser ajustado conforme o comportamento desejado ao voltar
+        },
+      ),
     ]);
   }
 
@@ -106,7 +113,6 @@ class _InicioViewState extends State<InicioView> {
         if (dados != null) {
           Provider.of<AllProvider>(context, listen: false).setDados(dados);
         }
-        print('Dados gerados com sucesso para a placa $placaId.');
         setState(() {
           _selectedViewIndex = 1; // Muda para o DashboardView
         });
@@ -142,6 +148,14 @@ class _InicioViewState extends State<InicioView> {
     }
   }
 
+  // Função que será chamada para exibir a ListasView ao clicar no botão "Minhas Solicitações"
+  void _onMinhasSolicitacoesPressed() {
+    setState(() {
+      _selectedViewIndex =
+          9; // Alterar para o índice onde ListasView está na lista
+    });
+  }
+
   // Função que será chamada para mudar para a tela de TicketView
   void _onTicketButtonPressed() {
     setState(() {
@@ -174,11 +188,14 @@ class _InicioViewState extends State<InicioView> {
                     : [],
                 selectedPlaca: selectedPlacaNotifier.value,
                 onPlacaSelected: _onPlacaSelecionada,
+                onMinhasSolicitacoesPressed:
+                    _onMinhasSolicitacoesPressed, // Passando a função para o Drawer
               ),
               Expanded(
                 child: Container(
                   color: const Color(0xFFF5F8DE),
-                  child: _views[_selectedViewIndex],
+                  child: _views[
+                      _selectedViewIndex], // Aqui ele vai exibir a tela correta
                 ),
               ),
             ],
