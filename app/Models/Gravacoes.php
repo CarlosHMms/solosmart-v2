@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\NovaGravacao;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,10 +19,18 @@ class Gravacoes extends Model
         'umidade_solo',
         'data_registro'
     ];
-    public function alertas()
+    protected static function booted()
     {
-        return $this->hasMany(Alertas::class);
+        static::created(function ($gravacao){
+            $gravacao->load('placas');
+            event(new NovaGravacao($gravacao));
+        });
     }
+
+    public function placas(){
+        return $this->belongsTo(Placas::class,'placa_id');
+    }
+
 
     public $timestamps = false;
 }

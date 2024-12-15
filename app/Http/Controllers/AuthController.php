@@ -10,22 +10,22 @@ use function Pest\Laravel\get;
 class AuthController extends Controller
 {
     use HttpResponse;
-    public function login(Request $request)
-    {
-        if (Auth::attempt($request->only('email', 'password'))) {
-            $user = Auth::user();
-            $token = $request->user()->createToken('tokenAuth', [
-                'placa-index',
-                'placa-store',
-                'placa-show',
-                'auth-logout',
-                'placa-destroy',
-                'ticket-store',
-                'gravacoes-index',
-                'gravacoes-listByDate',
-                'placa-editName'
-
-            ], now()->addHours(16));
+public function login(Request $request)
+{
+    if (Auth::attempt($request->only('email', 'password'))) {
+        $user = Auth::user();
+        $token = $request->user()->createToken('tokenAuth', [
+            'placa-index',
+            'placa-store',
+            'placa-show',
+            'auth-logout',
+            'placa-destroy',
+            'ticket-store',
+            'gravacoes-index',
+            'placa-editName',
+            'ticket-list'
+            
+        ], now()->addHours(16));
 
             return $this->response('Login Realizado!', 200, [
                 'token' => $token->plainTextToken,

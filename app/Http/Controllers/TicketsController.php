@@ -12,6 +12,7 @@ use Illuminate\Validation\ValidationException;
 use App\Http\Controllers\AuthController;
 use App\Notifications\CustomTicketEmail;
 use App\Models\User;
+use App\Http\Resources\TicketsResource;
 
 class TicketsController extends Controller
 {
@@ -65,5 +66,16 @@ class TicketsController extends Controller
 
         // Retorna erro se a criação do ticket falhar
         return $this->error('Falha ao abrir o ticket', 500);
+    }
+
+    public function ticket_list() {
+        // Verifica se o usuário tem permissão para listar
+        if (!auth()->user()->tokenCan('ticket-list')) {
+            return $this->error('Unauthorized', 403);
+        }
+
+        $tickets = Tickets::with('user')->where('user_id', auth()->id())->get();
+
+        return TicketsResource::collection($tickets);
     }
 }

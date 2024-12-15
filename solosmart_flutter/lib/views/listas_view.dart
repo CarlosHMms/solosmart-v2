@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:solosmart_flutter/services/ticketService.dart';
+import 'package:solosmart_flutter/utils/provider.dart';
 
 class ListasView extends StatefulWidget {
   final void Function() onBackButtonPressed;
@@ -10,27 +15,55 @@ class ListasView extends StatefulWidget {
 }
 
 class _ListasViewState extends State<ListasView> {
-  // Lista fictícia de tickets com detalhes
-  List<Map<String, dynamic>> tickets = [
-    {
-      'title': 'Problema com login',
-      'status': 'Aberto',
-      'responses': [
-        'Resposta 1: Verifique se o login está correto.',
-        'Resposta 2: Tente redefinir a senha.'
-      ]
-    },
-    {
-      'title': 'Erro na página de pagamento',
-      'status': 'Em progresso',
-      'responses': ['Resposta 1: Problema com o servidor de pagamento.']
-    },
-    {
-      'title': 'Solicitação de alteração de senha',
-      'status': 'Fechado',
-      'responses': ['Resposta 1: Senha alterada com sucesso.']
-    },
-  ];
+  final Ticketsservice _ticketsController = Ticketsservice();
+  String? token;
+  List<dynamic> _tickets = [];
+
+  Future<void> _carregarTickets() async {
+    token = Provider.of<AllProvider>(context, listen: false).token;
+    try {
+      final response = await _ticketsController.listarTickets(token!);
+
+      if (response.statusCode == 200) {
+        List<dynamic> ticketsJson = json.decode(response.body)['data'];
+        setState(() {
+          _tickets = ticketsJson;
+        });
+      } else {
+        throw Exception('Erro ao carregar os tickets: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erro ao carregar os tickets: $e');
+    }
+  }
+
+  String _statusTexto(int status) {
+    switch (status) {
+      case 0:
+        return 'Fechado';
+      case 1:
+        return 'Em Andamento';
+      default:
+        return 'Desconhecido';
+    }
+  }
+
+  Color _statusCor(int status) {
+    switch (status) {
+      case 0:
+        return Colors.green;
+      case 1:
+        return Colors.orange;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _carregarTickets();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,9 +105,9 @@ class _ListasViewState extends State<ListasView> {
                 const SizedBox(height: 20),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: tickets.length,
+                    itemCount: _tickets.length,
                     itemBuilder: (context, index) {
-                      final ticket = tickets[index];
+                      final ticket = _tickets[index];
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 20.0),
                         child: Container(
@@ -96,7 +129,7 @@ class _ListasViewState extends State<ListasView> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        ticket['title'],
+                                        ticket['assunto'],
                                         style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
@@ -105,7 +138,7 @@ class _ListasViewState extends State<ListasView> {
                                       ),
                                       const SizedBox(height: 5),
                                       Text(
-                                        'Status: ${ticket['status']}',
+                                        'Status: ${_statusTexto(ticket['status'])}',
                                         style: const TextStyle(
                                           fontSize: 16,
                                           color: Colors.black54,
@@ -114,17 +147,14 @@ class _ListasViewState extends State<ListasView> {
                                     ],
                                   ),
                                   Icon(
-                                    ticket['status'] == 'Fechado'
+                                    ticket['status'] == 0
                                         ? Icons.check_circle
                                         : Icons.error,
-                                    color: ticket['status'] == 'Fechado'
-                                        ? Colors.green
-                                        : Colors.orange,
+                                    color: _statusCor(ticket['status']),
                                   ),
                                 ],
                               ),
                               const SizedBox(height: 10),
-                              // Expansível com detalhes do ticket
                               ExpansionTile(
                                 title: const Text(
                                   'Detalhes do Ticket',
@@ -135,18 +165,28 @@ class _ListasViewState extends State<ListasView> {
                                   ),
                                 ),
                                 children: [
-                                  for (var response in ticket['responses'])
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 16.0, bottom: 8.0),
-                                      child: Text(
-                                        response,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black87,
-                                        ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 16.0, bottom: 8.0),
+                                    child: Text(
+                                      'Descrição: ${ticket['descricao']}',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black87,
                                       ),
                                     ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 16.0, bottom: 8.0),
+                                    child: Text(
+                                      'Data do Ticket: ${ticket['data_ticket']}',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],

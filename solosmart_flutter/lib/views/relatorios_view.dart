@@ -404,6 +404,30 @@ class _RelatoriosViewState extends State<RelatoriosView> {
                 ),
               ),
             ),
+<<<<<<< HEAD
+          ],
+        ),
+      ),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment:
+            MainAxisAlignment.end, // Garante alinhamento ao final
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 100), // Ajuste aqui a altura
+            child: FloatingActionButton(
+              heroTag: 'exportButton',
+              onPressed: () {
+                // Implementar funcionalidade de exportar dados
+              },
+              backgroundColor: const Color(0xFF41337A),
+              child: const Icon(
+                Icons.download,
+                color: Colors.white
+              ),
+            ),
+=======
+>>>>>>> d24b42226c9ec8aa9aa4f8b613ff9de2c1f108f8
           ),
         ],
       ),

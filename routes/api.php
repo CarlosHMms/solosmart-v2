@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\SensorDataController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\TicketsController;
+use App\Http\Controllers\AlertasController;
 use App\Http\Controllers\GravacaoController;
 
 // Route::get('/user', function (Request $request) {
@@ -34,8 +35,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/ticket', [TicketsController::class, 'store']);
     Route::get('/gravacoes', [GravacaoController::class, 'index']);
     Route::get('/gravacoes/listByDate', [GravacaoController::class, 'listByDate']);
+    Route::get('/tickets', [TicketsController::class, 'ticket_list']);
 });
 
+Route::get('/plaquinhas', [AlertasController::class, 'verifyTemperature']);
 Route::get('/usuarios', [UserController::class, 'index']);
 Route::get('/usuarios/{usuario}', [UserController::class, 'show']);
 Route::post('/cadastro', [UserController::class, 'store']);
