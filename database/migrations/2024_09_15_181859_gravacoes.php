@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('gravacoes', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->foreignId('placa_id')->nullable(true)->references('id')->on('placas')->onDelete('RESTRICT');
+            $table->foreignId('placa_id')->references('id')->on('placas')->onDelete('RESTRICT');
             $table->float('temperatura_ar');
             $table->float('umidade_ar');
             $table->float('umidade_solo');

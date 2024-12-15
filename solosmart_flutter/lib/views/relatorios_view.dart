@@ -161,7 +161,10 @@ class RelatoriosView extends StatelessWidget {
                 // Implementar funcionalidade de exportar dados
               },
               backgroundColor: const Color(0xFF41337A),
-              child: const Icon(Icons.download),
+              child: const Icon(
+                Icons.download,
+                color: Colors.white
+              ),
             ),
           ),
         ],

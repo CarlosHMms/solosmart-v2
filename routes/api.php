@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\SensorDataController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\TicketsController;
+use App\Http\Controllers\AlertasController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -32,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/ticket', [TicketsController::class, 'store']);
 });
 
+Route::get('/plaquinhas', [AlertasController::class, 'verifyTemperature']);
 Route::get('/usuarios', [UserController::class, 'index']);
 Route::get('/usuarios/{usuario}', [UserController::class, 'show']);
 Route::post('/cadastro', [UserController::class, 'store']);

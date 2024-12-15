@@ -9,20 +9,22 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 
 class Alertas extends Model
-{   
+{
     use HasApiTokens, HasFactory, Notifiable;
-
+    public $timestamps = false; 
+    
     protected $table = 'alertas';
     protected $fillable = [
+        'placa_id',
         'tipo',
         'descricao',
-        'data',
+        'data'
     ];
 
 
     public function gravacoes()
     {
-        return $this->belongsTo(Gravacoes::class);
+        return $this->belongsTo(Placas::class);
     }
-   
+
 }

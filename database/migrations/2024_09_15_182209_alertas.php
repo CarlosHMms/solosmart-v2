@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('alertas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('gravacoes_id')->references('id')->on('gravacoes')->onDelete('RESTRICT');
-            $table->string('tipo', 50);
+            $table->foreignId('placa_id')->references('id')->on('placas')->onDelete('RESTRICT');
+            $table->enum('tipo', ['grave', 'medio', 'leve']);
             $table->text('descricao');
             $table->timestamp('data', precision: 0);
         });
