@@ -27,20 +27,21 @@ public function login(Request $request)
             
         ], now()->addHours(16));
 
-        return $this->response('Login Realizado!', 200, [
-            'token' => $token->plainTextToken,
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'profile_image' => $user->profile_image,
-            ]
-        ]);
+            return $this->response('Login Realizado!', 200, [
+                'token' => $token->plainTextToken,
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'profile_image' => $user->profile_image,
+                ]
+            ]);
+        }
+        return $this->response('Email ou Senha incorretos!', 403);
     }
-    return $this->response('Email ou Senha incorretos!', 403);
-}
-    public function logout(Request $request){
-        if(!auth()->user()->tokenCan('auth-logout')){
+    public function logout(Request $request)
+    {
+        if (!auth()->user()->tokenCan('auth-logout')) {
             return $this->error('Unauthorized', 403);
         }
         $request->user()->currentAccessToken()->delete();

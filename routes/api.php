@@ -34,6 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/placas/editar/{id}', [PlacaController::class, 'editName']);
     Route::post('/ticket', [TicketsController::class, 'store']);
     Route::get('/gravacoes', [GravacaoController::class, 'index']);
+    Route::get('/gravacoes/listByDate', [GravacaoController::class, 'listByDate']);
     Route::get('/tickets', [TicketsController::class, 'ticket_list']);
 });
 
