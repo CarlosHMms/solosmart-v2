@@ -2,7 +2,7 @@
 
 return [
 
-    'paths' => ['api/*','storage/*'],
+    'paths' => ['api/*','storage/*','login'],
 
     'allowed_methods' => ['*'],
 

@@ -1,4 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:solosmart_flutter/utils/provider.dart';
 
 class NotifView extends StatefulWidget {
   const NotifView({super.key});
@@ -8,37 +14,68 @@ class NotifView extends StatefulWidget {
 }
 
 class _NotifViewState extends State<NotifView> {
-  final List<Map<String, String>> _notificacoes = [
-    {
-      "titulo": "Sensor 1",
-      "descricao": "Alerta de umidade alta",
-      "data": "08/11/2024",
-      "hora": "14:30"
-    },
-    {
-      "titulo": "Sensor 2",
-      "descricao": "Temperatura acima do limite",
-      "data": "08/11/2024",
-      "hora": "12:45"
-    },
-    {
-      "titulo": "Sistema",
-      "descricao": "Manutenção programada para amanhã",
-      "data": "07/11/2024",
-      "hora": "09:15"
-    },
-    {
-      "titulo": "Notificação de atualização",
-      "descricao": "Nova versão disponível",
-      "data": "06/11/2024",
-      "hora": "18:00"
-    },
-  ];
+  String _token = '';
+  final List<Map<String, String>> _notificacoes = [];
+  late Timer _pollingTimer;
+  @override
+  void initState() {
+    super.initState();
+    _iniciarPolling(); // Inicia o polling assim que a tela é criada
+  }
+
+  @override
+  void dispose() {
+    _pollingTimer.cancel(); // Cancela o Timer quando a tela for descartada
+    super.dispose();
+  }
+
+  void _iniciarPolling() {
+    // Configura o Timer para chamar a função a cada 10 segundos
+    _pollingTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      _buscarAlertas();
+    });
+  }
+
+
+  Future<void> _buscarAlertas() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://127.0.0.1:8000/api/newAlertas'),
+        headers: {
+          'Authorization': 'Bearer $_token', // Substitua pelo token real.
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Decodifica o JSON retornado pela API
+        final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+
+        // Acessa a lista de alertas dentro do campo "data"
+        final List<dynamic> alertas = jsonResponse['data'] ?? [];
+
+        setState(() {
+          _notificacoes.clear();
+          _notificacoes.addAll(alertas.map((alerta) {
+            return {
+              "descricao": (alerta["descricao"] ?? "Sem Descrição").toString(),
+              "Gravidade": (alerta["tipo"] ?? "Desconhecida").toString(),
+              "Data e hora": (alerta["data"] ?? "Data não disponível").toString(),
+            };
+          }).toList());
+        });
+      } else {
+        print("Erro ao buscar alertas: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Erro ao buscar alertas: $e");
+    }
+  }
 
   void _marcarComoVisualizada(int index) {
     setState(() {
       _notificacoes[index]["descricao"] =
-          "[Visualizada] ${_notificacoes[index]["descricao"]}";
+      "[Visualizada] ${_notificacoes[index]["descricao"]}";
     });
   }
 
@@ -56,6 +93,7 @@ class _NotifViewState extends State<NotifView> {
 
   @override
   Widget build(BuildContext context) {
+    _token = Provider.of<AllProvider>(context).token!;
     return Scaffold(
       body: Row(
         children: [
