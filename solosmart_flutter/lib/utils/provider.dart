@@ -13,6 +13,7 @@ class AllProvider with ChangeNotifier {
   String? _email;
   String? _password;
   int? _userId;
+  int? _code;
   Map<String, dynamic>? _user;
   Map<String, dynamic>? _placas;
   Map<String, dynamic>? _dados;
@@ -59,6 +60,13 @@ class AllProvider with ChangeNotifier {
 
   void setToken(String token) {
     _token = token;
+    notifyListeners();
+  }
+
+  int? get code => _code;
+
+  void setCode(int code) {
+    _code = code;
     notifyListeners();
   }
 
