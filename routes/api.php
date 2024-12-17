@@ -36,9 +36,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/gravacoes', [GravacaoController::class, 'index']);
     Route::get('/gravacoes/listByDate', [GravacaoController::class, 'listByDate']);
     Route::get('/tickets', [TicketsController::class, 'ticket_list']);
+    Route::get('/newAlertas', [AlertasController::class,'getNewAlertas']);
 });
-
-Route::get('/plaquinhas', [AlertasController::class, 'verifyTemperature']);
 Route::get('/usuarios', [UserController::class, 'index']);
 Route::get('/usuarios/{usuario}', [UserController::class, 'show']);
 Route::post('/cadastro', [UserController::class, 'store']);

@@ -32,6 +32,6 @@ class Placas extends Model
     }
     public function alertas()
 {
-    return $this->hasMany(Alertas::class);
+    return $this->hasMany(Alertas::class, 'placa_id', 'id');
 }
 }

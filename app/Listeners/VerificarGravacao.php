@@ -33,6 +33,7 @@ class VerificarGravacao
                     'placa_id' => $placa->id,
                     'tipo' => $tipo,
                     'descricao' => "Temperatura do ar fora do limite: {$gravacao->temperatura_ar}°C",
+                    'visualizado'=> false,
                     'data' => now(),
                 ]);
             }
@@ -44,6 +45,7 @@ class VerificarGravacao
                     'placa_id' => $placa->id,
                     'tipo' => $tipo,
                     'descricao' => "Umidade do solo fora do limite: {$gravacao->umidade_solo}%.",
+                    'visualizado'=> false,
                     'data' => now(),
                 ]);
             }
@@ -55,6 +57,7 @@ class VerificarGravacao
                     'placa_id' => $placa->id,
                     'tipo' => $tipo,
                     'descricao' => "Umidade do ar fora do limite: {$gravacao->umidade_ar}%.",
+                    'visualizado'=> false,
                     'data' => now(),
                 ]);
             }

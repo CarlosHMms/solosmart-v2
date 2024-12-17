@@ -63,13 +63,18 @@ class AlertasController extends Controller
     public function getNewAlertas(Request $request)
     {
         $lastChecked = $request->query('last_checked');
-        $alertas = Alertas::whereHas('placa', function ($query){
+        $alertas = Alertas::whereHas('placas', function ($query) {
             $query->where('user_id', auth()->id());
         })
-        ->with('placa')
-        ->when($lastChecked, function ($query) use ($lastChecked){
-            $query->where('data', '>', $lastChecked);
-        })->get();
+            ->where('visualizado', false) // Filtra apenas os alertas não visualizados
+            ->with('placas')
+            ->when($lastChecked, function ($query) use ($lastChecked) {
+                $query->where('data', '>', $lastChecked);
+            })
+            ->get();
+        $alertas->each(function ($alerta) {
+            $alerta->update(['visualizado' => true]);
+        });
         return AlertasResource::collection($alertas);
     }
     /**

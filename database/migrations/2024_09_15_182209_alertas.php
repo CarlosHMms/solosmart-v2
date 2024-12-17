@@ -13,6 +13,7 @@ return new class extends Migration
             $table->foreignId('placa_id')->references('id')->on('placas')->onDelete('RESTRICT');
             $table->enum('tipo', ['grave', 'medio', 'leve']);
             $table->text('descricao');
+            $table->boolean('visualizado');
             $table->timestamp('data', precision: 0);
         });
     }
