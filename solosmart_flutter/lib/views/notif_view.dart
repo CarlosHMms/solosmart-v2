@@ -14,7 +14,6 @@ class NotifView extends StatefulWidget {
 }
 
 class _NotifViewState extends State<NotifView> {
-  String _token = '';
   final List<Map<String, String>> _notificacoes = [];
   late Timer _pollingTimer;
   @override
@@ -39,10 +38,14 @@ class _NotifViewState extends State<NotifView> {
 
   Future<void> _buscarAlertas() async {
     try {
+      // Obtém o token do provider, sem escutar mudanças no widget tree
+      final userProvider = Provider.of<AllProvider>(context, listen: false);
+      final token = userProvider.token;
+
       final response = await http.get(
         Uri.parse('http://127.0.0.1:8000/api/newAlertas'),
         headers: {
-          'Authorization': 'Bearer $_token', // Substitua pelo token real.
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
@@ -51,16 +54,18 @@ class _NotifViewState extends State<NotifView> {
         // Decodifica o JSON retornado pela API
         final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
 
-        // Acessa a lista de alertas dentro do campo "data"
+        // Verifica se o campo "data" existe e é uma lista
         final List<dynamic> alertas = jsonResponse['data'] ?? [];
 
+        // Atualiza o estado com as notificações
         setState(() {
           _notificacoes.clear();
           _notificacoes.addAll(alertas.map((alerta) {
             return {
               "descricao": (alerta["descricao"] ?? "Sem Descrição").toString(),
               "Gravidade": (alerta["tipo"] ?? "Desconhecida").toString(),
-              "Data e hora": (alerta["data"] ?? "Data não disponível").toString(),
+              "Data e hora":
+                  (alerta["data"] ?? "Data não disponível").toString(),
             };
           }).toList());
         });
@@ -93,7 +98,6 @@ class _NotifViewState extends State<NotifView> {
 
   @override
   Widget build(BuildContext context) {
-    _token = Provider.of<AllProvider>(context).token!;
     return Scaffold(
       body: Row(
         children: [

@@ -18,6 +18,8 @@ class _RelatoriosViewState extends State<RelatoriosView> {
   final RelatorioService _relatorioService = RelatorioService();
   int currentPage = 1;
   int itemsPerPage = 10; // Número inicial de itens por página
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now();
 
   @override
   void initState() {
@@ -43,6 +45,25 @@ class _RelatoriosViewState extends State<RelatoriosView> {
       setState(() {
         isLoading = false;
       });
+    }
+  }
+
+  void fetchData() async {
+    final profileProvider = Provider.of<AllProvider>(context, listen: false);
+    final token = profileProvider.token;
+
+    // Convertendo as datas para o formato correto ISO-8601
+    final String startDateString = '${startDate.toIso8601String()}';
+    final String endDateString = '${endDate.toIso8601String()}';
+
+    try {
+      final List<dynamic> listByDate = await _relatorioService
+          .fetchGravacoesByDate(startDateString, endDateString, token!);
+      setState(() {
+        gravacoes = listByDate;
+      });
+    } catch (e) {
+      print('Erro ao buscar gravações: $e');
     }
   }
 
@@ -102,14 +123,50 @@ class _RelatoriosViewState extends State<RelatoriosView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                _buildDatePicker(context,
-                                    label: 'Sexta, 13/10/23'),
+                                _buildDatePicker(
+                                  context,
+                                  label: '${startDate.toLocal()}',
+                                  onDateChanged: (DateTime date) {
+                                    setState(() {
+                                      startDate = date;
+                                    });
+                                  },
+                                  onTimeChanged: (TimeOfDay time) {
+                                    setState(() {
+                                      startDate = DateTime(
+                                        startDate.year,
+                                        startDate.month,
+                                        startDate.day,
+                                        time.hour,
+                                        time.minute,
+                                      );
+                                    });
+                                  },
+                                ),
                                 const SizedBox(width: 16),
-                                _buildDatePicker(context,
-                                    label: 'Quinta, 29/11/23'),
+                                _buildDatePicker(
+                                  context,
+                                  label: '${endDate.toLocal()}',
+                                  onDateChanged: (DateTime date) {
+                                    setState(() {
+                                      endDate = date;
+                                    });
+                                  },
+                                  onTimeChanged: (TimeOfDay time) {
+                                    setState(() {
+                                      endDate = DateTime(
+                                        endDate.year,
+                                        endDate.month,
+                                        endDate.day,
+                                        time.hour,
+                                        time.minute,
+                                      );
+                                    });
+                                  },
+                                ),
                                 const SizedBox(width: 16),
                                 ElevatedButton(
-                                  onPressed: fetchGravacoes,
+                                  onPressed: fetchData,
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: const Color(0xFF41337A),
                                     padding: const EdgeInsets.symmetric(
@@ -125,277 +182,282 @@ class _RelatoriosViewState extends State<RelatoriosView> {
                             const SizedBox(height: 20),
                             isLoading
                                 ? const Center(
-                                child: CircularProgressIndicator())
+                                    child: CircularProgressIndicator())
                                 : SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Container(
-                                width: MediaQuery.of(context).size.width *
-                                    0.5,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(
-                                    color: Colors.grey,
-                                    width: 1,
-                                  ),
-                                ),
-                                padding: const EdgeInsets.all(8),
-                                child: Column(
-                                  children: [
-                                    Table(
-                                      columnWidths: const {
-                                        0: FlexColumnWidth(1),
-                                        1: FlexColumnWidth(2),
-                                        2: FlexColumnWidth(2),
-                                        3: FlexColumnWidth(2),
-                                        4: FlexColumnWidth(2),
-                                        5: FlexColumnWidth(2),
-                                      },
-                                      border: TableBorder(
-                                        horizontalInside: BorderSide(
-                                          color: Colors.grey[400]!,
-                                          width: 1,
-                                        ),
-                                        verticalInside: BorderSide(
-                                          color: Colors.grey[400]!,
+                                    scrollDirection: Axis.horizontal,
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(16),
+                                        border: Border.all(
+                                          color: Colors.grey,
                                           width: 1,
                                         ),
                                       ),
-                                      children: [
-                                        TableRow(
-                                          decoration: const BoxDecoration(
-                                            color: Color(0xFF41337A),
+                                      padding: const EdgeInsets.all(8),
+                                      child: Column(
+                                        children: [
+                                          Table(
+                                            columnWidths: const {
+                                              0: FlexColumnWidth(1),
+                                              1: FlexColumnWidth(2),
+                                              2: FlexColumnWidth(2),
+                                              3: FlexColumnWidth(2),
+                                              4: FlexColumnWidth(2),
+                                              5: FlexColumnWidth(2),
+                                            },
+                                            border: TableBorder(
+                                              horizontalInside: BorderSide(
+                                                color: Colors.grey[400]!,
+                                                width: 1,
+                                              ),
+                                              verticalInside: BorderSide(
+                                                color: Colors.grey[400]!,
+                                                width: 1,
+                                              ),
+                                            ),
+                                            children: [
+                                              TableRow(
+                                                decoration: const BoxDecoration(
+                                                  color: Color(0xFF41337A),
+                                                ),
+                                                children: const [
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 8),
+                                                    child: Center(
+                                                      child: Text(
+                                                        'ID',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 8),
+                                                    child: Center(
+                                                      child: Text(
+                                                        'Placa ID',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 8),
+                                                    child: Center(
+                                                      child: Text(
+                                                        'Temp. Ar (°C)',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 8),
+                                                    child: Center(
+                                                      child: Text(
+                                                        'Umid. Ar (%)',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 8),
+                                                    child: Center(
+                                                      child: Text(
+                                                        'Umid. Solo (%)',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 8),
+                                                    child: Center(
+                                                      child: Text(
+                                                        'Data e Hora',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
-                                          children: const [
-                                            Padding(
-                                              padding:
-                                              EdgeInsets.symmetric(
-                                                  vertical: 8),
-                                              child: Center(
-                                                child: Text(
-                                                  'ID',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                      FontWeight
-                                                          .bold),
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                              EdgeInsets.symmetric(
-                                                  vertical: 8),
-                                              child: Center(
-                                                child: Text(
-                                                  'Placa ID',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                      FontWeight
-                                                          .bold),
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                              EdgeInsets.symmetric(
-                                                  vertical: 8),
-                                              child: Center(
-                                                child: Text(
-                                                  'Temp. Ar (°C)',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                      FontWeight
-                                                          .bold),
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                              EdgeInsets.symmetric(
-                                                  vertical: 8),
-                                              child: Center(
-                                                child: Text(
-                                                  'Umid. Ar (%)',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                      FontWeight
-                                                          .bold),
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                              EdgeInsets.symmetric(
-                                                  vertical: 8),
-                                              child: Center(
-                                                child: Text(
-                                                  'Umid. Solo (%)',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                      FontWeight
-                                                          .bold),
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                              EdgeInsets.symmetric(
-                                                  vertical: 8),
-                                              child: Center(
-                                                child: Text(
-                                                  'Data e Hora',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                      FontWeight
-                                                          .bold),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    // Exibe os itens da página atual
-                                    Table(
-                                      children: currentPageItems
-                                          .asMap()
-                                          .entries
-                                          .map((entry) {
-                                        final index = entry.key;
-                                        final gravacao = entry.value;
+                                          // Exibe os itens da página atual
+                                          Table(
+                                            children: currentPageItems
+                                                .asMap()
+                                                .entries
+                                                .map((entry) {
+                                              final index = entry.key;
+                                              final gravacao = entry.value;
 
-                                        return TableRow(
-                                          decoration: BoxDecoration(
-                                            color: index % 2 == 0
-                                                ? Colors.white
-                                                : Colors.grey[200],
+                                              return TableRow(
+                                                decoration: BoxDecoration(
+                                                  color: index % 2 == 0
+                                                      ? Colors.white
+                                                      : Colors.grey[200],
+                                                ),
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(8),
+                                                    child: Center(
+                                                        child: Text(
+                                                            gravacao['id']
+                                                                .toString())),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(8),
+                                                    child: Center(
+                                                        child: Text(
+                                                            gravacao['placa_id']
+                                                                .toString())),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(8),
+                                                    child: Center(
+                                                        child: Text(gravacao[
+                                                                'temperatura_ar']
+                                                            .toString())),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(8),
+                                                    child: Center(
+                                                        child: Text(gravacao[
+                                                                'umidade_ar']
+                                                            .toString())),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(8),
+                                                    child: Center(
+                                                        child: Text(gravacao[
+                                                                'umidade_solo']
+                                                            .toString())),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(8),
+                                                    child: Center(
+                                                        child: Text(gravacao[
+                                                                'data_registro']
+                                                            .toString())),
+                                                  ),
+                                                ],
+                                              );
+                                            }).toList(),
                                           ),
-                                          children: [
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets.all(8),
-                                              child: Center(
-                                                  child: Text(
-                                                      gravacao['id']
-                                                          .toString())),
-                                            ),
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets.all(8),
-                                              child: Center(
-                                                  child: Text(
-                                                      gravacao['placa_id']
-                                                          .toString())),
-                                            ),
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets.all(8),
-                                              child: Center(
-                                                  child: Text(gravacao[
-                                                  'temperatura_ar']
-                                                      .toString())),
-                                            ),
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets.all(8),
-                                              child: Center(
-                                                  child: Text(gravacao[
-                                                  'umidade_ar']
-                                                      .toString())),
-                                            ),
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets.all(8),
-                                              child: Center(
-                                                  child: Text(gravacao[
-                                                  'umidade_solo']
-                                                      .toString())),
-                                            ),
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets.all(8),
-                                              child: Center(
-                                                  child: Text(gravacao[
-                                                  'data_registro']
-                                                      .toString())),
-                                            ),
-                                          ],
-                                        );
-                                      }).toList(),
-                                    ),
-                                    // Controle de página
-                                    Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                      children: [
-                                        ElevatedButton(
-                                          onPressed: currentPage > 1
-                                              ? () {
-                                            setState(() {
-                                              currentPage--;
-                                            });
-                                          }
-                                              : null,
-                                          child: const Text('Voltar'),
-                                        ),
-                                        const SizedBox(width: 16),
-                                        ElevatedButton(
-                                          onPressed: currentPage <
-                                              (gravacoes.length /
-                                                  itemsPerPage)
-                                                  .ceil()
-                                              ? () {
-                                            setState(() {
-                                              currentPage++;
-                                            });
-                                          }
-                                              : null,
-                                          child: const Text('Avançar'),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 16),
-                                    Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                      children: [
-                                        const Text(
-                                          'Itens por página: ',
-                                          style: TextStyle(
-                                            fontSize: 16,
+                                          // Controle de página
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              ElevatedButton(
+                                                onPressed: currentPage > 1
+                                                    ? () {
+                                                        setState(() {
+                                                          currentPage--;
+                                                        });
+                                                      }
+                                                    : null,
+                                                child: const Text('Voltar'),
+                                              ),
+                                              const SizedBox(width: 16),
+                                              ElevatedButton(
+                                                onPressed: currentPage <
+                                                        (gravacoes.length /
+                                                                itemsPerPage)
+                                                            .ceil()
+                                                    ? () {
+                                                        setState(() {
+                                                          currentPage++;
+                                                        });
+                                                      }
+                                                    : null,
+                                                child: const Text('Avançar'),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                        DropdownButton<int>(
-                                          value: itemsPerPage,
-                                          onChanged: (newValue) {
-                                            setState(() {
-                                              itemsPerPage = newValue!;
-                                              currentPage =
-                                              1; // Reinicia a página
-                                            });
-                                          },
-                                          items: [10, 20, 30, 50]
-                                              .map<DropdownMenuItem<int>>(
-                                                  (int value) {
-                                                return DropdownMenuItem<int>(
-                                                  value: value,
-                                                  child:
-                                                  Text(value.toString()),
-                                                );
-                                              }).toList(),
-                                        ),
-                                      ],
+                                          const SizedBox(height: 16),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              const Text(
+                                                'Itens por página: ',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              DropdownButton<int>(
+                                                value: itemsPerPage,
+                                                onChanged: (newValue) {
+                                                  setState(() {
+                                                    itemsPerPage = newValue!;
+                                                    currentPage =
+                                                        1; // Reinicia a página
+                                                  });
+                                                },
+                                                items: const [
+                                                  DropdownMenuItem<int>(
+                                                    value: 10,
+                                                    child: Text('10'),
+                                                  ),
+                                                  DropdownMenuItem<int>(
+                                                    value: 20,
+                                                    child: Text('20'),
+                                                  ),
+                                                  DropdownMenuItem<int>(
+                                                    value: 30,
+                                                    child: Text('30'),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                                  ),
                           ],
                         ),
                       ),
@@ -410,25 +472,61 @@ class _RelatoriosViewState extends State<RelatoriosView> {
     );
   }
 
-  Widget _buildDatePicker(BuildContext context, {required String label}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF3F4F6),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.calendar_today, color: Color(0xFF41337A)),
-          const SizedBox(width: 8),
-          Text(
+  Widget _buildDatePicker(
+    BuildContext context, {
+    required String label,
+    required Function(DateTime) onDateChanged,
+    required Function(TimeOfDay) onTimeChanged,
+  }) {
+    return GestureDetector(
+      onTap: () async {
+        final DateTime? pickedDate = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime(2000),
+          lastDate: DateTime(2101),
+        );
+        if (pickedDate != null) {
+          final TimeOfDay? pickedTime = await showTimePicker(
+            context: context,
+            initialTime: TimeOfDay.fromDateTime(DateTime.now()),
+          );
+          if (pickedTime != null) {
+            final DateTime newDate = DateTime(
+              pickedDate.year,
+              pickedDate.month,
+              pickedDate.day,
+              pickedTime.hour,
+              pickedTime.minute,
+            );
+            onDateChanged(newDate);
+            onTimeChanged(pickedTime);
+          }
+        }
+      },
+      child: Container(
+        width: 180,
+        height: 50,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 4,
+            ),
+          ],
+        ),
+        child: Center(
+          child: Text(
             label,
+            textAlign: TextAlign.center,
             style: const TextStyle(
-              fontSize: 14,
-              color: Color(0xFF41337A),
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
             ),
           ),
-        ],
+        ),
       ),
     );
   }
