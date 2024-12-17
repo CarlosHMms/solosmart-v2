@@ -54,26 +54,37 @@ class PlacaController extends Controller
 
     public function destroy($placaId)
     {
+        // Verifica se o token permite esta ação
         if (!auth()->user()->tokenCan('placa-destroy')) {
             return $this->error('Unauthorized', 403);
         }
 
-        // Busca a placa para garantir que o usuário autenticado é o dono
+        // Busca a placa para garantir que pertence ao usuário autenticado
         $placa = Placas::where('user_id', auth()->id())->where('id', $placaId)->first();
 
         if (!$placa) {
             return $this->error('Placa não encontrada', 404);
         }
 
-        // Tenta deletar a placa
-        if ($placa->gravacoes()->delete() || $placa->delete()) {
-            return $this->response('Placa deletada', 200);
+        try {
+            // Exclui os registros relacionados apenas se existirem
+            if ($placa->gravacoes()->exists()) {
+                $placa->gravacoes()->delete();
+            }
+
+            if ($placa->alertas()->exists()) {
+                $placa->alertas()->delete();
+            }
+
+            // Exclui a placa
+            $placa->delete();
+
+            return $this->response('Placa deletada com sucesso', 200);
+        } catch (\Exception $e) {
+            // Captura erros e retorna uma mensagem detalhada
+            return $this->error('Erro ao deletar a placa: ' . $e->getMessage(), 500);
         }
-
-        return $this->error('Placa não foi deletada', 400);
     }
-
-
 
     public function show($id)
     {

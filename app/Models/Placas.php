@@ -28,7 +28,7 @@ class Placas extends Model
 
     public function gravacoes()
     {
-        return $this->hasMany(Gravacoes::class);
+        return $this->hasMany(Gravacoes::class, 'placa_id', 'id');
     }
     public function alertas()
 {

@@ -90,7 +90,8 @@ class _PlacasViewState extends State<PlacasView> {
       final response = await _placaController.removerPlaca(token!, placaId);
 
       if (response.statusCode == 200) {
-        print(response.body);
+        print('Placa excluída com sucesso: ${response.body}');
+        _carregarPlacas(); // Recarrega a lista de placas após a exclusão
       } else {
         print("Erro ao excluir a placa: ${response.body}");
       }
@@ -196,8 +197,8 @@ class _PlacasViewState extends State<PlacasView> {
             ),
             TextButton(
               onPressed: () async {
+                Navigator.of(context).pop(); // Fecha o diálogo antes de excluir
                 await _deletar(placaId);
-                Navigator.of(context).pop();
               },
               child: const Text("Excluir"),
             ),
