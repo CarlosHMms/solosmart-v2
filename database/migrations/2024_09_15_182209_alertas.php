@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('alertas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('placa_id')->references('id')->on('placas')->onDelete('RESTRICT');
+            $table->foreignId('placa_id')->references('id')->on('placas')->onDelete('CASCADE');
             $table->enum('tipo', ['grave', 'medio', 'leve']);
             $table->text('descricao');
             $table->boolean('visualizado');

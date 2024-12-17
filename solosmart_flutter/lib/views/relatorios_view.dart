@@ -387,36 +387,43 @@ class _RelatoriosViewState extends State<RelatoriosView> {
                                             }).toList(),
                                           ),
                                           // Controle de página
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                          Column(
                                             children: [
-                                              ElevatedButton(
-                                                onPressed: currentPage > 1
-                                                    ? () {
-                                                        setState(() {
-                                                          currentPage--;
-                                                        });
-                                                      }
-                                                    : null,
-                                                child: const Text('Voltar'),
-                                              ),
-                                              const SizedBox(width: 16),
-                                              ElevatedButton(
-                                                onPressed: currentPage <
-                                                        (gravacoes.length /
-                                                                itemsPerPage)
-                                                            .ceil()
-                                                    ? () {
-                                                        setState(() {
-                                                          currentPage++;
-                                                        });
-                                                      }
-                                                    : null,
-                                                child: const Text('Avançar'),
+                                              SizedBox(height: 20),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  ElevatedButton(
+                                                    onPressed: currentPage > 1
+                                                        ? () {
+                                                            setState(() {
+                                                              currentPage--;
+                                                            });
+                                                          }
+                                                        : null,
+                                                    child: const Text('Voltar'),
+                                                  ),
+                                                  const SizedBox(width: 16),
+                                                  ElevatedButton(
+                                                    onPressed: currentPage <
+                                                            (gravacoes.length /
+                                                                    itemsPerPage)
+                                                                .ceil()
+                                                        ? () {
+                                                            setState(() {
+                                                              currentPage++;
+                                                            });
+                                                          }
+                                                        : null,
+                                                    child:
+                                                        const Text('Avançar'),
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),
+
                                           const SizedBox(height: 16),
                                           Row(
                                             mainAxisAlignment:

@@ -70,8 +70,8 @@ class _PlacasViewState extends State<PlacasView> {
         print('Dados buscado com sucesso para a placa $placaId.');
         widget.onDashboardSelected(1);
       } else {
-          final response = await _generatedata.gerarDados(placaId, token!);
-          if (response.statusCode == 200) {
+        final response = await _generatedata.gerarDados(placaId, token!);
+        if (response.statusCode == 200) {
           final Map<String, dynamic> responseData = jsonDecode(response.body);
           Map<String, dynamic>? dados = responseData['data'];
           if (dados != null) {
@@ -85,17 +85,16 @@ class _PlacasViewState extends State<PlacasView> {
     }
   }
 
-  Future<void> _deletar(int placaId) async{
-    try{
+  Future<void> _deletar(int placaId) async {
+    try {
       final response = await _placaController.removerPlaca(token!, placaId);
 
       if (response.statusCode == 200) {
         print(response.body);
-      
       } else {
         print("Erro ao excluir a placa: ${response.body}");
       }
-    }catch (e){
+    } catch (e) {
       print('Erro ao deletar placa: $e');
     }
   }
@@ -138,7 +137,8 @@ class _PlacasViewState extends State<PlacasView> {
             onPressed: () => _onPlacaSelecionada(placaName, placaId),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color.fromRGBO(65, 51, 122, 1),
-              padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
               minimumSize: const Size(150, 0),
             ),
             child: Text(
@@ -154,7 +154,8 @@ class _PlacasViewState extends State<PlacasView> {
                       width: 150,
                       child: TextField(
                         controller: _nameController,
-                        decoration: const InputDecoration(hintText: 'Novo nome'),
+                        decoration:
+                            const InputDecoration(hintText: 'Novo nome'),
                       ),
                     ),
                     IconButton(
@@ -260,6 +261,15 @@ class _PlacasViewState extends State<PlacasView> {
                                   return _buildPlacaItem(_placas[index]);
                                 },
                               ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 24.0),
+                        child: FloatingActionButton(
+                          onPressed: widget.onAddButtonPressed,
+                          backgroundColor: const Color.fromRGBO(65, 51, 122, 1),
+                          child: const Icon(Icons.add, color: Colors.white),
+                          shape: const CircleBorder(),
+                        ),
                       ),
                     ],
                   ),
