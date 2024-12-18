@@ -23,7 +23,8 @@ public function login(Request $request)
             'ticket-store',
             'gravacoes-index',
             'placa-editName',
-            'ticket-list'
+            'ticket-list',
+            'alerta-visualizado'
             
         ], now()->addHours(16));
 

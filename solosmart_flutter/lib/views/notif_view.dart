@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -14,12 +13,15 @@ class NotifView extends StatefulWidget {
 }
 
 class _NotifViewState extends State<NotifView> {
-  final List<Map<String, String>> _notificacoes = [];
+  final List<Map<String, dynamic>> _notificacoes =
+      []; // Alerta recebe tipo dinâmico
   late Timer _pollingTimer;
+
   @override
   void initState() {
     super.initState();
-    _iniciarPolling(); // Inicia o polling assim que a tela é criada
+    _buscarAlertas();
+    //_iniciarPolling(); // Inicia o polling assim que a tela é criada
   }
 
   @override
@@ -35,10 +37,8 @@ class _NotifViewState extends State<NotifView> {
     });
   }
 
-
   Future<void> _buscarAlertas() async {
     try {
-      // Obtém o token do provider, sem escutar mudanças no widget tree
       final userProvider = Provider.of<AllProvider>(context, listen: false);
       final token = userProvider.token;
 
@@ -51,24 +51,24 @@ class _NotifViewState extends State<NotifView> {
       );
 
       if (response.statusCode == 200) {
-        // Decodifica o JSON retornado pela API
         final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-
-        // Verifica se o campo "data" existe e é uma lista
         final List<dynamic> alertas = jsonResponse['data'] ?? [];
 
-        // Atualiza o estado com as notificações
-        setState(() {
-          _notificacoes.clear();
-          _notificacoes.addAll(alertas.map((alerta) {
-            return {
-              "descricao": (alerta["descricao"] ?? "Sem Descrição").toString(),
-              "Gravidade": (alerta["tipo"] ?? "Desconhecida").toString(),
-              "Data e hora":
-                  (alerta["data"] ?? "Data não disponível").toString(),
-            };
-          }).toList());
-        });
+        // Atualiza a lista de notificações
+        if (mounted) {
+          setState(() {
+            _notificacoes.clear();
+            _notificacoes.addAll(alertas.map((alerta) {
+              return {
+                "id": alerta["id"],
+                "tipo": alerta["tipo"] ?? "Sem Tipo",
+                "descricao": alerta["descricao"] ?? "Sem Descrição",
+                "dataHora": alerta["data"] ?? "Data não disponível",
+                "visualizada": false, // Novo campo
+              };
+            }).toList());
+          });
+        }
       } else {
         print("Erro ao buscar alertas: ${response.statusCode}");
       }
@@ -77,11 +77,66 @@ class _NotifViewState extends State<NotifView> {
     }
   }
 
-  void _marcarComoVisualizada(int index) {
-    setState(() {
-      _notificacoes[index]["descricao"] =
-      "[Visualizada] ${_notificacoes[index]["descricao"]}";
-    });
+  Future<void> marcarAlertasComoVisualizados(List<int> ids) async {
+    final token = Provider.of<AllProvider>(context, listen: false).token;
+
+    try {
+      final response = await http.put(
+        Uri.parse('http://127.0.0.1:8000/api/alertas/visualizar'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({'ids': ids}),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          for (var notificacao in _notificacoes) {
+            notificacao["visualizada"] = true;
+            notificacao["descricao"] =
+                "[Visualizada] ${notificacao["descricao"]}";
+          }
+        });
+        print('Alertas marcados como visualizados com sucesso.');
+      } else {
+        print('Erro ao atualizar alertas: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erro ao atualizar alertas: $e');
+    }
+  }
+
+
+  Future<void> _marcarComoVisualizada(int index) async {
+    final token = Provider.of<AllProvider>(context, listen: false).token;
+
+    try {
+      final idAlerta = _notificacoes[index]['id'];
+
+      final response = await http.put(
+        Uri.parse('http://127.0.0.1:8000/api/alertas/visualizar'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'ids': [idAlerta]
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          _notificacoes[index]["visualizada"] = true;
+          _notificacoes[index]["descricao"] =
+              "[Visualizada] ${_notificacoes[index]["descricao"]}";
+        });
+      } else {
+        debugPrint('Erro ao marcar alerta como visualizado: ${response.body}');
+      }
+    } catch (e) {
+      debugPrint('Erro ao marcar alerta como visualizado: $e');
+    }
   }
 
   void _removerNotificacao(int index) {
@@ -139,12 +194,11 @@ class _NotifViewState extends State<NotifView> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              setState(() {
-                                for (var notificacao in _notificacoes) {
-                                  notificacao["descricao"] =
-                                      "[Visualizada] ${notificacao["descricao"]}";
-                                }
-                              });
+                              final ids = _notificacoes
+                                  .map(
+                                      (notificacao) => notificacao["id"] as int)
+                                  .toList();
+                              marcarAlertasComoVisualizados(ids);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF41337A),
@@ -191,49 +245,68 @@ class _NotifViewState extends State<NotifView> {
                           padding: const EdgeInsets.symmetric(horizontal: 24.0),
                           itemCount: _notificacoes.length,
                           itemBuilder: (context, index) {
+                            // Determina a cor do Card com base no tipo do alerta
+                            Color cardColor;
+                            switch (_notificacoes[index]["tipo"]) {
+                              case "leve":
+                                cardColor = Colors
+                                    .green.shade100; // Verde para tipo leve
+                                break;
+                              case "medio":
+                                cardColor = Colors
+                                    .yellow.shade100; // Amarelo para tipo médio
+                                break;
+                              case "grave":
+                                cardColor = Colors
+                                    .red.shade100; // Vermelho para tipo grave
+                                break;
+                              default:
+                                cardColor = Colors.grey.shade200; // Cor padrão
+                            }
+
                             return Card(
+                              color: cardColor, // Define a cor do Card
                               margin: const EdgeInsets.symmetric(vertical: 8.0),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),
                               ),
                               elevation: 2,
                               child: ListTile(
-                                leading: const Icon(
+                                leading: Icon(
                                   Icons.notification_important,
-                                  color: Color(0xFF41337A),
+                                  color: _notificacoes[index]["tipo"] == "leve"
+                                      ? Colors.green
+                                      : _notificacoes[index]["tipo"] == "medio"
+                                          ? Colors.yellow[800]
+                                          : Colors.red,
                                 ),
                                 title: Text(
-                                  _notificacoes[index]["titulo"]!,
+                                  _notificacoes[index]["descricao"],
                                   style: const TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      _notificacoes[index]["descricao"]!,
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      "Data: ${_notificacoes[index]["data"]} - ${_notificacoes[index]["hora"]}",
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ],
+                                subtitle: Text(
+                                  "Data/Hora: ${_notificacoes[index]["dataHora"]}",
+                                  style: const TextStyle(fontSize: 14),
                                 ),
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     IconButton(
-                                      icon: const Icon(Icons.remove_red_eye),
-                                      onPressed: () =>
-                                          _marcarComoVisualizada(index),
-                                      color: const Color(0xFF41337A),
+                                      icon: Icon(
+                                        Icons.remove_red_eye,
+                                        color: _notificacoes[index]
+                                                ["visualizada"]
+                                            ? Colors
+                                                .grey // Cinza se visualizada
+                                            : const Color(0xFF41337A),
+                                      ),
+                                      onPressed: _notificacoes[index]
+                                              ["visualizada"]
+                                          ? null // Desativa o botão
+                                          : () => _marcarComoVisualizada(index),
                                     ),
                                     IconButton(
                                       icon: const Icon(Icons.close),

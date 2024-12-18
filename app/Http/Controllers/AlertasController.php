@@ -56,7 +56,7 @@ class AlertasController extends Controller
         return $this->response()->json([
             'message' => 'Alerta criado com sucesso!',
             'alerta' => $alerta
-        ], 201);
+        ], 200);
 
     }
 
@@ -72,10 +72,30 @@ class AlertasController extends Controller
                 $query->where('data', '>', $lastChecked);
             })
             ->get();
-        $alertas->each(function ($alerta) {
-            $alerta->update(['visualizado' => true]);
-        });
+        //$alertas->each(function ($alerta) {
+            //$alerta->update(['visualizado' => true]);
+        //});
         return AlertasResource::collection($alertas);
+    }
+
+    public function Visualizado(Request $request)
+    {
+        if(!auth()->user()->tokenCan('alerta-visualizado')){
+            return $this->error('unauthorized', 403);
+        }
+        // Valida a lista de IDs de alertas passados no corpo da requisição
+        $validated = $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:alertas,id', // Verifica se os IDs existem na tabela
+        ]);
+
+        // Atualiza o campo 'visualizado' para true (1) nos registros
+        Alertas::whereIn('id', $validated['ids'])->update(['visualizado' => true]);
+
+        // Retorna uma resposta de sucesso
+        return response()->json([
+            'message' => 'Alertas marcados como visualizados com sucesso.',
+        ], 200);
     }
     /**
      * Display the specified resource.
