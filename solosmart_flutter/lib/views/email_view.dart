@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RedefinirEmailView extends StatefulWidget {
-  const RedefinirEmailView({Key? key}) : super(key: key);
+  const RedefinirEmailView({super.key});
 
   @override
   State<RedefinirEmailView> createState() => _RedefinirEmailViewState();

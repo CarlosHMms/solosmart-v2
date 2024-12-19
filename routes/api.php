@@ -8,6 +8,9 @@ use App\Http\Controllers\PlacaController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\SensorDataController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\TicketsController;
+use App\Http\Controllers\AlertasController;
+use App\Http\Controllers\GravacaoController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -26,8 +29,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/profileupd', [UserController::class, 'updateProfileImage']);
     Route::get('/imagem/{filename}', [ImageController::class, 'getImage']);
     Route::put('/usuarios/perfil/{usuario}', [UserController::class, 'edit']);
+    Route::get('/buscar/{placa_id}', [SensorDataController::class, 'getLastPlacaData']);
+    Route::delete('/placas/delete/{placaId}', [PlacaController::class, 'destroy']);
+    Route::put('/placas/editar/{id}', [PlacaController::class, 'editName']);
+    Route::post('/ticket', [TicketsController::class, 'store']);
+    Route::get('/gravacoes', [GravacaoController::class, 'index']);
+    Route::get('/gravacoes/listByDate', [GravacaoController::class, 'listByDate']);
+    Route::get('/tickets', [TicketsController::class, 'ticket_list']);
+    Route::get('/newAlertas', [AlertasController::class,'getNewAlertas']);
+    Route::post('/filtrar', [GravacaoController::class,'listByDate']);
+    Route::put('/alertas/visualizar', [AlertasController::class, 'Visualizado']);
 });
-
 Route::get('/usuarios', [UserController::class, 'index']);
 Route::get('/usuarios/{usuario}', [UserController::class, 'show']);
 Route::post('/cadastro', [UserController::class, 'store']);

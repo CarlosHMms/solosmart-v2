@@ -10,7 +10,9 @@ import 'package:solosmart_flutter/views/relatorios_view.dart';
 import 'package:solosmart_flutter/views/add_view.dart';
 import 'package:solosmart_flutter/views/config_view.dart';
 import 'package:solosmart_flutter/views/notif_view.dart';
-import 'package:solosmart_flutter/views/suport_view.dart';
+import 'package:solosmart_flutter/views/faq_view.dart';
+import 'package:solosmart_flutter/views/ticket_view.dart';
+import 'package:solosmart_flutter/views/listas_view.dart';
 import 'package:solosmart_flutter/components/my_drawer.dart';
 import 'package:solosmart_flutter/components/my_supportbutton.dart';
 import 'dart:convert';
@@ -60,7 +62,17 @@ class _InicioViewState extends State<InicioView> {
       const AddView(),
       const ConfigView(),
       const NotifView(),
-      const SuportView(),
+      FAQView(
+        onTicketButtonPressed: _onTicketButtonPressed,
+        onMinhasSolicitacoesPressed:
+            _onMinhasSolicitacoesPressed, // Passando a função para o FAQView
+      ),
+      const TicketView(),
+      ListasView(
+        onBackButtonPressed: () {
+          // Esse método pode ser ajustado conforme o comportamento desejado ao voltar
+        },
+      ),
     ]);
   }
 
@@ -91,9 +103,9 @@ class _InicioViewState extends State<InicioView> {
     }
   }
 
-  Future<void> _gerarDados(int placaId) async {
+  Future<void> _buscarDados(int placaId) async {
     try {
-      final response = await _generatedata.gerarDados(placaId, token!);
+      final response = await _generatedata.buscarDados(placaId, token!);
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
@@ -101,12 +113,22 @@ class _InicioViewState extends State<InicioView> {
         if (dados != null) {
           Provider.of<AllProvider>(context, listen: false).setDados(dados);
         }
-        print('Dados gerados com sucesso para a placa $placaId.');
         setState(() {
           _selectedViewIndex = 1; // Muda para o DashboardView
         });
       } else {
-        throw Exception('Erro ao gerar dados: ${response.statusCode}');
+        final response = await _generatedata.gerarDados(placaId, token!);
+
+        if (response.statusCode == 200) {
+          final Map<String, dynamic> responseData = jsonDecode(response.body);
+          Map<String, dynamic>? dados = responseData['data'];
+          if (dados != null) {
+            Provider.of<AllProvider>(context, listen: false).setDados(dados);
+          }
+          setState(() {
+            _selectedViewIndex = 1; // Muda para o DashboardView
+          });
+        }
       }
     } catch (e) {
       print('Erro ao gerar dados: $e');
@@ -121,9 +143,24 @@ class _InicioViewState extends State<InicioView> {
     int? placaId =
         placas.firstWhere((placa) => placa['name'] == newValue)['id'];
     if (placaId != null) {
-      _gerarDados(placaId);
+      _buscarDados(placaId);
       Provider.of<AllProvider>(context, listen: false).setPlacaId(placaId);
     }
+  }
+
+  // Função que será chamada para exibir a ListasView ao clicar no botão "Minhas Solicitações"
+  void _onMinhasSolicitacoesPressed() {
+    setState(() {
+      _selectedViewIndex =
+          9; // Alterar para o índice onde ListasView está na lista
+    });
+  }
+
+  // Função que será chamada para mudar para a tela de TicketView
+  void _onTicketButtonPressed() {
+    setState(() {
+      _selectedViewIndex = 8; // Define o índice da TicketView
+    });
   }
 
   @override
@@ -151,11 +188,14 @@ class _InicioViewState extends State<InicioView> {
                     : [],
                 selectedPlaca: selectedPlacaNotifier.value,
                 onPlacaSelected: _onPlacaSelecionada,
+                onMinhasSolicitacoesPressed:
+                    _onMinhasSolicitacoesPressed, // Passando a função para o Drawer
               ),
               Expanded(
                 child: Container(
                   color: const Color(0xFFF5F8DE),
-                  child: _views[_selectedViewIndex],
+                  child: _views[
+                      _selectedViewIndex], // Aqui ele vai exibir a tela correta
                 ),
               ),
             ],

@@ -12,7 +12,6 @@ import 'package:solosmart_flutter/views/perfil_view.dart';
 import 'package:solosmart_flutter/views/recuperar_view.dart';
 import 'package:solosmart_flutter/views/redefinir_view.dart';
 import 'package:solosmart_flutter/views/relatorios_view.dart';
-import 'package:solosmart_flutter/views/suport_view.dart';
 
 void main() {
   runApp(
@@ -49,7 +48,6 @@ class MyApp extends StatelessWidget {
         'notificações': (context) => const NotifView(),
         '/recuperar': (context) => const PasswordRecoveryView(),
         '/relatórios': (context) => const RelatoriosView(),
-        '/suporte': (context) => const SuportView(),
         '/home': (context) => const InicioView(),
       },
     );

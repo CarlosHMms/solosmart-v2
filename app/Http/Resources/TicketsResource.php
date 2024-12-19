@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PlacaResource extends JsonResource
+class TicketsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,11 +16,10 @@ class PlacaResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'numero_serie' => $this->numero_serie,
-            'temperatura_ar_minima' => $this->temperatura_ar_minima,
-            'umidade_ar_minima' => $this->umidade_ar_minima,
-            'umidade_solo_minima' => $this->umidade_solo_minima,
+            'status' => $this->status,
+            'assunto' => $this->assunto,
+            'descricao' => $this->descricao,
+            'data_ticket' => $this->data_ticket,
             'user' => [
                 'name' => $this->user->name,
                 'email' => $this->user->email

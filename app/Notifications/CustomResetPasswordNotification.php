@@ -4,16 +4,14 @@ namespace App\Notifications;
 
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Support\Facades\URL;
-use Carbon\Carbon;
 
 class CustomResetPasswordNotification extends Notification
 {
-    public $token;
+    protected $code;
 
-    public function __construct($token)
+    public function __construct($code)
     {
-        $this->token = $token;
+        $this->code = $code;
     }
 
     public function via($notifiable)
@@ -23,15 +21,12 @@ class CustomResetPasswordNotification extends Notification
 
     public function toMail($notifiable)
     {
-        $flutterUrl = 'http://localhost:53719/#/reset';
-        $url = $flutterUrl . '?token=' . $this->token . '&email=' . urlencode($notifiable->email);
-
         return (new MailMessage)
-            ->subject('Recuperação de Senha - SoloSmart')
-            ->greeting('Olá, ' . $notifiable->name . '!')
-            ->line('Você está recebendo este e-mail porque solicitou a redefinição de senha para sua conta.')
-            ->action('Resetar Senha', $url)
-            ->line('Se você não solicitou uma redefinição de senha, nenhuma ação é necessária.')
-            ->line('Obrigado por usar nossa aplicação!');
+            ->subject('Código de Redefinição de Senha')
+            ->greeting('Olá')
+            ->line('Seu código de redefinição de senha é:')
+            ->line($this->code)
+            ->line('Este código é válido apenas para esta solicitação.')
+            ->line('Se você não solicitou a redefinição de senha, ignore este e-mail.');
     }
 }

@@ -71,8 +71,6 @@ class UserController extends Controller
         }
     }
 
-
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -88,23 +86,21 @@ class UserController extends Controller
         if (!$usuario) {
             return $this->error('Não foi possivel concluir a edição', 404);
         }
-
+        //Pego os dados validados
         $validatedData = $validator->validated();
 
-        //Valido e criptografo a senha fornecida caso exista
-        if ($validatedData['password']) {
+        if ($request->password) {
             $validatedData['password'] = Hash::make($validatedData['password']);
-
-            //Verifico se a senha antiga é válida
-            if (!Hash::check($validatedData['old_password'], $usuario->password)) {
-                return $this->error('Senha Incorreta', 400);
-            }
         }
 
+        //Verifico se a senha antiga é válida
+        if (!Hash::check($validatedData['old_password'], $usuario->password)) {
+            return $this->error('Senha Incorreta', 400);
+        }
         //Atualizo os dados do usuário
-
         try {
             $usuario->update($validatedData);
+            return $this->response('Usuário atualizado', 200, $validatedData);
         } catch (\Exception $e) {
             return $this->error('Não foi possivel concluir a edição', 400);
         }

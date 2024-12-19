@@ -24,22 +24,20 @@ class PlacasView extends StatefulWidget {
 class _PlacasViewState extends State<PlacasView> {
   final PlacaService _placaController = PlacaService();
   final Generatedata _generatedata = Generatedata();
+  final TextEditingController _nameController = TextEditingController();
+  int? _editingPlacaId;
   String? token;
   List<dynamic> _placas = [];
 
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    token = Provider.of<AllProvider>(context).token;
-
-    if (token != null) {
-      _carregarPlacas();
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      token = Provider.of<AllProvider>(context, listen: false).token;
+      if (token != null) {
+        _carregarPlacas();
+      }
+    });
   }
 
   Future<void> _carregarPlacas() async {
@@ -59,9 +57,9 @@ class _PlacasViewState extends State<PlacasView> {
     }
   }
 
-  Future<void> _gerarDados(int placaId) async {
+  Future<void> _buscarDados(int placaId) async {
     try {
-      final response = await _generatedata.gerarDados(placaId, token!);
+      final response = await _generatedata.buscarDados(placaId, token!);
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
@@ -69,22 +67,145 @@ class _PlacasViewState extends State<PlacasView> {
         if (dados != null) {
           Provider.of<AllProvider>(context, listen: false).setDados(dados);
         }
-        print('Dados gerados com sucesso para a placa $placaId.');
-        widget.onDashboardSelected(1); // Redireciona para o Dashboard
+        print('Dados buscado com sucesso para a placa $placaId.');
+        widget.onDashboardSelected(1);
       } else {
-        throw Exception('Erro ao gerar dados: ${response.statusCode}');
+        final response = await _generatedata.gerarDados(placaId, token!);
+        if (response.statusCode == 200) {
+          final Map<String, dynamic> responseData = jsonDecode(response.body);
+          Map<String, dynamic>? dados = responseData['data'];
+          if (dados != null) {
+            Provider.of<AllProvider>(context, listen: false).setDados(dados);
+          }
+        }
+        widget.onDashboardSelected(1);
       }
     } catch (e) {
-      print('Erro ao gerar dados: $e');
+      print('Erro ao buscar dados: $e');
+    }
+  }
+
+  Future<void> _deletar(int placaId) async {
+    try {
+      final response = await _placaController.removerPlaca(token!, placaId);
+
+      if (response.statusCode == 200) {
+        print('Placa excluída com sucesso: ${response.body}');
+        _carregarPlacas(); // Recarrega a lista de placas após a exclusão
+      } else {
+        print("Erro ao excluir a placa: ${response.body}");
+      }
+    } catch (e) {
+      print('Erro ao deletar placa: $e');
+    }
+  }
+
+  Future<void> _editarPlaca(int placaId) async {
+    try {
+      final response = await _placaController.editPlaca(
+          token!, placaId, _nameController.text);
+      if (response.statusCode == 200) {
+        print('Placa editada com sucesso');
+        setState(() {
+          _editingPlacaId = null;
+        });
+        _carregarPlacas();
+      } else {
+        throw Exception('Erro ao editar a placa: ${response.body}');
+      }
+    } catch (e) {
+      print('Erro ao editar placa: $e');
     }
   }
 
   void _onPlacaSelecionada(String placaName, int placaId) {
     print('Placa selecionada: $placaName');
     widget.selectedPlacaNotifier.value = placaName;
-    Provider.of<AllProvider>(context, listen: false)
-        .setPlacaId(placaId); // Armazena o ID da placa
-    _gerarDados(placaId);
+    Provider.of<AllProvider>(context, listen: false).setPlacaId(placaId);
+    _buscarDados(placaId);
+  }
+
+  Widget _buildPlacaItem(Map<String, dynamic> placa) {
+    int placaId = placa['id'];
+    String placaName = placa['name'];
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            onPressed: () => _onPlacaSelecionada(placaName, placaId),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color.fromRGBO(65, 51, 122, 1),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
+              minimumSize: const Size(150, 0),
+            ),
+            child: Text(
+              placaName,
+              style: const TextStyle(fontSize: 18, color: Colors.white),
+            ),
+          ),
+          const SizedBox(width: 10),
+          _editingPlacaId == placaId
+              ? Row(
+                  children: [
+                    SizedBox(
+                      width: 150,
+                      child: TextField(
+                        controller: _nameController,
+                        decoration:
+                            const InputDecoration(hintText: 'Novo nome'),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => _editarPlaca(placaId),
+                      icon: const Icon(Icons.check, color: Colors.green),
+                    ),
+                  ],
+                )
+              : IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _editingPlacaId = placaId;
+                      _nameController.text = placaName;
+                    });
+                  },
+                  icon: const Icon(Icons.edit, color: Color(0xFF41337A)),
+                ),
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.red),
+            onPressed: () => _confirmarExclusao(placaId),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _confirmarExclusao(int placaId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Confirmar exclusão"),
+          content: const Text("Tem certeza de que deseja excluir esta placa?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("Cancelar"),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(); // Fecha o diálogo antes de excluir
+                await _deletar(placaId);
+              },
+              child: const Text("Excluir"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -110,84 +231,45 @@ class _PlacasViewState extends State<PlacasView> {
                       ),
                     ],
                   ),
-                  child: Stack(
+                  child: Column(
                     children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(top: 50.0),
-                            child: Text(
-                              'Selecionar Central',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 40,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Open Sans',
-                                color: Colors.black,
-                              ),
-                            ),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 20.0),
+                        child: Text(
+                          'Selecionar Central',
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.w600,
                           ),
-                          Expanded(
-                            child: _placas.isNotEmpty
-                                ? ListView.builder(
-                                    padding: const EdgeInsets.all(16.0),
-                                    itemCount: _placas.length,
-                                    itemBuilder: (context, index) {
-                                      String placaName = _placas[index]['name'];
-                                      int placaId = _placas[index]['id'];
-                                      return ListTile(
-                                        title: ElevatedButton(
-                                          onPressed: () => _onPlacaSelecionada(
-                                              placaName, placaId),
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                const Color.fromRGBO(
-                                                    65, 51, 122, 1),
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10.0),
-                                          ),
-                                          child: Text(
-                                            placaName,
-                                            style: const TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  )
-                                : const Center(
-                                    child: Text(
-                                      'Não há placas adicionadas',
-                                      style: TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                          ),
-                        ],
+                        ),
                       ),
-                      Positioned(
-                        bottom: 60,
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: InkWell(
-                            onTap: widget.onAddButtonPressed,
-                            child: Container(
-                              width: 60,
-                              height: 60,
-                              decoration: const BoxDecoration(
-                                color: Color.fromRGBO(65, 51, 122, 1),
-                                shape: BoxShape.circle,
+                      Expanded(
+                        child: _placas.isEmpty
+                            ? const Center(
+                                child: Text(
+                                  'Não há placas adicionadas.',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              )
+                            : ListView.builder(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                itemCount: _placas.length,
+                                itemBuilder: (context, index) {
+                                  return _buildPlacaItem(_placas[index]);
+                                },
                               ),
-                              child: const Icon(
-                                Icons.add,
-                                size: 32,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 24.0),
+                        child: FloatingActionButton(
+                          onPressed: widget.onAddButtonPressed,
+                          backgroundColor: const Color.fromRGBO(65, 51, 122, 1),
+                          child: const Icon(Icons.add, color: Colors.white),
+                          shape: const CircleBorder(),
                         ),
                       ),
                     ],

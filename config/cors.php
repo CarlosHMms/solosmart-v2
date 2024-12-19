@@ -2,9 +2,11 @@
 
 return [
 
-    'paths' => ['api/*','storage/*'],
+    'paths' => ['api/*','storage/*','login'],
 
     'allowed_methods' => ['*'],
+
+    'Access-Control-Allow-Origin' => ['*'],
 
     'allowed_origins' => ['*'],
 

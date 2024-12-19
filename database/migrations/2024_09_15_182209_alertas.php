@@ -10,12 +10,10 @@ return new class extends Migration
     {
         Schema::create('alertas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('gravacoes_id')->references('id')->on('gravacoes')->onDelete('RESTRICT');
-            $table->float('temperatura_ar_minima');
-            $table->float('umidade_ar_minima');
-            $table->float('umidade_solo_mm');
-            $table->string('tipo', 50);
+            $table->foreignId('placa_id')->references('id')->on('placas')->onDelete('CASCADE');
+            $table->enum('tipo', ['grave', 'medio', 'leve']);
             $table->text('descricao');
+            $table->boolean('visualizado');
             $table->timestamp('data', precision: 0);
         });
     }

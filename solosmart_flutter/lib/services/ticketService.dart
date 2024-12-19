@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class Generatedata{
-  final String baseUrl = 'http://127.0.0.1:8000/api';
+class Ticketsservice {
+  final String baseUrl = 'http://localhost:8000/api';
 
-
-  Future<http.Response> gerarDados(int placaId,  String token) async {
-    final url = Uri.parse('$baseUrl/gerar');
+  Future<http.Response> ticket(String token, String email, int status, String assunto, String descricao) async {
+    final url = Uri.parse('$baseUrl/ticket');
 
     try {
       final response = await http.post(
@@ -17,7 +16,10 @@ class Generatedata{
           'Authorization': 'Bearer $token',
         },
         body: jsonEncode({
-          'placa_id': placaId,
+          'email': email,
+          'status': status,
+          'assunto': assunto,
+          'descricao': descricao,
         }),
       );
       return response;
@@ -26,8 +28,8 @@ class Generatedata{
     }
   }
 
-  Future<http.Response> buscarDados(int placaId,  String token) async {
-    final url = Uri.parse('$baseUrl/buscar/$placaId');
+  Future<http.Response> listarTickets(String token) async {
+    final url = Uri.parse('$baseUrl/tickets');
 
     try {
       final response = await http.get(

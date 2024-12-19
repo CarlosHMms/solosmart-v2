@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:solosmart_flutter/views/login_view.dart';
 
 class ResetPasswordView extends StatefulWidget {
   const ResetPasswordView({super.key});
@@ -9,7 +10,7 @@ class ResetPasswordView extends StatefulWidget {
 
 class _ResetPasswordViewState extends State<ResetPasswordView> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   String? token;
@@ -26,156 +27,132 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
   void _resetPassword() {
     if (_formKey.currentState!.validate()) {
       // Aqui você pode chamar seu backend para redefinir a senha usando o token e a nova senha.
-      print('Senha: ${_passwordController.text}, Token: $token');
+      print('Nova Senha: ${_newPasswordController.text}, Token: $token');
       // Enviar a senha e o token para o backend
-      // Por exemplo: AuthService.resetPassword(token, _passwordController.text);
+      // Exemplo: AuthService.resetPassword(token, _newPasswordController.text);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF6d4c3d),
+      backgroundColor: const Color(0xFF6D4C3D),
       body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            width: 612,
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: const Color(0xFFf5f8de),
-              borderRadius: BorderRadius.circular(19),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  spreadRadius: 4,
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
+        child: Container(
+          padding: const EdgeInsets.all(20.0),
+          width: 350,
+          decoration: BoxDecoration(
+            color: const Color(0xFFF5F8DE),
+            borderRadius: BorderRadius.circular(10.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                spreadRadius: 3,
+                blurRadius: 5,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  'assets/images/SoloSmart.png',
+                  width: 200,
+                  height: 100,
+                ),
+                const Text(
+                  'Redefinir Senha',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // Campo de Nova Senha
+                TextFormField(
+                  controller: _newPasswordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Nova Senha',
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, insira a nova senha';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 20),
+                // Campo de Repetir Senha
+                TextFormField(
+                  controller: _confirmPasswordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Repetir Senha',
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, repita a senha';
+                    }
+                    if (value != _newPasswordController.text) {
+                      return 'As senhas não coincidem';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 30),
+                // Botão de Redefinir Senha
+                ElevatedButton(
+                  onPressed: _resetPassword,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF41337A),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 115,
+                      vertical: 18,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  child: const Text(
+                    'Redefinir',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Já lembrou da senha?"),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginView(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Faça login',
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ),
+                  ],
                 ),
               ],
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Solo',
-                    style: TextStyle(
-                      fontFamily: 'Academy',
-                      color: Color(0xFF31e981),
-                      fontSize: 40,
-                    ),
-                  ),
-                  const Text(
-                    'Smart',
-                    style: TextStyle(
-                      fontFamily: 'Academy',
-                      color: Color(0xFF41337a),
-                      fontSize: 40,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Nova Senha',
-                    style: TextStyle(
-                      fontFamily: 'Open Sans',
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  // Campo de Senha
-                  TextFormField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Senha',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, insira a senha';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  // Campo de Repetir Senha
-                  TextFormField(
-                    controller: _confirmPasswordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Repetir Senha',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, repita a senha';
-                      }
-                      if (value != _passwordController.text) {
-                        return 'As senhas não coincidem';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 40),
-                  // Botões de Cancelar e Redefinir
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          // Lógica para cancelar
-                          Navigator.pop(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey[200],
-                          side: const BorderSide(color: Color(0xFF41337a), width: 2),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 15),
-                          child: Text(
-                            'Cancelar',
-                            style: TextStyle(
-                              fontFamily: 'Open Sans',
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: _resetPassword,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF41337a),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 15),
-                          child: Text(
-                            'Redefinir',
-                            style: TextStyle(
-                              fontFamily: 'Open Sans',
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
             ),
           ),
         ),

@@ -26,6 +26,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Placas::class);
     }
+    public function tickets()
+    {
+        return $this->hasMany(Tickets::class);
+    }
+
 
     // Acessador para a propriedade profile_image
     public function getProfileImageAttribute($value)

@@ -9,17 +9,43 @@ import 'package:solosmart_flutter/services/perfilService.dart';
 // Provider para gerenciar o estado do token
 class AllProvider with ChangeNotifier {
   String? _token;
+  String? _name;
+  String? _email;
+  String? _password;
   int? _userId;
+  int? _code;
   Map<String, dynamic>? _user;
   Map<String, dynamic>? _placas;
   Map<String, dynamic>? _dados;
   Map<String, dynamic>? _profile;
+  Map<String, dynamic>? _tickets;
   int? _placaId;
 
   int? get userId => _userId;
 
   void setUserId(int userId) {
     _userId = userId;
+    notifyListeners();
+  }
+
+  String? get name => _name;
+
+  void setName(String name){
+    _name = name;
+    notifyListeners();
+  }
+
+  String? get email => _email;
+
+  void setEmail(String email){
+    _email = email;
+    notifyListeners();
+  }
+
+  String? get password => _password;
+
+  void setPassword(String password){
+    _password = password;
     notifyListeners();
   }
 
@@ -37,6 +63,13 @@ class AllProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  int? get code => _code;
+
+  void setCode(int code) {
+    _code = code;
+    notifyListeners();
+  }
+
   Map<String, dynamic>? get user => _user;
 
   void setUser(Map<String, dynamic> user) {
@@ -48,6 +81,13 @@ class AllProvider with ChangeNotifier {
 
   void setPlacas(Map<String, dynamic> placas) {
     _placas = placas;
+    notifyListeners();
+  }
+
+  Map<String, dynamic>? get tickets => _tickets;
+
+  void setTickets(Map<String, dynamic> tickets) {
+    _tickets = tickets;
     notifyListeners();
   }
 

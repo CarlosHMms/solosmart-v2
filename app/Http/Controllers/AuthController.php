@@ -10,11 +10,25 @@ use function Pest\Laravel\get;
 class AuthController extends Controller
 {
     use HttpResponse;
-    public function login(Request $request){
-        if(Auth::attempt($request->only('email','password'))){
-            $user = Auth::user();
-            $token = $request->user()->createToken('tokenAuth', ['placa-index','placa-store','placa-show', 'auth-logout'], now()->addHours(16));
-            return $this->response('Login Realizado!', 200,[
+public function login(Request $request)
+{
+    if (Auth::attempt($request->only('email', 'password'))) {
+        $user = Auth::user();
+        $token = $request->user()->createToken('tokenAuth', [
+            'placa-index',
+            'placa-store',
+            'placa-show',
+            'auth-logout',
+            'placa-destroy',
+            'ticket-store',
+            'gravacoes-index',
+            'placa-editName',
+            'ticket-list',
+            'alerta-visualizado'
+            
+        ], now()->addHours(16));
+
+            return $this->response('Login Realizado!', 200, [
                 'token' => $token->plainTextToken,
                 'user' => [
                     'id' => $user->id,
@@ -23,12 +37,12 @@ class AuthController extends Controller
                     'profile_image' => $user->profile_image,
                 ]
             ]);
-
         }
         return $this->response('Email ou Senha incorretos!', 403);
     }
-    public function logout(Request $request){
-        if(!auth()->user()->tokenCan('auth-logout')){
+    public function logout(Request $request)
+    {
+        if (!auth()->user()->tokenCan('auth-logout')) {
             return $this->error('Unauthorized', 403);
         }
         $request->user()->currentAccessToken()->delete();
