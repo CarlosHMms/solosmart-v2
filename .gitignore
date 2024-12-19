@@ -1,21 +1,114 @@
-/.phpunit.cache
-/node_modules
+# Laravel-specific
+/vendor/
+/node_modules/
 /public/build
 /public/hot
 /public/storage
 /storage/*.key
-/vendor
+/storage/framework/*
+/storage/logs/*
+!/storage/framework/.gitignore
+!/storage/logs/.gitignore
+
+# Environment files
 .env
+.env.*
 .env.backup
 .env.production
-.phpactor.json
+
+# Debugbar and other development tools
+/storage/debugbar/*
+
+# Composer and npm lock files (optional)
+/composer.lock
+/package-lock.json
+
+# Laravel compiled assets and cache
+/public/mix-manifest.json
+/npm-debug.log
+/yarn-debug.log
+/yarn-error.log
+
+# Additional Laravel-related files
+.phpunit.cache
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
 auth.json
-npm-debug.log
-yarn-error.log
-/.fleet
-/.idea
-/.vscode
-/.zed
+.phpactor.json
+
+# Flutter/Dart-related files
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+
+# Flutter build and generated files
+build/
+*.apk
+*.aab
+*.app
+*.deb
+*.dmg
+*.ipa
+*.log
+*.pdb
+*.tar.gz
+*.zip
+
+# Flutter platform-specific files
+ios/Flutter/Flutter.podspec
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+ios/Pods/
+ios/.symlinks/
+ios.xcworkspace
+ios/Flutter/Generated.xcconfig
+ios/Runner.xcworkspace
+android/.gradle/
+android/app/debug.keystore
+android/app/release.keystore
+android/local.properties
+*.jks
+linux/flutter/
+linux/flutter/generated_plugin_registrant.cc
+windows/flutter/
+windows/flutter/generated_plugin_registrant.cc
+
+# IDE and editor specific files
+.idea/
+.vscode/
+.fleet/
+.zed/
+*.iml
+*.ipr
+*.iws
+
+# macOS-specific
+.DS_Store
+
+# Temporary and cache files
+*.tmp
+*.temp
+*.bak
+*.swp
+
+# Coverage and logs
+coverage/
+*.log
+
+# Sensitive data
+firebase_app_id_file.json
+google-services.json
+GoogleService-Info.plist
+
+# Symbol files
+*.symbols
+
+# Crash logs
+crashlytics/
+
+# CMake build files
+**/CMakeLists.txt.user
